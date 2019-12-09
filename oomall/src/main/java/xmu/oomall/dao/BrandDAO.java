@@ -2,13 +2,13 @@ package xmu.oomall.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import xmu.oomall.mapper.ProductMapper;
+import xmu.oomall.mapper.BrandMapper;
 
 /**
  * @author Ke
  */
 @Repository
-public class ProductDAO {
+public class BrandDAO {
     @Autowired
-    private ProductMapper productMapper;
+    private BrandMapper brandMapper;
 }
