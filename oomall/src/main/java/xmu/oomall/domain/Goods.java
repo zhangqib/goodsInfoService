@@ -81,6 +81,9 @@ public class Goods {
     private Boolean beDeleted;
     private LocalDateTime gmtCreate;
     private LocalDateTime gmtModified;
+
+    public Goods() {}
+
     @Override
     public String toString() {
         return "Goods{" +
