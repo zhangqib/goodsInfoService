@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import xmu.oomall.mapper.BrandMapper;
 
 /**
- * @author Ke
+ * @author zhang
  */
 @Repository
 public class BrandDAO {

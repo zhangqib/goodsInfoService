@@ -50,5 +50,6 @@ public interface ProductMapper {
      * @mbg.generated Mon Dec 09 20:12:20 CST 2019
      */
     int updateByPrimaryKey(Product record);
-    
+
+    List<Product> selectByGoodsId(Integer goodsId);
 }
