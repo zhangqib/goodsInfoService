@@ -26,7 +26,7 @@ public class GoodsDAO {
      * @param goods
      * @return 更新完id的商品
      */
-    public Goods insert(GoodsImpl goods) {
+    public Goods insert(Goods goods) {
         goodsMapper.insert(goods);
         return goods;
     }
