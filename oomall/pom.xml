@@ -8,13 +8,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <dependencies>
-        <dependency>
-            <groupId>goodsInfoService</groupId>
-            <artifactId>oomallStd</artifactId>
-        </dependency>
-    </dependencies>
-
     <groupId>goodsInfoService</groupId>
     <artifactId>oomall</artifactId>
     <version>0.0.1-SNAPSHOT</version>
