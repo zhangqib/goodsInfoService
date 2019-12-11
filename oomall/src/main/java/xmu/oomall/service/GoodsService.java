@@ -1,9 +1,7 @@
 package xmu.oomall.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
-import xmu.oomall.controller.VO.*;
+import xmu.oomall.controller.vo.*;
 import xmu.oomall.domain.*;
 import xmu.oomall.util.ResponseUtil;
 import java.util.List;

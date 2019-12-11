@@ -4,11 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import xmu.oomall.controller.VO.*;
+import xmu.oomall.controller.vo.*;
 import xmu.oomall.domain.*;
 import xmu.oomall.service.*;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * @Author Ke

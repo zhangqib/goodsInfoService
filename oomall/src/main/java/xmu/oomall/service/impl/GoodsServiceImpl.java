@@ -1,8 +1,8 @@
 package xmu.oomall.service.impl;
 
 import org.springframework.stereotype.Service;
-import xmu.oomall.controller.VO.GoodsVo;
-import xmu.oomall.controller.VO.ProductVo;
+import xmu.oomall.controller.vo.GoodsVo;
+import xmu.oomall.controller.vo.ProductVo;
 import xmu.oomall.domain.Brand;
 import xmu.oomall.domain.Goods;
 import xmu.oomall.domain.GoodsCategory;
