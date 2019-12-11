@@ -1,4 +1,4 @@
-package xmu.oomall.controller.VO;
+package xmu.oomall.controller.vo;
 
 
 import xmu.oomall.domain.*;
