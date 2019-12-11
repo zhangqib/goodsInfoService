@@ -22,6 +22,17 @@ public class GoodsController {
     private GoodsService goodsService;
 
     /**
+     * 根据id获得产品对象
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/product/{id}")
+    public Object getProductById(@PathVariable Integer id) {
+        return null;
+    }
+
+    /**
      * 管理员查询商品下的产品
      *
      * @param id
@@ -35,11 +46,14 @@ public class GoodsController {
 
     /**
      * 管理员添加商品下的产品
+     *
      * @param id
      * @return
      */
-//    @PostMapping("/goods/{id}/products")
-//    public Object listProductByGoodsId(@PathVariable Integer id);
+    @PostMapping("/goods/{id}/products")
+    public Object addProductByGoodsId(@PathVariable Integer id,@RequestBody ProductVo productVo) {
+        return null;
+    }
 
     /**
      * 管理员修改商品下的某个产品信息
@@ -48,7 +62,7 @@ public class GoodsController {
      * @return
      */
     @PutMapping("/products/{id}")
-    public Object updateProductById(@PathVariable Integer id) {
+    public Object updateProductById(@PathVariable Integer id,@RequestBody ProductVo productVo) {
         return null;
     }
 
@@ -81,7 +95,7 @@ public class GoodsController {
      * @return
      */
     @GetMapping("/goods/{id}")
-    public Object getGoodsById(@NotNull Integer id) {
+    public Object getGoodsById(@PathVariable Integer id) {
         return null;
     }
 
@@ -113,7 +127,7 @@ public class GoodsController {
      * @return
      */
     @GetMapping("/categories/{id}/goods")
-    public Object getCategoriesInfoById() {
+    public Object getCategoriesInfoById(@PathVariable Integer id) {
         return null;
     }
 
@@ -132,7 +146,6 @@ public class GoodsController {
     public Object listGoods(String goodsSn, String name,
                             @RequestParam(defaultValue = "1") Integer page,
                             @RequestParam(defaultValue = "10") Integer limit,
-    //                        @Sort @RequestParam(defaultValue = "add_time") String sort,
                             @RequestParam(defaultValue = "add_time") String sort,
                             @RequestParam(defaultValue = "desc") String order) {
         return null;
@@ -153,7 +166,6 @@ public class GoodsController {
     public Object listBrandByCondition(String id, String name,
                                        @RequestParam(defaultValue = "1") Integer page,
                                        @RequestParam(defaultValue = "10") Integer limit,
-     //                                  @Sort @RequestParam(defaultValue = "add_time") String sort,
                                        @RequestParam(defaultValue = "add_time") String sort,
                                        @RequestParam(defaultValue = "desc") String order) {
         return null;
@@ -197,11 +209,11 @@ public class GoodsController {
     /**
      * 删除一个品牌
      *
-     * @param brand
+     * @param id
      * @return
      */
     @DeleteMapping("/brands/{id}")
-    public Object deleteBrandById(@RequestBody Brand brand) {
+    public Object deleteBrandById(@PathVariable Integer id) {
         return null;
     }
 
@@ -233,7 +245,7 @@ public class GoodsController {
      * @return
      */
     @GetMapping("/categories/{id}")
-    public Object getGoodsCategoryById(@NotNull Integer id) {
+    public Object getGoodsCategoryById(@PathVariable Integer id) {
         return null;
     }
 
@@ -253,11 +265,10 @@ public class GoodsController {
      * 删除单个分类
      *
      * @param id
-     * @param goodsCategory
      * @return
      */
     @DeleteMapping("/categories/{id}")
-    public Object deleteGoodsCategory(@PathVariable Integer id, @RequestBody GoodsCategory goodsCategory) {
+    public Object deleteGoodsCategory(@PathVariable Integer id) {
         return null;
     }
 
@@ -283,7 +294,6 @@ public class GoodsController {
     @GetMapping("/brands")
     public Object listBrand(@RequestParam(defaultValue = "1") Integer page,
                             @RequestParam(defaultValue = "10") Integer limit,
-      //                      @Sort @RequestParam(defaultValue = "add_time") String sort,
                             @RequestParam(defaultValue = "add_time") String sort,
                             @RequestParam(defaultValue = "desc") String order) {
         return null;
@@ -296,18 +306,7 @@ public class GoodsController {
      * @return 当前分类栏目
      */
     @GetMapping("categories/l1/{id}/l2")
-    public Object listSecondLevelGoodsCategoryById(@NotNull Integer id) {
-        return null;
-    }
-
-    /**
-     * 根据id获得产品对象
-     *
-     * @param id
-     * @return
-     */
-    @GetMapping("/product/{id}")
-    public Object getProductById(@PathVariable Integer id) {
+    public Object listSecondLevelGoodsCategoryById(@PathVariable Integer id) {
         return null;
     }
 
