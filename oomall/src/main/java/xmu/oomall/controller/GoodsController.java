@@ -4,10 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import xmu.oomall.VO.*;
+import xmu.oomall.controller.VO.*;
 import xmu.oomall.domain.*;
 import xmu.oomall.service.*;
-import xmu.oomall.util.ResponseUtil;
 
 import javax.validation.constraints.NotNull;
 
@@ -15,7 +14,7 @@ import javax.validation.constraints.NotNull;
  * @Author Ke
  */
 @RestController
-//@RequestMapping(value = "/orders", produces = "application/json;charset=UTF-8", consumes = "application/json;charset=UTF-8")
+//@RequestMapping(value = "/goods", produces = "application/json;charset=UTF-8", consumes = "application/json;charset=UTF-8")
 public class GoodsController {
     private  static final Logger logger = LoggerFactory.getLogger(GoodsController.class);
 
