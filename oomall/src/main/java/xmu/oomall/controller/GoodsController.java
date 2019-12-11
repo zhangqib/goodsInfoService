@@ -26,8 +26,8 @@ public class GoodsController {
      * @return
      */
     @GetMapping("/product/{id}")
-    public Object getProductById(@PathVariable Integer id) {
-        return null;
+    public Object getProductById(@PathVariable Integer id){
+        return goodsService.getProductById(id);
     }
 
     /**
@@ -38,8 +38,7 @@ public class GoodsController {
      */
     @GetMapping("/goods/{id}/products")
     public Object listProductByGoodsId(@PathVariable Integer id) {
-
-        return null;
+        return goodsService.listProductByGoodsId(id);
     }
 
     /**
@@ -50,7 +49,7 @@ public class GoodsController {
      */
     @PostMapping("/goods/{id}/products")
     public Object addProductByGoodsId(@PathVariable Integer id,@RequestBody ProductVo productVo) {
-        return null;
+        return goodsService.addProductByGoodsId(id,productVo);
     }
 
     /**
@@ -60,8 +59,8 @@ public class GoodsController {
      * @return
      */
     @PutMapping("/products/{id}")
-    public Object updateProductById(@PathVariable Integer id,@RequestBody ProductVo productVo) {
-        return null;
+    public Object updateProductById(@PathVariable Integer id,@RequestBody ProductVo productVo){
+        return goodsService.updateProductById(id,productVo);
     }
 
     /**
@@ -72,7 +71,7 @@ public class GoodsController {
      */
     @DeleteMapping("/products/{id}")
     public Object deleteProductById(@PathVariable Integer id) {
-        return null;
+        return goodsService.deleteProductById(id);
     }
 
     /**
@@ -83,7 +82,7 @@ public class GoodsController {
      */
     @PostMapping("/goods")
     public Object addGoods(@RequestBody GoodsVo goodsVo) {
-        return null;
+        return goodsService.addGoods(goodsVo);
     }
 
     /**
@@ -94,7 +93,7 @@ public class GoodsController {
      */
     @GetMapping("/goods/{id}")
     public Object getGoodsById(@PathVariable Integer id) {
-        return null;
+        return goodsService.getGoodsById(id);
     }
 
     /**
@@ -105,7 +104,7 @@ public class GoodsController {
      */
     @PutMapping("/goods/{id}")
     public Object updateGoodsById(@PathVariable Integer id, @RequestBody GoodsVo goodsVo) {
-        return null;
+        return goodsService.updateGoodsById(id,goodsVo);
     }
 
     /**
@@ -116,17 +115,17 @@ public class GoodsController {
      */
     @DeleteMapping("/goods/{id}")
     public Object deleteGoodsById(@PathVariable Integer id) {
-        return null;
+        return goodsService.deleteGoodsById(id);
     }
 
     /**
-     * 获取商品分类信息
+     * 获取某一类别下的商品
      *
      * @return
      */
     @GetMapping("/categories/{id}/goods")
-    public Object getCategoriesInfoById(@PathVariable Integer id) {
-        return null;
+    public Object ListGoodsByCategoryId(@PathVariable Integer id) {
+        return goodsService.listGoodsByCategoryId(id);
     }
 
     /**
@@ -141,12 +140,12 @@ public class GoodsController {
      * @return
      */
     @GetMapping("/goods")
-    public Object listGoods(String goodsSn, String name,
+    public Object listGoodsByCondition(String goodsSn, String name,
                             @RequestParam(defaultValue = "1") Integer page,
                             @RequestParam(defaultValue = "10") Integer limit,
                             @RequestParam(defaultValue = "add_time") String sort,
                             @RequestParam(defaultValue = "desc") String order) {
-        return null;
+        return goodsService.listGoodsByCondition(goodsSn,name,page,limit);
     }
 
     /**
@@ -166,7 +165,7 @@ public class GoodsController {
                                        @RequestParam(defaultValue = "10") Integer limit,
                                        @RequestParam(defaultValue = "add_time") String sort,
                                        @RequestParam(defaultValue = "desc") String order) {
-        return null;
+        return goodsService.listBrandByCondition(id,name,page,limit);
     }
 
 
@@ -178,7 +177,7 @@ public class GoodsController {
      */
     @PostMapping("/brands")
     public Object addBrand(@RequestBody Brand brand) {
-        return null;
+        return goodsService.addBrand(brand);
     }
 
     /**
@@ -189,7 +188,7 @@ public class GoodsController {
      */
     @GetMapping("/brands/{id}")
     public Object getBrandById(@PathVariable Integer id) {
-        return null;
+        return goodsService.getBrandById(id);
     }
 
     /**
@@ -201,7 +200,7 @@ public class GoodsController {
      */
     @PutMapping("/brands/{id}")
     public Object updateBrandById(@PathVariable Integer id, @RequestBody Brand brand) {
-        return null;
+        return goodsService.updateBrandById(id,brand);
     }
 
     /**
@@ -212,7 +211,7 @@ public class GoodsController {
      */
     @DeleteMapping("/brands/{id}")
     public Object deleteBrandById(@PathVariable Integer id) {
-        return null;
+        return goodsService.deleteBrandById(id);
     }
 
     /**
@@ -222,7 +221,7 @@ public class GoodsController {
      */
     @GetMapping("/categories")
     public Object listGoodsCategory() {
-        return null;
+        return goodsService.listGoodsCategory();
     }
 
     /**
@@ -233,7 +232,7 @@ public class GoodsController {
      */
     @PostMapping("/categories")
     public Object addGoodsCategory(@RequestBody GoodsCategory goodsCategory) {
-        return null;
+        return goodsService.addGoodsCategory(goodsCategory);
     }
 
     /**
@@ -244,7 +243,7 @@ public class GoodsController {
      */
     @GetMapping("/categories/{id}")
     public Object getGoodsCategoryById(@PathVariable Integer id) {
-        return null;
+        return goodsService.getGoodsCategoryById(id);
     }
 
     /**
@@ -256,7 +255,7 @@ public class GoodsController {
      */
     @PutMapping("/categories/{id}")
     public Object updateGoodsCategoryById(@PathVariable Integer id, @RequestBody GoodsCategory goodsCategory) {
-        return null;
+        return goodsService.updateGoodsCategoryById(id,goodsCategory);
     }
 
     /**
@@ -267,7 +266,7 @@ public class GoodsController {
      */
     @DeleteMapping("/categories/{id}")
     public Object deleteGoodsCategory(@PathVariable Integer id) {
-        return null;
+        return goodsService.deleteGoodsCategory(id);
     }
 
     /**
@@ -277,7 +276,7 @@ public class GoodsController {
      */
     @GetMapping("/categories/l1")
     public Object listOneLevelGoodsCategory() {
-        return null;
+        return goodsService.listOneLevelGoodsCategory();
     }
 
     /**
@@ -294,7 +293,7 @@ public class GoodsController {
                             @RequestParam(defaultValue = "10") Integer limit,
                             @RequestParam(defaultValue = "add_time") String sort,
                             @RequestParam(defaultValue = "desc") String order) {
-        return null;
+        return goodsService.listBrand(page,limit);
     }
 
     /**
@@ -305,7 +304,7 @@ public class GoodsController {
      */
     @GetMapping("categories/l1/{id}/l2")
     public Object listSecondLevelGoodsCategoryById(@PathVariable Integer id) {
-        return null;
+        return goodsService.listSecondLevelGoodsCategoryById(id);
     }
 
 

@@ -1,14 +1,18 @@
 package xmu.oomall.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xmu.oomall.controller.vo.GoodsVo;
 import xmu.oomall.controller.vo.ProductVo;
+import xmu.oomall.dao.GoodsDAO;
+import xmu.oomall.dao.ProductDAO;
 import xmu.oomall.domain.Brand;
 import xmu.oomall.domain.Goods;
 import xmu.oomall.domain.GoodsCategory;
 import xmu.oomall.domain.Product;
 import xmu.oomall.service.GoodsService;
 import xmu.oomall.util.ResponseUtil;
+import java.lang.Object;
 import java.util.List;
 
 /**
@@ -16,6 +20,14 @@ import java.util.List;
  */
 @Service
 public class GoodsServiceImpl implements GoodsService {
+    @Autowired
+    private GoodsDAO goodsDao;
+    @Autowired
+    private ProductDAO productDao;
+    @Autowired
+    private BrandDAO brandDao;
+    @Autowired
+    private GoodsCategoryDAO goodsCategoryDao;
 
     /**
      * 根据id获得产品对象
@@ -25,7 +37,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Product getProductById(Integer id) {
-        return null;
+        return productDao.selectById(id);
     }
 
     /**
@@ -36,7 +48,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public List<Product> listProductByGoodsId(Integer id) {
-        return null;
+        return productDao.selectByGoodsId(id);
     }
 
     /**
@@ -46,8 +58,9 @@ public class GoodsServiceImpl implements GoodsService {
      * @return
      */
     @Override
-    public Product addProductByGoodsId(Integer id, ProductVo productVo) {
-        return null;
+    public Product addProductByGoodsId(Integer id, ProductVo productVo){
+        Product product =productVo.getProduct();
+        return productDao.insert(product);
     }
 
     /**
@@ -58,7 +71,13 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Product updateProductById(Integer id, ProductVo productVo) {
-        return null;
+        Product product=productVo.getProduct();
+        if (product.getId().equals(id)) {
+            return productDao.updateById(product);
+        }
+        else{
+            return null;
+        }
     }
 
     /**
@@ -68,8 +87,13 @@ public class GoodsServiceImpl implements GoodsService {
      * @return
      */
     @Override
-    public ResponseUtil deleteProductById(Integer id) {
-        return null;
+    public Object deleteProductById(Integer id) {
+        if (productDao.deleteById(id)) {
+            return ResponseUtil.ok();
+        }
+        else {
+            return ResponseUtil.fail();
+        }
     }
 
     /**
@@ -80,7 +104,8 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Goods addGoods(GoodsVo goodsVo) {
-        return null;
+        Goods goods=goodsVo.getGoods();
+        return goodsDao.insert(goods);
     }
 
     /**
@@ -91,7 +116,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Goods getGoodsById(Integer id) {
-        return null;
+        return goodsDao.selectById(id);
     }
 
     /**
@@ -102,7 +127,13 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Goods updateGoodsById(Integer id, GoodsVo goodsVo) {
-        return null;
+        Goods goods=goodsVo.getGoods();
+        if(goods.getId().equals(id)) {
+            return goodsDao.updateById(goods);
+        }
+        else{
+            return null;
+        }
     }
 
     /**
@@ -112,18 +143,23 @@ public class GoodsServiceImpl implements GoodsService {
      * @return
      */
     @Override
-    public ResponseUtil deleteGoodsById(Integer id) {
-        return null;
+    public Object deleteGoodsById(Integer id) {
+        if (goodsDao.deleteByPrimaryKey(id)) {
+            return ResponseUtil.ok();
+        }
+        else {
+            return ResponseUtil.fail();
+        }
     }
 
     /**
-     * 获取商品分类信息
+     * 获取某一类别下的商品
      *
      * @return
      */
     @Override
-    public GoodsCategory getCategoriesInfoById(Integer id) {
-        return null;
+    public List<Goods> listGoodsByCategoryId(Integer id) {
+        goodsDao.selectByCategoryId(id);
     }
 
     /**
@@ -133,31 +169,12 @@ public class GoodsServiceImpl implements GoodsService {
      * @param name
      * @param page
      * @param limit
-     * @param sort
-     * @param order
      * @return
      */
     @Override
-    public List<Goods> listGoods(String goodsSn, String name, Integer page, Integer limit, String sort, String order) {
-        return null;
+    public List<Goods> listGoodsByCondition(String goodsSn, String name, Integer page, Integer limit) {
+        return goodsDao.selectGoodsByCondition(goodsSn,name,page,limit);
     }
-
-    /**
-     * 根据条件搜索品牌
-     *
-     * @param id
-     * @param name
-     * @param page
-     * @param limit
-     * @param sort
-     * @param order
-     * @return
-     */
-    @Override
-    public List<Brand> listBrandByCondition(String id, String name, Integer page, Integer limit, String sort, String order) {
-        return null;
-    }
-
 
     /**
      * 创建一个品牌
@@ -167,7 +184,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Brand addBrand(Brand brand) {
-        return null;
+        return brandDao.insert(brand);
     }
 
     /**
@@ -178,7 +195,20 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Brand getBrandById(Integer id) {
-        return null;
+        return brandDao.selectById(id);
+    }
+
+    /**
+     * 查看所有品牌
+     *
+     * @param page
+     * @param limit
+     * @return
+     */
+    @Override
+    public List<Brand> listBrand(Integer page, Integer limit) {
+        return brandDao.selectAllBrand(page,limit);
+
     }
 
     /**
@@ -190,7 +220,12 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Brand updateBrandById(Integer id, Brand brand) {
-        return null;
+        if(brand.getId().equals(id)) {
+            return brandDao.updateById(brand);
+        }
+        else{
+            return null;
+        }
     }
 
     /**
@@ -200,8 +235,26 @@ public class GoodsServiceImpl implements GoodsService {
      * @return
      */
     @Override
-    public ResponseUtil deleteBrandById(Integer id) {
-        return null;
+    public Object deleteBrandById(Integer id) {
+        if (brandDao.deleteByPrimaryKey(id)) {
+            return ResponseUtil.ok();
+        }
+        else {
+            return ResponseUtil.fail();
+        }
+    }
+    /**
+     * 根据条件搜索品牌
+     *
+     * @param id
+     * @param name
+     * @param page
+     * @param limit
+     * @return
+     */
+    @Override
+    public List<Brand> listBrandByCondition(String id, String name, Integer page, Integer limit) {
+        return brandDao.selectBrandByCondition(id,name,page,limit);
     }
 
     /**
@@ -211,7 +264,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public List<GoodsCategory> listGoodsCategory() {
-        return null;
+        return goodsCategoryDao.selectAllGoodsCategory();
     }
 
     /**
@@ -222,7 +275,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public GoodsCategory addGoodsCategory(GoodsCategory goodsCategory) {
-        return null;
+        return goodsCategoryDao.insert(goodsCategory);
     }
 
     /**
@@ -233,7 +286,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public GoodsCategory getGoodsCategoryById(Integer id) {
-        return null;
+        return goodsCategoryDao.selectById(id);
     }
 
     /**
@@ -245,7 +298,12 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public GoodsCategory updateGoodsCategoryById(Integer id, GoodsCategory goodsCategory) {
-        return null;
+        if(goodsCategoryDao.getId().equals(id)) {
+            return goodsCategoryDao.updateById(goodsCategory);
+        }
+        else{
+            return null;
+        }
     }
 
     /**
@@ -255,8 +313,13 @@ public class GoodsServiceImpl implements GoodsService {
      * @return
      */
     @Override
-    public ResponseUtil deleteGoodsCategory(Integer id) {
-        return null;
+    public Object deleteGoodsCategory(Integer id) {
+        if (goodsCategoryDao.deleteByPrimaryKey(id)) {
+            return ResponseUtil.ok();
+        }
+        else {
+            return ResponseUtil.fail();
+        }
     }
 
     /**
@@ -266,7 +329,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public List<GoodsCategory> listOneLevelGoodsCategory() {
-        return null;
+        return goodsCategoryDao.selectOneLevelGoodsCategory();
     }
 
     /**
@@ -277,22 +340,10 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public List<GoodsCategory> listSecondLevelGoodsCategoryById(Integer id) {
-        return null;
+        return goodsCategoryDao.selectSecondLevelGoodsCategory();
     }
 
-    /**
-     * 查看所有品牌
-     *
-     * @param page
-     * @param limit
-     * @param sort
-     * @param order
-     * @return
-     */
-    @Override
-    public List<Brand> listBrand(Integer page, Integer limit, String sort, String order) {
-        return null;
-    }
+
 
 
 }

@@ -1,17 +1,24 @@
 package xmu.oomall.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import xmu.oomall.controller.vo.*;
-import xmu.oomall.domain.*;
+import xmu.oomall.controller.vo.GoodsVo;
+import xmu.oomall.controller.vo.ProductVo;
+import xmu.oomall.dao.GoodsDAO;
+import xmu.oomall.dao.ProductDAO;
+import xmu.oomall.domain.Brand;
+import xmu.oomall.domain.Goods;
+import xmu.oomall.domain.GoodsCategory;
+import xmu.oomall.domain.Product;
 import xmu.oomall.util.ResponseUtil;
+import java.lang.Object;
 import java.util.List;
 
 /**
  * @Author Ke
  */
 @Service
-public interface GoodsService {
-
+public interface GoodsService{
     /**
      * 根据id获得产品对象
      *
@@ -34,7 +41,7 @@ public interface GoodsService {
      * @param id
      * @return
      */
-    public Product addProductByGoodsId(Integer id,ProductVo productVo);
+    public Product addProductByGoodsId(Integer id, ProductVo productVo);
 
     /**
      * 管理员修改商品下的某个产品信息
@@ -42,7 +49,7 @@ public interface GoodsService {
      * @param id
      * @return
      */
-    public Product updateProductById(Integer id,ProductVo productVo);
+    public Product updateProductById(Integer id, ProductVo productVo);
 
     /**
      * 管理员删除商品下的某个产品信息
@@ -50,7 +57,8 @@ public interface GoodsService {
      * @param id
      * @return
      */
-    public ResponseUtil deleteProductById(Integer id);
+    public Object deleteProductById(Integer id);
+
     /**
      * 新建商品
      *
@@ -81,14 +89,14 @@ public interface GoodsService {
      * @param id
      * @return
      */
-    public ResponseUtil deleteGoodsById(Integer id);
+    public Object deleteGoodsById(Integer id);
 
     /**
-     * 获取商品分类信息
+     * 获取某一类别下的商品
      *
      * @return
      */
-    public GoodsCategory getCategoriesInfoById(Integer id);
+    public List<Goods> listGoodsByCategoryId(Integer id);
 
     /**
      * 根据条件搜素商品
@@ -97,25 +105,9 @@ public interface GoodsService {
      * @param name
      * @param page
      * @param limit
-     * @param sort
-     * @param order
      * @return
      */
-    public List<Goods> listGoods(String goodsSn, String name, Integer page,Integer limit,String sort,String order);
-
-    /**
-     * 根据条件搜索品牌
-     *
-     * @param id
-     * @param name
-     * @param page
-     * @param limit
-     * @param sort
-     * @param order
-     * @return
-     */
-    public List<Brand> listBrandByCondition(String id, String name,Integer page, Integer limit,String sort,String order);
-
+    public List<Goods> listGoodsByCondition(String goodsSn, String name, Integer page, Integer limit);
 
     /**
      * 创建一个品牌
@@ -134,6 +126,15 @@ public interface GoodsService {
     public Brand getBrandById(Integer id);
 
     /**
+     * 查看所有品牌
+     *
+     * @param page
+     * @param limit
+     * @return
+     */
+    public List<Brand> listBrand(Integer page, Integer limit);
+
+    /**
      * 修改单个品牌的信息
      *
      * @param id
@@ -148,14 +149,24 @@ public interface GoodsService {
      * @param id
      * @return
      */
-    public ResponseUtil deleteBrandById(Integer id);
+    public Object deleteBrandById(Integer id);
+    /**
+     * 根据条件搜索品牌
+     *
+     * @param id
+     * @param name
+     * @param page
+     * @param limit
+     * @return
+     */
+    public List<Brand> listBrandByCondition(String id, String name, Integer page, Integer limit);
+
     /**
      * 查看所有的分类
      *
      * @return
      */
     public List<GoodsCategory> listGoodsCategory();
-
     /**
      * 新建一个分类
      *
@@ -163,7 +174,6 @@ public interface GoodsService {
      * @return
      */
     public GoodsCategory addGoodsCategory(GoodsCategory goodsCategory);
-
     /**
      * 查看单个分类信息
      *
@@ -179,23 +189,20 @@ public interface GoodsService {
      * @param goodsCategory
      * @return
      */
-    public GoodsCategory updateGoodsCategoryById(Integer id,GoodsCategory goodsCategory);
-
+    public GoodsCategory updateGoodsCategoryById(Integer id, GoodsCategory goodsCategory);
     /**
      * 删除单个分类
      *
      * @param id
      * @return
      */
-    public ResponseUtil deleteGoodsCategory(Integer id);
-
+    public Object deleteGoodsCategory(Integer id);
     /**
      * 查看所有一级分类
      *
      * @return
      */
     public List<GoodsCategory> listOneLevelGoodsCategory();
-
     /**
      * 获取当前一级分类下的二级分类
      *
@@ -203,18 +210,4 @@ public interface GoodsService {
      * @return 当前分类栏目
      */
     public List<GoodsCategory> listSecondLevelGoodsCategoryById(Integer id);
-
-    /**
-     * 查看所有品牌
-     *
-     * @param page
-     * @param limit
-     * @param sort
-     * @param order
-     * @return
-     */
-    public List<Brand> listBrand(Integer page,Integer limit,String sort,String order);
-
-
-
 }
