@@ -4,6 +4,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import xmu.oomall.domain.po.GoodsCategoryPo;
+import xmu.oomall.domain.po.GoodsPo;
 
 import java.util.List;
 

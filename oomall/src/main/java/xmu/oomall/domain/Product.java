@@ -4,6 +4,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import xmu.oomall.domain.po.GoodsPo;
+import xmu.oomall.domain.po.ProductPo;
 
 /**
  * @Author: 数据库与对象模型标准组

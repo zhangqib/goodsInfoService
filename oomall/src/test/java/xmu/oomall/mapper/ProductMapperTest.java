@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import xmu.oomall.Application;
-import xmu.oomall.domain.Product;
+import xmu.oomall.domain.po.ProductPo;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -23,7 +23,7 @@ class ProductMapperTest {
 
     @Test
     void insert() {
-        Product product = new Product();
+        ProductPo product = new ProductPo();
         product.setBeDeleted(false);
         product.setGmtCreate(LocalDateTime.now());
         product.setGoodsId(5);
@@ -31,15 +31,16 @@ class ProductMapperTest {
         product.setPrice(new BigDecimal(21));
         product.setSafetyStock(1);
         product.setSpecifications("test sp");
+        product.setGmtModified(LocalDateTime.now());
         productMapper.insert(product);
         System.out.println(product);
     }
 
     @Test
     void insertProducts() {
-        List<Product> products = new ArrayList<Product>();
+        List<ProductPo> products = new ArrayList<ProductPo>();
         for(int i = 0; i < 10; ++i) {
-            Product product = new Product();
+            ProductPo product = new ProductPo();
             product.setGoodsId(3);
             products.add(product);
         }
@@ -48,23 +49,22 @@ class ProductMapperTest {
 
     @Test
     void selectByPrimaryKey() {
-        System.out.println(productMapper.selectByPrimaryKey(1));
+        System.out.println(productMapper.selectByPrimaryKey(3));
     }
 
     @Test
     void selectByGoodsId() {
-        List<Product> productList = productMapper.selectByGoodsId(3);
-        for(Product product: productList) {
+        List<ProductPo> productList = productMapper.selectByGoodsId(3);
+        for(ProductPo product: productList) {
             System.out.println(product);
         }
     }
 
     @Test
     void updateByPrimaryKey() {
-        Product product = productMapper.selectByPrimaryKey(3);
+        ProductPo product = productMapper.selectByPrimaryKey(3);
         product.setSafetyStock(12);
         System.out.println(productMapper.updateByPrimaryKey(product));
     }
-
 
 }

@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import xmu.oomall.domain.po.ShareRulePo;
 
 import java.math.BigDecimal;
 import java.util.List;
