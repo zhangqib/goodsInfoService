@@ -9,10 +9,11 @@ import java.util.List;
 
 
 /**
- * @Author 模块标准组
- * @Description:商品模块外部及内部api
- * @create 2019/12/3 18:30
+ * @Author Ke
+ * @Description: GoodsServiceInterface
+ * @create 2019/12/12 22:22
  */
+
 
 @Service
 public interface GoodsService {
@@ -47,9 +48,9 @@ public interface GoodsService {
      * 管理员删除商品下的某个产品信息
      *
      * @param id
-     * @return 无（ResponseUtil.ok()即可）
+     * @return boolean
      */
-    public Object deleteProductById( Integer id);
+    public boolean deleteProductById( Integer id);
 
 //    /**
 //     * 获取商品列表
@@ -88,9 +89,9 @@ public interface GoodsService {
      * 根据id删除商品信息
      *
      * @param id
-     * @return 无（即ResponseUtil.ok()即可）
+     * @return boolean
      */
-    public Object deleteGoodsById( Integer id);
+    public boolean deleteGoodsById( Integer id);
 
     /**
      * 获取商品分类信息
@@ -109,7 +110,7 @@ public interface GoodsService {
      * @param limit   一页多少
      *                //     * @param sort
      *                //     * @param order
-     * @return
+     * @return List<Goods>
      */
     public List<Goods> listGoods( String goodsSn,
                              String name,
@@ -132,95 +133,83 @@ public interface GoodsService {
 
     /**
      * 创建一个品牌
-     *
      * @param brand
-     * @return
+     * @return Brand
      */
     public Brand addBrand( Brand brand);
 
     /**
      * 查看品牌详情,此API与商城端/brands/{id}完全相同
-     *
      * @param id
-     * @return
+     * @return Brand
      */
     public Brand getBrandById( Integer id);
 
     /**
      * 修改单个品牌的信息
-     *
      * @param id
      * @param brand
-     * @return
+     * @return Brand
      */
     public Brand updateBrandById( Integer id,  Brand brand);
 
     /**
      * 删除一个品牌
-     *
      * @param id
-     * @return
+     * @return boolean
      */
-    public Object deleteBrandById( Integer id);
+    public boolean deleteBrandById( Integer id);
 
     /**
      * 查看所有的分类
-     *
-     * @return
+     * @return List<GoodsCategory>
      */
     public List<GoodsCategory> listGoodsCategory();
 
     /**
      * 新建一个分类
-     *
      * @param goodsCategory
-     * @return
+     * @return GoodsCategory
      */
     public GoodsCategory addGoodsCategory( GoodsCategory goodsCategory);
 
     /**
      * 查看单个分类信息
-     *
      * @param id
-     * @return
+     * @return GoodsCategory
      */
     public GoodsCategory getGoodsCategoryById( Integer id);
 
     /**
      * 修改分类信息
-     *
      * @param id
      * @param goodsCategory
-     * @return
+     * @return GoodsCategory
      */
     public GoodsCategory updateGoodsCategoryById( Integer id,  GoodsCategory goodsCategory);
 
     /**
      * 删除单个分类
-     *
      * @param id
      * @param goodsCategory
-     * @return
+     * @return boolean
      */
-    public Object deleteGoodsCategory( Integer id,  GoodsCategory goodsCategory);
+    public boolean deleteGoodsCategory( Integer id,  GoodsCategory goodsCategory);
 
     /**
      * 查看所有一级分类
-     *
-     * @return
+     * @return List<GoodsCategory>
      */
     public List<GoodsCategory> listOneLevelGoodsCategory();
 
     /**
      * 查看所有品牌
-     *
      * @return List<Brand>
      */
     public List<Brand> listBrand();
 
     /**
      * 获取当前一级分类下的二级分类
-     *
      * @param id 分类类目ID
      * @return 当前分类栏目
      */
@@ -228,17 +217,15 @@ public interface GoodsService {
 
     /**
      * 根据id获得产品对象 - 内部
-     *
      * @param id
-     * @return
+     * @return Product
      */
     public Product getProductById( Integer id);
 
     /**
      * 判断商品是否在售 - 内部
-     *
      * @param id
-     * @return
+     * @return boolean
      */
     public boolean isGoodsOnSale( Integer id);
 
