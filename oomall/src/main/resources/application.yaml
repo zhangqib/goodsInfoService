@@ -28,7 +28,7 @@ spring:
     host: localhost
 
 mybatis:
-  type-aliases-package: xmu.oomall.domain
+  type-aliases-package: xmu.oomall.domain.po
   mapper-locations: classpath:xmu.oomall.mapper/*.xml
   configuration:
     map-underscore-camel-case: true

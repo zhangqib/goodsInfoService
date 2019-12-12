@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import xmu.oomall.Application;
-import xmu.oomall.domain.Goods;
+import xmu.oomall.domain.po.GoodsPo;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -16,12 +16,12 @@ class GoodsMapperTest {
 
     @Test
     void deleteByPrimaryKey() {
-        System.out.println(goodsMapper.deleteByPrimaryKey(5));
+        System.out.println(goodsMapper.deleteByPrimaryKey(4));
     }
 
     @Test
     void insert() {
-        Goods goods = new Goods();
+        GoodsPo goods = new GoodsPo();
         goods.setBeDeleted(false);
         goods.setBeSpecial(false);
         goods.setBrandId(1);
@@ -46,21 +46,13 @@ class GoodsMapperTest {
     }
 
     @Test
-    void insertSelective() {
-    }
-
-    @Test
     void selectByPrimaryKey() {
-        System.out.println(goodsMapper.selectByPrimaryKey(5));
-    }
-
-    @Test
-    void updateByPrimaryKeySelective() {
+        System.out.println(goodsMapper.selectByPrimaryKey(4));
     }
 
     @Test
     void updateByPrimaryKey() {
-        Goods goods = goodsMapper.selectByPrimaryKey(4);
+        GoodsPo goods = goodsMapper.selectByPrimaryKey(4);
         goods.setGoodsSn("12");
         System.out.println(goodsMapper.updateByPrimaryKey(goods));
     }
