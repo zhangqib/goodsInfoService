@@ -38,7 +38,7 @@ class GoodsMapperTest {
         goods.setShareUrl("test url");
         goods.setShortName("t");
         goods.setSpecialFreightId(1);
-        goods.setStatusCode(false);
+        goods.setStatusCode(0);
         goods.setVolume("1");
         goods.setWeight(new BigDecimal(1));
         goodsMapper.insert(goods);
@@ -55,5 +55,10 @@ class GoodsMapperTest {
         GoodsPo goods = goodsMapper.selectByPrimaryKey(4);
         goods.setGoodsSn("12");
         System.out.println(goodsMapper.updateByPrimaryKey(goods));
+    }
+
+    @Test
+    void selectByCategoryId() {
+        System.out.println(goodsMapper.selectByCategoryId(1));
     }
 }

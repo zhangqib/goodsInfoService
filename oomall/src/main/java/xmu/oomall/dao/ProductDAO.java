@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import xmu.oomall.domain.Product;
 import xmu.oomall.mapper.ProductMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,7 +41,8 @@ public class ProductDAO {
      * @return product
      */
     public Product selectById(Integer id) {
-        return productMapper.selectByPrimaryKey(id);
+//        return productMapper.selectByPrimaryKey(id);
+        return new Product();
     }
 
     /**
@@ -49,7 +51,8 @@ public class ProductDAO {
      * @return products
      */
     public List<Product> selectByGoodsId(Integer id) {
-        return productMapper.selectByGoodsId(id);
+//        return productMapper.selectByGoodsId(id);
+        return new ArrayList<Product>();
     }
 
     /**

@@ -3,15 +3,13 @@ package xmu.oomall.dao;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import xmu.oomall.Application;
 import xmu.oomall.domain.Goods;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@SpringBootTest(classes = Application.class)
+@SpringBootTest
 class GoodsDAOTest {
-
     @Autowired
     private GoodsDAO goodsDAO;
 
@@ -42,20 +40,29 @@ class GoodsDAOTest {
     }
 
     @Test
-    void deleteByPrimaryKey() {
-        System.out.println();
+    void deleteById() {
+        System.out.println(goodsDAO.deleteById(5));
     }
 
     @Test
     void selectById() {
-        System.out.println(goodsDAO.selectById(3));
+        System.out.println(goodsDAO.selectById(5));
     }
 
     @Test
     void selectByProductId() {
+        System.out.println(goodsDAO.selectByProductId(4));
     }
 
     @Test
-    void updateById() {
+    void isGoodsOnSale() {
+    }
+
+    @Test
+    void selectGoodsByCondition() {
+    }
+
+    @Test
+    void selectByCategoryId() {
     }
 }

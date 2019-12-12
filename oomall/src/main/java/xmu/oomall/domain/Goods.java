@@ -3,7 +3,6 @@ package xmu.oomall.domain;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import xmu.oomall.domain.po.BrandPo;
 import xmu.oomall.domain.po.GoodsCategoryPo;
 import xmu.oomall.domain.po.GoodsPo;
@@ -18,7 +17,6 @@ import java.util.List;
  **/
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode(callSuper = true)
 public class Goods extends GoodsPo {
     private BrandPo brandPo;
@@ -27,4 +25,9 @@ public class Goods extends GoodsPo {
     private GrouponRule grouponRule;
     private ShareRule shareRule;
     private PresaleRule presaleRule;
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

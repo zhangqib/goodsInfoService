@@ -14,12 +14,16 @@ import java.util.List;
  */
 public class Copyer {
 
-    public static <B, S extends B> void Copy(B bo, S so) {
+    public static <B, S extends B> boolean Copy(B bo, S so) {
         try {
-            Class bc = bo.getClass();
-            if (bo == null || so == null) {
-                return;
+            if (bo == null) {
+                so = null;
+                return false;
             }
+            if (so == null) {
+                return false;
+            }
+            Class bc = bo.getClass();
             DeserializeBeanInfo deserializeBeanInfo = DeserializeBeanInfo.computeSetters(so.getClass(), (Type) so.getClass());
             List<FieldInfo> getters = TypeUtils.computeGetters(bo.getClass(), null);
             List<FieldInfo> setters = deserializeBeanInfo.getFieldList();
@@ -40,5 +44,6 @@ public class Copyer {
         } catch (Exception ex) {
             System.out.println(ex.toString());
         }
+        return true;
     }
 }

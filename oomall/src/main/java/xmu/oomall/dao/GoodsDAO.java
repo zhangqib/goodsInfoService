@@ -3,9 +3,11 @@ package xmu.oomall.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import xmu.oomall.domain.Goods;
-import xmu.oomall.domain.Product;
+import xmu.oomall.domain.po.GoodsPo;
+import xmu.oomall.domain.po.ProductPo;
 import xmu.oomall.mapper.GoodsMapper;
 import xmu.oomall.mapper.ProductMapper;
+import xmu.oomall.util.Copyer;
 
 import java.util.List;
 
@@ -36,8 +38,8 @@ public class GoodsDAO {
      * @return 删除是否成功
      */
     public boolean deleteById(Integer id) {
-        List<Product> products = productMapper.selectByGoodsId(id);
-        for(Product product: products) {
+        List<ProductPo> products = productMapper.selectByGoodsId(id);
+        for(ProductPo product: products) {
             if (productMapper.deleteByPrimaryKey(product.getId()) == 0) {
                 return false;
             }
@@ -51,7 +53,8 @@ public class GoodsDAO {
      * @return Goods
      */
     public Goods selectById(Integer id) {
-        return goodsMapper.selectByPrimaryKey(id);
+        GoodsPo goods = goodsMapper.selectByPrimaryKey(id);
+        return goods(goods);
     }
 
     /**
@@ -60,8 +63,12 @@ public class GoodsDAO {
      * @return productId所属的商品
      */
     public Goods selectByProductId(Integer productId) {
-        Product product = productMapper.selectByPrimaryKey(productId);
-        return goodsMapper.selectByPrimaryKey(product.getGoodsId());
+        ProductPo product = productMapper.selectByPrimaryKey(productId);
+        if (product == null) {
+            return null;
+        }
+        GoodsPo goods = goodsMapper.selectByPrimaryKey(product.getGoodsId());
+        return goods(goods);
     }
 
     /**
@@ -83,5 +90,19 @@ public class GoodsDAO {
 
     public List<Goods> selectByCategoryId(Integer id) {
         return null;
+    }
+
+    /**
+     * 将GoodsPo转换成Goods对象
+     * @param goodsPo
+     * @return goods pojo
+     */
+    private Goods goods(GoodsPo goodsPo) {
+        Goods goods = new Goods();
+        if (Copyer.Copy(goodsPo, goods)) {
+            return goods;
+        } else {
+            return null;
+        }
     }
 }
