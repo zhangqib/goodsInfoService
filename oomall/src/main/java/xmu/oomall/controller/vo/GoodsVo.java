@@ -28,7 +28,7 @@ public class GoodsVo {
     /**
      * 商品的返点规则
      */
-    private List<ShareRule> shareRules;
+    private ShareRule shareRules;
 
     /**
      * 商品的规格
@@ -75,11 +75,11 @@ public class GoodsVo {
         this.brand = brand;
     }
 
-    public List<ShareRule> getShareRules() {
+    public ShareRule getShareRules() {
         return shareRules;
     }
 
-    public void setShareRules(List<ShareRule> shareRules) {
+    public void setShareRules(ShareRule shareRules) {
         this.shareRules = shareRules;
     }
 

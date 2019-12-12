@@ -4,14 +4,12 @@ package xmu.oomall.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xmu.oomall.controller.vo.GoodsVo;
-import xmu.oomall.domain.Brand;
-import xmu.oomall.domain.Goods;
-import xmu.oomall.domain.GoodsCategory;
-import xmu.oomall.domain.Product;
+import xmu.oomall.domain.*;
 import xmu.oomall.dao.*;
 import xmu.oomall.service.GoodsService;
 import xmu.oomall.util.ResponseUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,7 +37,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public List<Product> listProductByGoodsId(Integer id) {
-        return null;
+        return productDao.selectByGoodsId(id);
     }
 
     /**
@@ -51,7 +49,12 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Product addProductByGoodsId(Integer id, Product product) {
-        return null;
+        if (product.getGoodsId().equals(id)) {
+            return productDao.insert(product);
+        }
+        else {
+            return null;
+        }
     }
 
     /**
@@ -63,7 +66,12 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Product updateProductById(Integer id, Product product) {
-        return null;
+        if (product.getId().equals(id)) {
+            return productDao.updateById(product);
+        }
+        else {
+            return null;
+        }
     }
 
     /**
@@ -74,7 +82,12 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Object deleteProductById(Integer id) {
-        return null;
+        if (productDao.deleteById(id)) {
+            return ResponseUtil.ok();
+        }
+        else {
+            return ResponseUtil.fail();
+        }
     }
 
     /**
@@ -85,7 +98,22 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public GoodsVo getGoodsById(Integer id) {
-        return null;
+        Goods goods=goodsDao.selectById(id);
+        GoodsVo goodsVo=new GoodsVo();
+        Brand brand=brandDao.selectById(goods.getBrandId());
+        goodsVo.setBrand(brand);
+        goodsVo.setGoods(goods);
+        GoodsCategory goodsCategory=goodsCategoryDao.selectById(goods.getGoodsCategoryId());
+        goodsVo.setGoodsCategory(goodsCategory);
+        GrouponRule grouponRule=new GrouponRule();
+        goodsVo.setGrouponRule(grouponRule);
+        List<Product> listProducts=new ArrayList<Product>();
+        goods.getProductPoList();
+        goodsVo.setProducts(listProducts);
+        ShareRule shareRule=new ShareRule();
+        goodsVo.setShareRules(shareRule);
+        SpecialFreight specialFreight=new SpecialFreight();
+        goodsVo.setSpecialFreight(specialFreight);
     }
 
     /**
@@ -289,7 +317,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Product getProductById(Integer id) {
-        return null;
+        return productDao.selectById(id);
     }
 
     /**
