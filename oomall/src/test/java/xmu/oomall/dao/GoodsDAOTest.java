@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import xmu.oomall.Application;
-import xmu.oomall.domain.impl.GoodsImpl;
+import xmu.oomall.domain.Goods;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -17,7 +17,7 @@ class GoodsDAOTest {
 
     @Test
     void insert() {
-        GoodsImpl goods = new GoodsImpl();
+        Goods goods = new Goods();
         goods.setBeDeleted(false);
         goods.setBeSpecial(false);
         goods.setBrandId(1);
@@ -38,20 +38,21 @@ class GoodsDAOTest {
         goods.setVolume("1");
         goods.setWeight(new BigDecimal(1));
         goodsDAO.insert(goods);
+        System.out.println(goods);
     }
 
     @Test
     void deleteByPrimaryKey() {
+        System.out.println(goodsDAO == null);
     }
 
     @Test
     void selectById() {
-        System.out.println(goodsDAO.selectById(2));
+        System.out.println(goodsDAO.selectById(3));
     }
 
     @Test
     void selectByProductId() {
-
     }
 
     @Test
