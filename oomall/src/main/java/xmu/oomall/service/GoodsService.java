@@ -158,7 +158,7 @@ public interface GoodsService {
     /**
      * 删除一个品牌
      *
-     * @param brand
+     * @param id
      * @return
      */
     public Object deleteBrandById( Integer id);
