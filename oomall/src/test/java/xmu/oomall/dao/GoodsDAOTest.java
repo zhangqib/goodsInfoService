@@ -43,7 +43,7 @@ class GoodsDAOTest {
 
     @Test
     void deleteByPrimaryKey() {
-        System.out.println(goodsDAO == null);
+        System.out.println();
     }
 
     @Test

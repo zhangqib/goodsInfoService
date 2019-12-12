@@ -36,7 +36,7 @@ public class GoodsDAO {
      * @param id
      * @return 删除是否成功
      */
-    public boolean deleteByPrimaryKey(Integer id) {
+    public boolean deleteById(Integer id) {
         List<Product> products = productMapper.selectByGoodsId(id);
         for(Product product: products) {
             if (productMapper.deleteByPrimaryKey(product.getId()) == 0) {

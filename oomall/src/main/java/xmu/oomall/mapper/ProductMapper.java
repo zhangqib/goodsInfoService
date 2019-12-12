@@ -32,6 +32,14 @@ public interface ProductMapper {
      *
      * @mbg.generated Mon Dec 09 20:12:20 CST 2019
      */
+
+    /**
+     * 插入products列表
+     * @param products
+     * @return 插入的数量
+     */
+    int insertProducts(List<Product> products);
+
     int insertSelective(Product record);
 
     /**
@@ -65,4 +73,5 @@ public interface ProductMapper {
      * @mbg.generated Mon Dec 09 20:12:20 CST 2019
      */
     int updateByPrimaryKey(Product record);
+
 }
