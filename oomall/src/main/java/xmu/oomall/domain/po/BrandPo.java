@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 /**
  * @Author: 数据库与对象模型标准组
@@ -18,6 +18,11 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 public class BrandPo {
 
-    private List<GoodsPo> goodsPoList;
-
+    private Integer id;
+    private String description;
+    private LocalDateTime gmtCreate;
+    private LocalDateTime gmtModified;
+    private boolean beDeleted;
+    private String name;
+    private String picUrl;
 }
