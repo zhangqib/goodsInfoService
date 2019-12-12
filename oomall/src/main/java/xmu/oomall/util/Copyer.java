@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class Copyer {
 
-    public static <B, S extends B> void Copy(B bo, S so) throws IllegalAccessException {
+    public static <B, S extends B> void Copy(B bo, S so) {
         try {
             Class bc = bo.getClass();
             if (bo == null || so == null) {
