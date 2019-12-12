@@ -67,7 +67,12 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public Product updateProductById(Integer id, Product product) {
         if (product.getId().equals(id)) {
-            return productDao.updateById(product);
+            if(productDao.updateById(product)){
+                return product;
+            }
+            else{
+                return null;
+            }
         }
         else {
             return null;
@@ -108,12 +113,12 @@ public class GoodsServiceImpl implements GoodsService {
         GrouponRule grouponRule=new GrouponRule();
         goodsVo.setGrouponRule(grouponRule);
         List<Product> listProducts=new ArrayList<Product>();
-        goods.getProductPoList();
         goodsVo.setProducts(listProducts);
         ShareRule shareRule=new ShareRule();
         goodsVo.setShareRules(shareRule);
         SpecialFreight specialFreight=new SpecialFreight();
         goodsVo.setSpecialFreight(specialFreight);
+        return goodsVo;
     }
 
     /**
@@ -124,7 +129,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Goods addGoods(Goods goods) {
-        return null;
+        return goodsDao.insert(goods);
     }
 
     /**
@@ -136,7 +141,17 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Goods updateGoodsById(Integer id, Goods goods) {
-        return null;
+        if(goods.getId().equals(id)) {
+            if(goodsDao.updateById(goods)){
+                return goods;
+            }
+            else{
+                return null;
+            }
+        }
+        else{
+            return null;
+        }
     }
 
     /**
@@ -147,7 +162,12 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Object deleteGoodsById(Integer id) {
-        return null;
+        if (goodsDao.deleteById(id)) {
+            return ResponseUtil.ok();
+        }
+        else {
+            return ResponseUtil.fail();
+        }
     }
 
     /**
@@ -158,7 +178,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public List<Goods> getCategoriesInfoById(Integer id) {
-        return null;
+        return goodsDao.selectByCategoryId(id);
     }
 
     /**
@@ -174,7 +194,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public List<Goods> listGoods(String goodsSn, String name, Integer page, Integer limit) {
-        return null;
+        return goodsDao.selectGoodsByCondition(goodsSn,name,page,limit);
     }
 
     /**
@@ -185,7 +205,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Brand addBrand(Brand brand) {
-        return null;
+        return brandDao.insert(brand);
     }
 
     /**
@@ -196,7 +216,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Brand getBrandById(Integer id) {
-        return null;
+        return brandDao.selectById(id);
     }
 
     /**
@@ -208,18 +228,33 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Brand updateBrandById(Integer id, Brand brand) {
-        return null;
+        if(brand.getId().equals(id)) {
+            if(brandDao.updateById(brand)){
+                return brand;
+            }
+            else{
+                return null;
+            }
+        }
+        else{
+            return null;
+        }
     }
 
     /**
      * 删除一个品牌
      *
-     * @param brand
+     * @param id
      * @return
      */
     @Override
-    public Object deleteBrandById(Brand brand) {
-        return null;
+    public Object deleteBrandById(Integer id) {
+        if (brandDao.deleteById(id)) {
+            return ResponseUtil.ok();
+        }
+        else {
+            return ResponseUtil.fail();
+        }
     }
 
     /**
@@ -229,7 +264,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public List<GoodsCategory> listGoodsCategory() {
-        return null;
+        return goodsCategoryDao.selectAllGoodsCategory();
     }
 
     /**
@@ -240,7 +275,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public GoodsCategory addGoodsCategory(GoodsCategory goodsCategory) {
-        return null;
+        return goodsCategoryDao.insert(goodsCategory);
     }
 
     /**
@@ -251,7 +286,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public GoodsCategory getGoodsCategoryById(Integer id) {
-        return null;
+        return goodsCategoryDao.selectById(id);
     }
 
     /**
@@ -263,7 +298,17 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public GoodsCategory updateGoodsCategoryById(Integer id, GoodsCategory goodsCategory) {
-        return null;
+        if(goodsCategory.getId().equals(id)) {
+            if (goodsCategoryDao.updateById(goodsCategory)){
+                return goodsCategory;
+            }
+            else{
+                return null;
+            }
+        }
+        else{
+            return null;
+        }
     }
 
     /**
@@ -275,7 +320,12 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Object deleteGoodsCategory(Integer id, GoodsCategory goodsCategory) {
-        return null;
+        if (goodsCategoryDao.deleteById(id)) {
+            return ResponseUtil.ok();
+        }
+        else {
+            return ResponseUtil.fail();
+        }
     }
 
     /**
@@ -285,7 +335,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public List<GoodsCategory> listOneLevelGoodsCategory() {
-        return null;
+        return goodsCategoryDao.selectOneLevelGoodsCategory();
     }
 
     /**
@@ -295,7 +345,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public List<Brand> listBrand() {
-        return null;
+        return brandDao.selectAllBrand();
     }
 
     /**
@@ -306,7 +356,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public List<GoodsCategory> listSecondLevelGoodsCategoryById(Integer id) {
-        return null;
+        return goodsCategoryDao.selectSecondLevelGoodsCategory(id);
     }
 
     /**
@@ -328,6 +378,6 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public boolean isGoodsOnSale(Integer id) {
-        return false;
+        return goodsDao.isGoodsOnSale(id);
     }
 }

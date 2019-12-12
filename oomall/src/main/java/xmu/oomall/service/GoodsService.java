@@ -161,7 +161,7 @@ public interface GoodsService {
      * @param brand
      * @return
      */
-    public Object deleteBrandById( Brand brand);
+    public Object deleteBrandById( Integer id);
 
     /**
      * 查看所有的分类

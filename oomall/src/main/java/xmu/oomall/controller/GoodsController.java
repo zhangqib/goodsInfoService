@@ -198,7 +198,7 @@ public class GoodsController {
      * @return
      */
     @DeleteMapping("/brands/{id}")
-    public Object deleteBrandById(@RequestBody Brand brand) {
+    public Object deleteBrandById(@PathVariable Integer id) {
         return null;
     }
 

@@ -72,4 +72,16 @@ public class GoodsDAO {
     public boolean updateById(Goods goods) {
         return goodsMapper.updateByPrimaryKey(goods) == 1;
     }
+
+    public boolean isGoodsOnSale(Integer id) {
+        return true;
+    }
+
+    public List<Goods> selectGoodsByCondition(String goodsSn, String name, Integer page, Integer limit) {
+        return null;
+    }
+
+    public List<Goods> selectByCategoryId(Integer id) {
+        return null;
+    }
 }

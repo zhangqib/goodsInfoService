@@ -2,7 +2,6 @@ package xmu.oomall.dao;
 
 import org.springframework.stereotype.Repository;
 import xmu.oomall.domain.Brand;
-import xmu.oomall.domain.Product;
 
 import java.util.List;
 
@@ -47,7 +46,11 @@ public class BrandDAO {
      * @param goods
      * @return 更新是否成功
      */
-    public Brand updateById(Brand brand) {
+    public boolean updateById(Brand brand) {
+        return true;
+    }
+
+    public List<Brand> selectAllBrand() {
         return null;
     }
 }

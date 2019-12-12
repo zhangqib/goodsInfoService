@@ -2,9 +2,7 @@ package xmu.oomall.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import xmu.oomall.domain.Goods;
 import xmu.oomall.domain.GoodsCategory;
-import xmu.oomall.domain.Product;
 import xmu.oomall.mapper.GoodsMapper;
 import xmu.oomall.mapper.ProductMapper;
 
@@ -31,12 +29,6 @@ public class GoodsCategoryDAO {
         return null;
     }
 
-    /**
-     * 根据id删除Goods，级联删除其对应的product
-     *
-     * @param id
-     * @return 删除是否成功
-     */
     public boolean deleteById(Integer id) {
         return false;
     }
@@ -58,7 +50,29 @@ public class GoodsCategoryDAO {
      * @param goods
      * @return 更新是否成功
      */
-    public GoodsCategory updateById(GoodsCategory goodsCategory) {
+    public boolean updateById(GoodsCategory goodsCategory) {
+        return true;
+    }
+    /**
+     * 查看所有一级分类
+     *
+     * @return
+     */
+    public List<GoodsCategory> selectOneLevelGoodsCategory(){
+        return null;
+    }
+
+    /**
+     * 获取当前一级分类下的二级分类
+     *
+     * @param id 分类类目ID
+     * @return 当前分类栏目
+     */
+    public List<GoodsCategory> selectSecondLevelGoodsCategory(Integer id) {
+        return null;
+    }
+
+    public List<GoodsCategory> selectAllGoodsCategory() {
         return null;
     }
 }
