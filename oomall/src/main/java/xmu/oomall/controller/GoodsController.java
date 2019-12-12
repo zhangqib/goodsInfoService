@@ -1,172 +1,160 @@
 package xmu.oomall.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import xmu.oomall.controller.vo.*;
 import xmu.oomall.domain.*;
-import xmu.oomall.service.*;
+
 
 /**
- * @Author Ke
+ * @Author 模块标准组
+ * @Description:商品模块外部及内部api
+ * @create 2019/12/3 18:30
  */
+
 @RestController
-//@RequestMapping(value = "/goods", produces = "application/json;charset=UTF-8", consumes = "application/json;charset=UTF-8")
+@RequestMapping("/goodsService")
 public class GoodsController {
-    private  static final Logger logger = LoggerFactory.getLogger(GoodsController.class);
-
-    @Autowired
-    private GoodsService goodsService;
-
-    /**
-     * 根据id获得产品对象
-     *
-     * @param id
-     * @return
-     */
-    @GetMapping("/product/{id}")
-    public Object getProductById(@PathVariable Integer id){
-        return goodsService.getProductById(id);
-    }
 
     /**
      * 管理员查询商品下的产品
      *
      * @param id
-     * @return
+     * @return List<Product>，所属该商品的产品列表
      */
     @GetMapping("/goods/{id}/products")
     public Object listProductByGoodsId(@PathVariable Integer id) {
-        return goodsService.listProductByGoodsId(id);
+        return null;
     }
 
     /**
      * 管理员添加商品下的产品
      *
      * @param id
-     * @return
+     * @param product
+     * @return Product，新添加的产品信息
      */
     @PostMapping("/goods/{id}/products")
-    public Object addProductByGoodsId(@PathVariable Integer id,@RequestBody ProductVo productVo) {
-        return goodsService.addProductByGoodsId(id,productVo);
+    public Object addProductByGoodsId(@PathVariable Integer id, @RequestBody Product product) {
+        return null;
     }
 
     /**
      * 管理员修改商品下的某个产品信息
      *
      * @param id
-     * @return
+     * @param product
+     * @return Product，修改后的产品信息
      */
     @PutMapping("/products/{id}")
-    public Object updateProductById(@PathVariable Integer id,@RequestBody ProductVo productVo){
-        return goodsService.updateProductById(id,productVo);
+    public Object updateProductById(@PathVariable Integer id, @RequestBody Product product) {
+        return null;
     }
 
     /**
      * 管理员删除商品下的某个产品信息
      *
      * @param id
-     * @return
+     * @return 无（ResponseUtil.ok()即可）
      */
     @DeleteMapping("/products/{id}")
     public Object deleteProductById(@PathVariable Integer id) {
-        return goodsService.deleteProductById(id);
+        return null;
     }
 
-    /**
-     * 新建商品
-     *
-     * @param goodsVo
-     * @return
-     */
-    @PostMapping("/goods")
-    public Object addGoods(@RequestBody GoodsVo goodsVo) {
-        return goodsService.addGoods(goodsVo);
-    }
+//    /**
+//     * 获取商品列表
+//     * @return
+//     */
+//    @GetMapping("/goods")
+//    public Object listGoods();
+
 
     /**
      * 根据id获取某个商品
      *
      * @param id
-     * @return
+     * @return GoodsVo，即商品的信息，此URL与WX端是同一个URL
      */
     @GetMapping("/goods/{id}")
-    public Object getGoodsById(@PathVariable Integer id) {
-        return goodsService.getGoodsById(id);
+    public Object getGoodsById(Integer id) {
+        return null;
+    }
+
+    /**
+     * 新建/上架一个商品
+     *
+     * @param goods
+     * @return Goods，即新建的一个商品
+     */
+    @PostMapping("/goods")
+    public Object addGoods(@RequestBody Goods goods) {
+        return null;
     }
 
     /**
      * 根据id更新商品信息
      *
-     * @param goodsVo
-     * @return
+     * @param id
+     * @param goods
+     * @return Goods，修改后的商品信息
      */
     @PutMapping("/goods/{id}")
-    public Object updateGoodsById(@PathVariable Integer id, @RequestBody GoodsVo goodsVo) {
-        return goodsService.updateGoodsById(id,goodsVo);
+    public Object updateGoodsById(@PathVariable Integer id, @RequestBody Goods goods) {
+        return null;
     }
 
     /**
      * 根据id删除商品信息
      *
      * @param id
-     * @return
+     * @return 无（即ResponseUtil.ok()即可）
      */
     @DeleteMapping("/goods/{id}")
     public Object deleteGoodsById(@PathVariable Integer id) {
-        return goodsService.deleteGoodsById(id);
+        return null;
     }
 
     /**
-     * 获取某一类别下的商品
+     * 获取商品分类信息
      *
+     * @param id
      * @return
      */
     @GetMapping("/categories/{id}/goods")
-    public Object ListGoodsByCategoryId(@PathVariable Integer id) {
-        return goodsService.listGoodsByCategoryId(id);
+    public Object getCategoriesInfoById(@PathVariable Integer id) {
+        return null;
     }
 
     /**
-     * 根据条件搜素商品
+     * 根据条件搜索商品
      *
-     * @param goodsSn
-     * @param name
-     * @param page
-     * @param limit
-     * @param sort
-     * @param order
+     * @param goodsSn 商品的序列号
+     * @param name    商品的名字
+     * @param page    第几页
+     * @param limit   一页多少
+     *                //     * @param sort
+     *                //     * @param order
      * @return
      */
     @GetMapping("/goods")
-    public Object listGoodsByCondition(String goodsSn, String name,
-                            @RequestParam(defaultValue = "1") Integer page,
-                            @RequestParam(defaultValue = "10") Integer limit,
-                            @RequestParam(defaultValue = "add_time") String sort,
-                            @RequestParam(defaultValue = "desc") String order) {
-        return goodsService.listGoodsByCondition(goodsSn,name,page,limit);
+    public Object listGoods(@RequestParam String goodsSn,
+                            @RequestParam String name,
+                            @RequestParam Integer page,
+                            @RequestParam Integer limit
+//                            @RequestParam String sort,
+//                            @RequestParam String order
+    ) {
+        return null;
     }
 
-    /**
-     * 根据条件搜索品牌
-     *
-     * @param id
-     * @param name
-     * @param page
-     * @param limit
-     * @param sort
-     * @param order
-     * @return
-     */
-    @GetMapping("/admins/brands")
-    public Object listBrandByCondition(String id, String name,
-                                       @RequestParam(defaultValue = "1") Integer page,
-                                       @RequestParam(defaultValue = "10") Integer limit,
-                                       @RequestParam(defaultValue = "add_time") String sort,
-                                       @RequestParam(defaultValue = "desc") String order) {
-        return goodsService.listBrandByCondition(id,name,page,limit);
-    }
+//    /**
+//     * 根据条件搜索品牌
+//     *
+//     * @return List<Brand>
+//     */
+//    @GetMapping("/admins/brands")
+//    public Object listBrand() {
+//        return null;
+//    }
 
 
     /**
@@ -177,7 +165,7 @@ public class GoodsController {
      */
     @PostMapping("/brands")
     public Object addBrand(@RequestBody Brand brand) {
-        return goodsService.addBrand(brand);
+        return null;
     }
 
     /**
@@ -188,7 +176,7 @@ public class GoodsController {
      */
     @GetMapping("/brands/{id}")
     public Object getBrandById(@PathVariable Integer id) {
-        return goodsService.getBrandById(id);
+        return null;
     }
 
     /**
@@ -200,18 +188,18 @@ public class GoodsController {
      */
     @PutMapping("/brands/{id}")
     public Object updateBrandById(@PathVariable Integer id, @RequestBody Brand brand) {
-        return goodsService.updateBrandById(id,brand);
+        return null;
     }
 
     /**
      * 删除一个品牌
      *
-     * @param id
+     * @param brand
      * @return
      */
     @DeleteMapping("/brands/{id}")
-    public Object deleteBrandById(@PathVariable Integer id) {
-        return goodsService.deleteBrandById(id);
+    public Object deleteBrandById(@RequestBody Brand brand) {
+        return null;
     }
 
     /**
@@ -221,7 +209,7 @@ public class GoodsController {
      */
     @GetMapping("/categories")
     public Object listGoodsCategory() {
-        return goodsService.listGoodsCategory();
+        return null;
     }
 
     /**
@@ -232,7 +220,7 @@ public class GoodsController {
      */
     @PostMapping("/categories")
     public Object addGoodsCategory(@RequestBody GoodsCategory goodsCategory) {
-        return goodsService.addGoodsCategory(goodsCategory);
+        return null;
     }
 
     /**
@@ -243,7 +231,7 @@ public class GoodsController {
      */
     @GetMapping("/categories/{id}")
     public Object getGoodsCategoryById(@PathVariable Integer id) {
-        return goodsService.getGoodsCategoryById(id);
+        return null;
     }
 
     /**
@@ -255,18 +243,19 @@ public class GoodsController {
      */
     @PutMapping("/categories/{id}")
     public Object updateGoodsCategoryById(@PathVariable Integer id, @RequestBody GoodsCategory goodsCategory) {
-        return goodsService.updateGoodsCategoryById(id,goodsCategory);
+        return null;
     }
 
     /**
      * 删除单个分类
      *
      * @param id
+     * @param goodsCategory
      * @return
      */
     @DeleteMapping("/categories/{id}")
-    public Object deleteGoodsCategory(@PathVariable Integer id) {
-        return goodsService.deleteGoodsCategory(id);
+    public Object deleteGoodsCategory(@PathVariable Integer id, @RequestBody GoodsCategory goodsCategory) {
+        return null;
     }
 
     /**
@@ -276,24 +265,17 @@ public class GoodsController {
      */
     @GetMapping("/categories/l1")
     public Object listOneLevelGoodsCategory() {
-        return goodsService.listOneLevelGoodsCategory();
+        return null;
     }
 
     /**
      * 查看所有品牌
      *
-     * @param page
-     * @param limit
-     * @param sort
-     * @param order
-     * @return
+     * @return List<Brand>
      */
     @GetMapping("/brands")
-    public Object listBrand(@RequestParam(defaultValue = "1") Integer page,
-                            @RequestParam(defaultValue = "10") Integer limit,
-                            @RequestParam(defaultValue = "add_time") String sort,
-                            @RequestParam(defaultValue = "desc") String order) {
-        return goodsService.listBrand(page,limit);
+    public Object listBrand() {
+        return null;
     }
 
     /**
@@ -304,8 +286,29 @@ public class GoodsController {
      */
     @GetMapping("categories/l1/{id}/l2")
     public Object listSecondLevelGoodsCategoryById(@PathVariable Integer id) {
-        return goodsService.listSecondLevelGoodsCategoryById(id);
+        return null;
     }
 
+    /**
+     * 根据id获得产品对象 - 内部
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/product/{id}")
+    public Object getProductById(@PathVariable Integer id) {
+        return null;
+    }
+
+    /**
+     * 判断商品是否在售 - 内部
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/goods/{id}/isOnSale")
+    public Object isGoodsOnSale(@PathVariable Integer id) {
+        return null;
+    }
 
 }

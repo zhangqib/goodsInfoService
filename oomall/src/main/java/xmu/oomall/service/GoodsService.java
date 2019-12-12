@@ -1,37 +1,27 @@
 package xmu.oomall.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.*;
 import xmu.oomall.controller.vo.GoodsVo;
-import xmu.oomall.controller.vo.ProductVo;
-import xmu.oomall.dao.GoodsDAO;
-import xmu.oomall.dao.ProductDAO;
-import xmu.oomall.domain.Brand;
-import xmu.oomall.domain.Goods;
-import xmu.oomall.domain.GoodsCategory;
-import xmu.oomall.domain.Product;
-import xmu.oomall.util.ResponseUtil;
-import java.lang.Object;
+import xmu.oomall.domain.*;
+
 import java.util.List;
 
+
 /**
- * @Author Ke
+ * @Author 模块标准组
+ * @Description:商品模块外部及内部api
+ * @create 2019/12/3 18:30
  */
+
 @Service
-public interface GoodsService{
-    /**
-     * 根据id获得产品对象
-     *
-     * @param id
-     * @return
-     */
-    public Product getProductById(Integer id);
+public interface GoodsService {
 
     /**
      * 管理员查询商品下的产品
      *
      * @param id
-     * @return
+     * @return List<Product>，所属该商品的产品列表
      */
     public List<Product> listProductByGoodsId(Integer id);
 
@@ -39,75 +29,106 @@ public interface GoodsService{
      * 管理员添加商品下的产品
      *
      * @param id
-     * @return
+     * @param product
+     * @return Product，新添加的产品信息
      */
-    public Product addProductByGoodsId(Integer id, ProductVo productVo);
+    public Product addProductByGoodsId( Integer id,  Product product);
 
     /**
      * 管理员修改商品下的某个产品信息
      *
      * @param id
-     * @return
+     * @param product
+     * @return Product，修改后的产品信息
      */
-    public Product updateProductById(Integer id, ProductVo productVo);
+    public Product updateProductById( Integer id,  Product product);
 
     /**
      * 管理员删除商品下的某个产品信息
      *
      * @param id
-     * @return
+     * @return 无（ResponseUtil.ok()即可）
      */
-    public Object deleteProductById(Integer id);
+    public Object deleteProductById( Integer id);
 
-    /**
-     * 新建商品
-     *
-     * @param goodsVo
-     * @return
-     */
-    public Goods addGoods(GoodsVo goodsVo);
+//    /**
+//     * 获取商品列表
+//     * @return
+//     */
+//    @GetMapping("/goods")
+//    public Object listGoods();
+
 
     /**
      * 根据id获取某个商品
      *
      * @param id
-     * @return
+     * @return GoodsVo，即商品的信息，此URL与WX端是同一个URL
      */
-    public Goods getGoodsById(Integer id);
+    public GoodsVo getGoodsById(Integer id);
+
+    /**
+     * 新建/上架一个商品
+     *
+     * @param goods
+     * @return Goods，即新建的一个商品
+     */
+    public Goods addGoods( Goods goods);
 
     /**
      * 根据id更新商品信息
      *
-     * @param goodsVo
-     * @return
+     * @param id
+     * @param goods
+     * @return Goods，修改后的商品信息
      */
-    public Goods updateGoodsById(Integer id, GoodsVo goodsVo);
+    public Goods updateGoodsById( Integer id,  Goods goods);
 
     /**
      * 根据id删除商品信息
      *
      * @param id
-     * @return
+     * @return 无（即ResponseUtil.ok()即可）
      */
-    public Object deleteGoodsById(Integer id);
+    public Object deleteGoodsById( Integer id);
 
     /**
-     * 获取某一类别下的商品
+     * 获取商品分类信息
      *
+     * @param id
      * @return
      */
-    public List<Goods> listGoodsByCategoryId(Integer id);
+    public List<Goods> getCategoriesInfoById( Integer id);
 
     /**
-     * 根据条件搜素商品
+     * 根据条件搜索商品
      *
-     * @param goodsSn
-     * @param name
-     * @param page
-     * @param limit
+     * @param goodsSn 商品的序列号
+     * @param name    商品的名字
+     * @param page    第几页
+     * @param limit   一页多少
+     *                //     * @param sort
+     *                //     * @param order
      * @return
      */
-    public List<Goods> listGoodsByCondition(String goodsSn, String name, Integer page, Integer limit);
+    public List<Goods> listGoods( String goodsSn,
+                             String name,
+                             Integer page,
+                             Integer limit
+//                             String sort,
+//                             String order
+    );
+
+//    /**
+//     * 根据条件搜索品牌
+//     *
+//     * @return List<Brand>
+//     */
+//    @GetMapping("/admins/brands")
+//    public Object listBrand() {
+//        return null;
+//    }
+
 
     /**
      * 创建一个品牌
@@ -115,7 +136,7 @@ public interface GoodsService{
      * @param brand
      * @return
      */
-    public Brand addBrand(Brand brand);
+    public Brand addBrand( Brand brand);
 
     /**
      * 查看品牌详情,此API与商城端/brands/{id}完全相同
@@ -123,16 +144,7 @@ public interface GoodsService{
      * @param id
      * @return
      */
-    public Brand getBrandById(Integer id);
-
-    /**
-     * 查看所有品牌
-     *
-     * @param page
-     * @param limit
-     * @return
-     */
-    public List<Brand> listBrand(Integer page, Integer limit);
+    public Brand getBrandById( Integer id);
 
     /**
      * 修改单个品牌的信息
@@ -141,25 +153,15 @@ public interface GoodsService{
      * @param brand
      * @return
      */
-    public Brand updateBrandById(Integer id, Brand brand);
+    public Brand updateBrandById( Integer id,  Brand brand);
 
     /**
      * 删除一个品牌
      *
-     * @param id
+     * @param brand
      * @return
      */
-    public Object deleteBrandById(Integer id);
-    /**
-     * 根据条件搜索品牌
-     *
-     * @param id
-     * @param name
-     * @param page
-     * @param limit
-     * @return
-     */
-    public List<Brand> listBrandByCondition(String id, String name, Integer page, Integer limit);
+    public Object deleteBrandById( Brand brand);
 
     /**
      * 查看所有的分类
@@ -167,20 +169,22 @@ public interface GoodsService{
      * @return
      */
     public List<GoodsCategory> listGoodsCategory();
+
     /**
      * 新建一个分类
      *
      * @param goodsCategory
      * @return
      */
-    public GoodsCategory addGoodsCategory(GoodsCategory goodsCategory);
+    public GoodsCategory addGoodsCategory( GoodsCategory goodsCategory);
+
     /**
      * 查看单个分类信息
      *
      * @param id
      * @return
      */
-    public GoodsCategory getGoodsCategoryById(Integer id);
+    public GoodsCategory getGoodsCategoryById( Integer id);
 
     /**
      * 修改分类信息
@@ -189,25 +193,53 @@ public interface GoodsService{
      * @param goodsCategory
      * @return
      */
-    public GoodsCategory updateGoodsCategoryById(Integer id, GoodsCategory goodsCategory);
+    public GoodsCategory updateGoodsCategoryById( Integer id,  GoodsCategory goodsCategory);
+
     /**
      * 删除单个分类
      *
      * @param id
+     * @param goodsCategory
      * @return
      */
-    public Object deleteGoodsCategory(Integer id);
+    public Object deleteGoodsCategory( Integer id,  GoodsCategory goodsCategory);
+
     /**
      * 查看所有一级分类
      *
      * @return
      */
     public List<GoodsCategory> listOneLevelGoodsCategory();
+
+    /**
+     * 查看所有品牌
+     *
+     * @return List<Brand>
+     */
+    public List<Brand> listBrand();
+
     /**
      * 获取当前一级分类下的二级分类
      *
      * @param id 分类类目ID
      * @return 当前分类栏目
      */
-    public List<GoodsCategory> listSecondLevelGoodsCategoryById(Integer id);
+    public List<GoodsCategory> listSecondLevelGoodsCategoryById( Integer id);
+
+    /**
+     * 根据id获得产品对象 - 内部
+     *
+     * @param id
+     * @return
+     */
+    public Product getProductById( Integer id);
+
+    /**
+     * 判断商品是否在售 - 内部
+     *
+     * @param id
+     * @return
+     */
+    public boolean isGoodsOnSale( Integer id);
+
 }
