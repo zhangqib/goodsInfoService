@@ -15,8 +15,8 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode(callSuper = true)
-public class Brand extends BrandPo {
+@EqualsAndHashCode(callSuper = false)
+public class BrandPo {
 
     private List<GoodsPo> goodsPoList;
 

@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import xmu.oomall.domain.Goods;
 import xmu.oomall.domain.Product;
-import xmu.oomall.domain.impl.GoodsImpl;
 import xmu.oomall.mapper.GoodsMapper;
 import xmu.oomall.mapper.ProductMapper;
 
@@ -70,7 +69,7 @@ public class GoodsDAO {
      * @param goods
      * @return 更新是否成功
      */
-    public boolean updateById(GoodsImpl goods) {
+    public boolean updateById(Goods goods) {
         return goodsMapper.updateByPrimaryKey(goods) == 1;
     }
 }

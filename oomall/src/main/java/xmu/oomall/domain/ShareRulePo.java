@@ -1,4 +1,5 @@
-package xmu.ddao.domain.standard;
+package xmu.oomall.domain;
+
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -9,30 +10,27 @@ import java.time.LocalDateTime;
 
 /**
  * @Author: 数据库与对象模型标准组
- * @Description: 分享明细
+ * @Description: 分享规则
  * @Date: Created in 16:00 2019/12/11
  **/
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode
-public class ShareItem {
+public class ShareRulePo {
     private Integer id;
     /**
-     *分享者ID
-     */
-    private Integer userId;
+    * 分享等级（分享次数所对应返利）
+     * JSON格式: {"strategy": [{"lowerbound":xxx, "upperbound":xxx, "rate":xxx}]}, xxx为具体数值
+    */
+    private String shareLevelStrategy;
     /**
-     *商品ID
-     */
+    *商品ID
+    */
     private Integer goodsId;
-    /**
-     *成功件数
-     */
-    private Integer successNum;
 
+    private Boolean beDeleted;
     private LocalDateTime gmtCreate;
     private LocalDateTime gmtModified;
-    private Boolean beDeleted;
 
 }
