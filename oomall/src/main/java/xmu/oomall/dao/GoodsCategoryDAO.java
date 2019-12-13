@@ -3,6 +3,7 @@ package xmu.oomall.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import xmu.oomall.domain.GoodsCategory;
+import xmu.oomall.domain.po.GoodsCategoryPo;
 import xmu.oomall.mapper.GoodsMapper;
 import xmu.oomall.mapper.ProductMapper;
 
@@ -53,26 +54,25 @@ public class GoodsCategoryDAO {
     public boolean updateById(GoodsCategory goodsCategory) {
         return true;
     }
-    /**
-     * 查看所有一级分类
-     *
-     * @return
-     */
-    public List<GoodsCategory> selectOneLevelGoodsCategory(){
+
+
+    public List<GoodsCategory> selectOneLevelGoodsCategories(Integer page, Integer limit) {
         return null;
     }
 
-    /**
-     * 获取当前一级分类下的二级分类
-     *
-     * @param id 分类类目ID
-     * @return 当前分类栏目
-     */
-    public List<GoodsCategory> selectSecondLevelGoodsCategory(Integer id) {
+    public GoodsCategory selectSecondLevelGoodsCategories(Integer id, Integer page, Integer limit) {
         return null;
     }
 
-    public List<GoodsCategory> selectAllGoodsCategory() {
+    public List<GoodsCategory> selectGoodsCategoriesByCondition(Integer page, Integer limit) {
+        return null;
+    }
+
+    public boolean updateById(GoodsCategoryPo goodsCategoryPo) {
+        return false;
+    }
+
+    public GoodsCategoryPo insert(GoodsCategoryPo goodsCategoryPo) {
         return null;
     }
 }
