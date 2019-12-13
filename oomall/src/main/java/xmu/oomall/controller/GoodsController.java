@@ -41,6 +41,7 @@ public class GoodsController {
 
     /**
      * 内部接口————————————判断商品是否在售
+     *
      * @param id：Integer
      * @return Boolean
      */
@@ -48,16 +49,6 @@ public class GoodsController {
     public Object isGoodsOnSale(@PathVariable Integer id) {
         return null;
     }
-//    /**
-//     * 内部接口——————根据id搜索商品(给collect、comment、footprint调用)
-//     *
-//     * @param id：Integer(PathVariable
-//     * @return GoodsPo，搜索到的商品Po
-//     */
-//    @GetMapping("/goods/{id}")
-//    public Object getGoodsPoById(@PathVariable Integer id) {
-//        return null;
-//    }
 
     /**
      * 管理员根据条件搜索商品
@@ -65,32 +56,33 @@ public class GoodsController {
      * @param goodsSn:String   商品的序列号
      * @param goodsName:String 商品的名字
      * @param status:Integer   商品是否上架，这个域的取值以数据字典为准
-     * @param page: Integer 第几页
-     * @param limit: Integer 一页多少
+     * @param page:            Integer 第几页
+     * @param limit:           Integer 一页多少
      * @return List<GoodsPo>,搜索到的商品的列表
      */
     @GetMapping("/goods")
     public Object listGoodsByCondition(@RequestParam String goodsSn,
-                            @RequestParam String goodsName,
-                            @RequestParam Integer status,
-                            @RequestParam Integer page,
-                            @RequestParam Integer limit) {
+                                       @RequestParam String goodsName,
+                                       @RequestParam Integer status,
+                                       @RequestParam Integer page,
+                                       @RequestParam Integer limit) {
         return null;
     }
 
     /**
      * 用户根据条件搜素商品
+     *
      * @param goodsSn:String   商品的序列号
      * @param goodsName:String 商品的名字
-     * @param page:Integer 第几页
-     * @param limit:Integer 一页多少
+     * @param page:Integer     第几页
+     * @param limit:Integer    一页多少
      * @return List<GoodsPo>,搜索到的商品的列表
      */
     @GetMapping("/goods")
     public Object listGoodsByCondition(@RequestParam String goodsSn,
-                            @RequestParam String goodsName,
-                            @RequestParam Integer page,
-                            @RequestParam Integer limit) {
+                                       @RequestParam String goodsName,
+                                       @RequestParam Integer page,
+                                       @RequestParam Integer limit) {
         return null;
     }
 
@@ -98,8 +90,8 @@ public class GoodsController {
      * 用户根据商品分类搜索商品
      *
      * @param id:Integer(PathVariable
-     * @param page:Integer 第几页
-     * @param limit:Integer 一页多少
+     * @param page:Integer            第几页
+     * @param limit:Integer           一页多少
      * @return List<GoodsPo>，搜索到的商品的列表
      */
     @GetMapping("/categories/{id}/goods")
@@ -111,6 +103,7 @@ public class GoodsController {
 
     /**
      * 管理员新建商品
+     *
      * @param goods：Goods(RequestBody
      * @return GoodsPo，新建的商品
      */
@@ -149,6 +142,7 @@ public class GoodsController {
 
     /**
      * 管理员根据id搜索产品
+     *
      * @param id:Integer(PathVariable
      * @return Product，搜索到的产品
      */
@@ -157,21 +151,12 @@ public class GoodsController {
         return null;
     }
 
-//    /**
-//     * 内部接口——————————————根据id搜索产品
-//     * @param id:Integer(PathVariable
-//     * @return Product，搜索到的产品
-//     */
-//    @GetMapping("/products/{id}")
-//    public Object getProductById(@PathVariable Integer id) {
-//        return null;
-//    }
-
     /**
      * 管理员搜索某个商品下的所有产品
+     *
      * @param id:Integer(PathVariable
-     * @param page:Integer 第几页
-     * @param limit:Integer 一页多少
+     * @param page:Integer            第几页
+     * @param limit:Integer           一页多少
      * @return List<ProductPo>，所属该商品的产品列表
      */
     @GetMapping("/goods/{id}/products")
@@ -183,6 +168,7 @@ public class GoodsController {
 
     /**
      * 管理员新建某个商品下的产品
+     *
      * @param id:Integer(PathVariable
      * @param productPo:ProductPo(RequestBody
      * @return List<ProductPo>，属于这个商品的产品列表
@@ -222,8 +208,10 @@ public class GoodsController {
 
 
     //-----------------Brand---------------Brand-----------Brand---------
+
     /**
      * 管理员或用户根据id搜索品牌
+     *
      * @param id:Integer(PathVariable
      * @return Brand
      */
@@ -234,23 +222,25 @@ public class GoodsController {
 
     /**
      * 管理员根据条件搜索品牌
-     * @param brandId:String 品牌的id
+     *
+     * @param brandId:String   品牌的id
      * @param brandName:String 品牌的名字
-     * @param page: Integer 第几页
-     * @param limit: Integer 一页多少
+     * @param page:            Integer 第几页
+     * @param limit:           Integer 一页多少
      * @return List<brand>,搜索到的品牌列表
      */
     @GetMapping("/admins/brands")
     public Object listBrandsByCondition(@RequestParam String brandId,
-                                       @RequestParam String brandName,
-                                       @RequestParam Integer page,
-                                       @RequestParam Integer limit) {
+                                        @RequestParam String brandName,
+                                        @RequestParam Integer page,
+                                        @RequestParam Integer limit) {
         return null;
     }
 
     /**
      * 用户搜索所有品牌
-     * @param page: Integer 第几页
+     *
+     * @param page:  Integer 第几页
      * @param limit: Integer 一页多少
      * @return List<brand>,搜索到的品牌列表
      */
@@ -262,6 +252,7 @@ public class GoodsController {
 
     /**
      * 管理员创建品牌
+     *
      * @param brand
      * @param brand:Brand 要添加的品牌
      * @return Brand
@@ -273,6 +264,7 @@ public class GoodsController {
 
     /**
      * 管理员修改品牌
+     *
      * @param id：Integer（PathVariable
      * @param brand：Brand（RequestBody
      * @return Brand
@@ -284,6 +276,7 @@ public class GoodsController {
 
     /**
      * 管理员根据id删除品牌
+     *
      * @param id：Integer
      * @return Brand
      */
@@ -296,8 +289,10 @@ public class GoodsController {
     //-----------------Brand---------------Brand-----------Brand---------
 
     //-----------------GoodsCategory---------------GoodsCategory-----------GoodsCategory---------
+
     /**
      * 管理员或用户根据id搜索分类
+     *
      * @param id：Integer
      * @return GoodsCategory
      */
@@ -308,7 +303,8 @@ public class GoodsController {
 
     /**
      * 管理员或用户搜索所有分类
-     * @param page: Integer 第几页
+     *
+     * @param page:  Integer 第几页
      * @param limit: Integer 一页多少
      * @return List<GoodsCategory>
      */
@@ -320,7 +316,8 @@ public class GoodsController {
 
     /**
      * 管理员或用户搜索所有一级分类
-     * @param page: Integer 第几页
+     *
+     * @param page:  Integer 第几页
      * @param limit: Integer 一页多少
      * @return List<GoodsCategory>
      */
@@ -332,9 +329,10 @@ public class GoodsController {
 
     /**
      * 管理员或用户搜索某一级分类下的所有二级分类
+     *
      * @param id：Integer
-     * @param page: Integer 第几页
-     * @param limit: Integer 一页多少
+     * @param page:      Integer 第几页
+     * @param limit:     Integer 一页多少
      * @return GoodsCategory
      */
     @GetMapping("/categories/l1/{id}/l2")
@@ -346,6 +344,7 @@ public class GoodsController {
 
     /**
      * 管理员新建分类
+     *
      * @param goodsCategory：GoodsCategory
      * @return GoodsCategory
      */
@@ -356,6 +355,7 @@ public class GoodsController {
 
     /**
      * 管理员修改分类
+     *
      * @param id：Integer
      * @param goodsCategory：GoodsCategory
      * @return GoodsCategory
@@ -367,6 +367,7 @@ public class GoodsController {
 
     /**
      * 管理员删除分类
+     *
      * @param id：Integer
      * @return GoodsCategory
      */
