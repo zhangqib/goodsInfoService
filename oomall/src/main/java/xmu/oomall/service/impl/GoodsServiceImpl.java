@@ -86,7 +86,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public List<GoodsPo> listGoodsByCondition(String goodsSn, String goodsName, Integer page, Integer limit) {
-        return goodsDao.selectByCondition(goodsSn, goodsName, page, limit);
+        return goodsDao.selectByCondition(goodsSn, goodsName, null,page, limit);
     }
 
     /**
