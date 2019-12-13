@@ -1,178 +1,231 @@
 package xmu.oomall.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import xmu.oomall.domain.*;
+import xmu.oomall.domain.po.GoodsPo;
+import xmu.oomall.domain.po.ProductPo;
+import xmu.oomall.service.GoodsService;
+
+import java.util.List;
 
 
 /**
- * @Author 模块标准组
- * @Description:商品模块外部及内部api
- * @create 2019/12/3 18:30
+ * @Author Ke
+ * @Description: GoodsController
+ * @create 2019/12/13 13:13
  */
 
 @RestController
 @RequestMapping("/goodsService")
 public class GoodsController {
+    private static final Logger logger = LoggerFactory.getLogger(GoodsController.class);
+
+    @Autowired
+    private GoodsService goodsService;
+
+    //-----------------Goods---------------Goods-----------Goods---------
 
     /**
-     * 管理员查询商品下的产品
+     * 管理员或用户根据id搜索商品
      *
-     * @param id
-     * @return List<Product>，所属该商品的产品列表
+     * @param id：Integer(PathVariable
+     * @return Goods，搜索到的商品，此URL与WX端是同一个URL
+     */
+    @GetMapping("/goods/{id}")
+    public Object getGoodsById(@PathVariable Integer id) {
+        return null;
+    }
+
+    /**
+     * 内部接口————————————判断商品是否在售
+     * @param id：Integer
+     * @return Boolean
+     */
+    @GetMapping("/goods/{id}/isOnSale")
+    public Object isGoodsOnSale(@PathVariable Integer id) {
+        return null;
+    }
+//    /**
+//     * 内部接口——————根据id搜索商品(给collect、comment、footprint调用)
+//     *
+//     * @param id：Integer(PathVariable
+//     * @return GoodsPo，搜索到的商品Po
+//     */
+//    @GetMapping("/goods/{id}")
+//    public Object getGoodsPoById(@PathVariable Integer id) {
+//        return null;
+//    }
+
+    /**
+     * 管理员根据条件搜索商品
+     *
+     * @param goodsSn:String   商品的序列号
+     * @param goodsName:String 商品的名字
+     * @param status:Integer   商品是否上架，这个域的取值以数据字典为准
+     * @param page: Integer 第几页
+     * @param limit: Integer 一页多少
+     * @return List<GoodsPo>,搜索到的商品的列表
+     */
+    @GetMapping("/goods")
+    public Object listGoodsByCondition(@RequestParam String goodsSn,
+                            @RequestParam String goodsName,
+                            @RequestParam Integer status,
+                            @RequestParam Integer page,
+                            @RequestParam Integer limit) {
+        return null;
+    }
+
+    /**
+     * 用户根据条件搜素商品
+     * @param goodsSn:String   商品的序列号
+     * @param goodsName:String 商品的名字
+     * @param page:Integer 第几页
+     * @param limit:Integer 一页多少
+     * @return List<GoodsPo>,搜索到的商品的列表
+     */
+    @GetMapping("/goods")
+    public Object listGoodsByCondition(@RequestParam String goodsSn,
+                            @RequestParam String goodsName,
+                            @RequestParam Integer page,
+                            @RequestParam Integer limit) {
+        return null;
+    }
+
+    /**
+     * 用户根据商品分类搜索商品
+     *
+     * @param id:Integer(PathVariable
+     * @param page:Integer 第几页
+     * @param limit:Integer 一页多少
+     * @return List<GoodsPo>，搜索到的商品的列表
+     */
+    @GetMapping("/categories/{id}/goods")
+    public Object ListGoodsByCategoryId(@PathVariable Integer id,
+                                        @RequestParam Integer page,
+                                        @RequestParam Integer limit) {
+        return null;
+    }
+
+    /**
+     * 管理员新建商品
+     * @param goods：Goods(RequestBody
+     * @return GoodsPo，新建的商品
+     */
+    @PostMapping("/admin/goods")
+    public Object addGoods(@RequestBody Goods goods) {
+        return null;
+    }
+
+    /**
+     * 管理员根据id修改商品
+     *
+     * @param id：Integer(PathVariable
+     * @param goodsPo:GoodsPo(RequestBody
+     * @return GoodsPo，修改后的商品
+     */
+    @PutMapping("/goods/{id}")
+    public Object updateGoodsById(@PathVariable Integer id,
+                                  @RequestBody GoodsPo goodsPo) {
+        return null;
+    }
+
+    /**
+     * 管理员根据id删除商品
+     *
+     * @param id：Integer(PathVariable
+     * @return ResponseUtil.ok()或者ResponseUtil.fail()
+     */
+    @DeleteMapping("/goods/{id}")
+    public Object deleteGoodsById(@PathVariable Integer id) {
+        return null;
+    }
+    //-----------------Goods---------------Goods-----------Goods---------
+    //-----------------Goods---------------Goods-----------Goods---------
+
+    //-----------------Product-------------Product-------------Product--------
+
+    /**
+     * 管理员根据id搜索产品
+     * @param id:Integer(PathVariable
+     * @return Product，搜索到的产品
+     */
+    @GetMapping("/products/{id}")
+    public Object getProductById(@PathVariable Integer id) {
+        return null;
+    }
+
+//    /**
+//     * 内部接口——————————————根据id搜索产品
+//     * @param id:Integer(PathVariable
+//     * @return Product，搜索到的产品
+//     */
+//    @GetMapping("/products/{id}")
+//    public Object getProductById(@PathVariable Integer id) {
+//        return null;
+//    }
+
+    /**
+     * 管理员搜索某个商品下的所有产品
+     * @param id:Integer(PathVariable
+     * @param page:Integer 第几页
+     * @param limit:Integer 一页多少
+     * @return List<ProductPo>，所属该商品的产品列表
      */
     @GetMapping("/goods/{id}/products")
-    public Object listProductByGoodsId(@PathVariable Integer id) {
+    public Object listProductsByGoodsId(@PathVariable Integer id,
+                                        @RequestParam Integer page,
+                                        @RequestParam Integer limit) {
         return null;
     }
 
     /**
-     * 管理员添加商品下的产品
-     *
-     * @param id
-     * @param product
-     * @return Product，新添加的产品信息
+     * 管理员新建某个商品下的产品
+     * @param id:Integer(PathVariable
+     * @param productPo:ProductPo(RequestBody
+     * @return List<ProductPo>，属于这个商品的产品列表
      */
     @PostMapping("/goods/{id}/products")
-    public Object addProductByGoodsId(@PathVariable Integer id, @RequestBody Product product) {
+    public Object addProduct(@PathVariable Integer id,
+                             @RequestBody ProductPo productPo) {
         return null;
     }
 
     /**
-     * 管理员修改商品下的某个产品信息
+     * 管理员根据id修改产品
      *
-     * @param id
-     * @param product
-     * @return Product，修改后的产品信息
+     * @param id:Integer(PathVariable
+     * @param productPo:ProductPo(RequestBody
+     * @return ProductPo，修改后的产品
      */
     @PutMapping("/products/{id}")
-    public Object updateProductById(@PathVariable Integer id, @RequestBody Product product) {
+    public Object updateProductById(@PathVariable Integer id,
+                                    @RequestBody ProductPo productPo) {
         return null;
     }
 
     /**
-     * 管理员删除商品下的某个产品信息
+     * 管理员根据id删除产品
      *
-     * @param id
-     * @return 无（ResponseUtil.ok()即可）
+     * @param id:Integer(PathVariable
+     * @return ResponseUtil.ok()或者ResponseUtil.fail()
      */
     @DeleteMapping("/products/{id}")
     public Object deleteProductById(@PathVariable Integer id) {
         return null;
     }
 
-//    /**
-//     * 获取商品列表
-//     * @return
-//     */
-//    @GetMapping("/goods")
-//    public Object listGoods();
+    //-----------------Product-------------Product-------------Product--------
+    //-----------------Product-------------Product-------------Product--------
 
 
+    //-----------------Brand---------------Brand-----------Brand---------
     /**
-     * 根据id获取某个商品
-     *
-     * @param id
-     * @return GoodsVo，即商品的信息，此URL与WX端是同一个URL
-     */
-    @GetMapping("/goods/{id}")
-    public Object getGoodsById(Integer id) {
-        return null;
-    }
-
-    /**
-     * 新建/上架一个商品
-     *
-     * @param goods
-     * @return Goods，即新建的一个商品
-     */
-    @PostMapping("/goods")
-    public Object addGoods(@RequestBody Goods goods) {
-        return null;
-    }
-
-    /**
-     * 根据id更新商品信息
-     *
-     * @param id
-     * @param goods
-     * @return Goods，修改后的商品信息
-     */
-    @PutMapping("/goods/{id}")
-    public Object updateGoodsById(@PathVariable Integer id, @RequestBody Goods goods) {
-        return null;
-    }
-
-    /**
-     * 根据id删除商品信息
-     *
-     * @param id
-     * @return 无（即ResponseUtil.ok()即可）
-     */
-    @DeleteMapping("/goods/{id}")
-    public Object deleteGoodsById(@PathVariable Integer id) {
-        return null;
-    }
-
-    /**
-     * 获取商品分类信息
-     *
-     * @param id
-     * @return
-     */
-    @GetMapping("/categories/{id}/goods")
-    public Object getCategoriesInfoById(@PathVariable Integer id) {
-        return null;
-    }
-
-    /**
-     * 根据条件搜索商品
-     *
-     * @param goodsSn 商品的序列号
-     * @param name    商品的名字
-     * @param page    第几页
-     * @param limit   一页多少
-     *                //     * @param sort
-     *                //     * @param order
-     * @return
-     */
-    @GetMapping("/goods")
-    public Object listGoods(@RequestParam String goodsSn,
-                            @RequestParam String name,
-                            @RequestParam Integer page,
-                            @RequestParam Integer limit
-//                            @RequestParam String sort,
-//                            @RequestParam String order
-    ) {
-        return null;
-    }
-
-//    /**
-//     * 根据条件搜索品牌
-//     *
-//     * @return List<Brand>
-//     */
-//    @GetMapping("/admins/brands")
-//    public Object listBrand() {
-//        return null;
-//    }
-
-
-    /**
-     * 创建一个品牌
-     *
-     * @param brand
-     * @return
-     */
-    @PostMapping("/brands")
-    public Object addBrand(@RequestBody Brand brand) {
-        return null;
-    }
-
-    /**
-     * 查看品牌详情,此API与商城端/brands/{id}完全相同
-     *
-     * @param id
-     * @return
+     * 管理员或用户根据id搜索品牌
+     * @param id:Integer(PathVariable
+     * @return Brand
      */
     @GetMapping("/brands/{id}")
     public Object getBrandById(@PathVariable Integer id) {
@@ -180,11 +233,49 @@ public class GoodsController {
     }
 
     /**
-     * 修改单个品牌的信息
-     *
-     * @param id
+     * 管理员根据条件搜索品牌
+     * @param brandId:String 品牌的id
+     * @param brandName:String 品牌的名字
+     * @param page: Integer 第几页
+     * @param limit: Integer 一页多少
+     * @return List<brand>,搜索到的品牌列表
+     */
+    @GetMapping("/admins/brands")
+    public Object listBrandsByCondition(@RequestParam String brandId,
+                                       @RequestParam String brandName,
+                                       @RequestParam Integer page,
+                                       @RequestParam Integer limit) {
+        return null;
+    }
+
+    /**
+     * 用户搜索所有品牌
+     * @param page: Integer 第几页
+     * @param limit: Integer 一页多少
+     * @return List<brand>,搜索到的品牌列表
+     */
+    @GetMapping("/brands")
+    public Object listBrandsByCondition(@RequestParam Integer page,
+                                        @RequestParam Integer limit) {
+        return null;
+    }
+
+    /**
+     * 管理员创建品牌
      * @param brand
-     * @return
+     * @param brand:Brand 要添加的品牌
+     * @return Brand
+     */
+    @PostMapping("/brands")
+    public Object addBrand(@RequestBody Brand brand) {
+        return null;
+    }
+
+    /**
+     * 管理员修改品牌
+     * @param id：Integer（PathVariable
+     * @param brand：Brand（RequestBody
+     * @return Brand
      */
     @PutMapping("/brands/{id}")
     public Object updateBrandById(@PathVariable Integer id, @RequestBody Brand brand) {
@@ -192,42 +283,23 @@ public class GoodsController {
     }
 
     /**
-     * 删除一个品牌
-     *
-     * @param brand
-     * @return
+     * 管理员根据id删除品牌
+     * @param id：Integer
+     * @return Brand
      */
     @DeleteMapping("/brands/{id}")
     public Object deleteBrandById(@PathVariable Integer id) {
         return null;
     }
 
-    /**
-     * 查看所有的分类
-     *
-     * @return
-     */
-    @GetMapping("/categories")
-    public Object listGoodsCategory() {
-        return null;
-    }
+    //-----------------Brand---------------Brand-----------Brand---------
+    //-----------------Brand---------------Brand-----------Brand---------
 
+    //-----------------GoodsCategory---------------GoodsCategory-----------GoodsCategory---------
     /**
-     * 新建一个分类
-     *
-     * @param goodsCategory
-     * @return
-     */
-    @PostMapping("/categories")
-    public Object addGoodsCategory(@RequestBody GoodsCategory goodsCategory) {
-        return null;
-    }
-
-    /**
-     * 查看单个分类信息
-     *
-     * @param id
-     * @return
+     * 管理员或用户根据id搜索分类
+     * @param id：Integer
+     * @return GoodsCategory
      */
     @GetMapping("/categories/{id}")
     public Object getGoodsCategoryById(@PathVariable Integer id) {
@@ -235,11 +307,58 @@ public class GoodsController {
     }
 
     /**
-     * 修改分类信息
-     *
-     * @param id
-     * @param goodsCategory
-     * @return
+     * 管理员或用户搜索所有分类
+     * @param page: Integer 第几页
+     * @param limit: Integer 一页多少
+     * @return List<GoodsCategory>
+     */
+    @GetMapping("/categories")
+    public Object listGoodsCategories(@RequestParam Integer page,
+                                      @RequestParam Integer limit) {
+        return null;
+    }
+
+    /**
+     * 管理员或用户搜索所有一级分类
+     * @param page: Integer 第几页
+     * @param limit: Integer 一页多少
+     * @return List<GoodsCategory>
+     */
+    @GetMapping("/categories/l1")
+    public Object listOneLevelGoodsCategories(@RequestParam Integer page,
+                                              @RequestParam Integer limit) {
+        return null;
+    }
+
+    /**
+     * 管理员或用户搜索某一级分类下的所有二级分类
+     * @param id：Integer
+     * @param page: Integer 第几页
+     * @param limit: Integer 一页多少
+     * @return GoodsCategory
+     */
+    @GetMapping("/categories/l1/{id}/l2")
+    public Object listSecondLevelGoodsCategoryById(@PathVariable Integer id,
+                                                   @RequestParam Integer page,
+                                                   @RequestParam Integer limit) {
+        return null;
+    }
+
+    /**
+     * 管理员新建分类
+     * @param goodsCategory：GoodsCategory
+     * @return GoodsCategory
+     */
+    @PostMapping("/categories")
+    public Object addGoodsCategory(@RequestBody GoodsCategory goodsCategory) {
+        return null;
+    }
+
+    /**
+     * 管理员修改分类
+     * @param id：Integer
+     * @param goodsCategory：GoodsCategory
+     * @return GoodsCategory
      */
     @PutMapping("/categories/{id}")
     public Object updateGoodsCategoryById(@PathVariable Integer id, @RequestBody GoodsCategory goodsCategory) {
@@ -247,68 +366,14 @@ public class GoodsController {
     }
 
     /**
-     * 删除单个分类
-     *
-     * @param id
-     * @param goodsCategory
-     * @return
+     * 管理员删除分类
+     * @param id：Integer
+     * @return GoodsCategory
      */
     @DeleteMapping("/categories/{id}")
-    public Object deleteGoodsCategory(@PathVariable Integer id, @RequestBody GoodsCategory goodsCategory) {
+    public Object deleteGoodsCategory(@PathVariable Integer id) {
         return null;
     }
-
-    /**
-     * 查看所有一级分类
-     *
-     * @return
-     */
-    @GetMapping("/categories/l1")
-    public Object listOneLevelGoodsCategory() {
-        return null;
-    }
-
-    /**
-     * 查看所有品牌
-     *
-     * @return List<Brand>
-     */
-    @GetMapping("/brands")
-    public Object listBrand() {
-        return null;
-    }
-
-    /**
-     * 获取当前一级分类下的二级分类
-     *
-     * @param id 分类类目ID
-     * @return 当前分类栏目
-     */
-    @GetMapping("categories/l1/{id}/l2")
-    public Object listSecondLevelGoodsCategoryById(@PathVariable Integer id) {
-        return null;
-    }
-
-    /**
-     * 根据id获得产品对象 - 内部
-     *
-     * @param id
-     * @return
-     */
-    @GetMapping("/product/{id}")
-    public Object getProductById(@PathVariable Integer id) {
-        return null;
-    }
-
-    /**
-     * 判断商品是否在售 - 内部
-     *
-     * @param id
-     * @return
-     */
-    @GetMapping("/goods/{id}/isOnSale")
-    public Object isGoodsOnSale(@PathVariable Integer id) {
-        return null;
-    }
-
+    //-----------------GoodsCategory---------------GoodsCategory-----------GoodsCategory---------
+    //-----------------GoodsCategory---------------GoodsCategory-----------GoodsCategory---------
 }
