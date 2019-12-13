@@ -24,6 +24,7 @@ public class GoodsDAO {
 
     /**
      * 将商品插入数据库
+     *
      * @param goods
      * @return 更新完id的商品
      */
@@ -34,12 +35,13 @@ public class GoodsDAO {
 
     /**
      * 根据id删除Goods，级联删除其对应的product
+     *
      * @param id
      * @return 删除是否成功
      */
     public boolean deleteById(Integer id) {
         List<ProductPo> products = productMapper.selectByGoodsId(id);
-        for(ProductPo product: products) {
+        for (ProductPo product : products) {
             if (productMapper.deleteByPrimaryKey(product.getId()) == 0) {
                 return false;
             }
@@ -49,6 +51,7 @@ public class GoodsDAO {
 
     /**
      * 根据id返回对应的商品
+     *
      * @param id
      * @return Goods
      */
@@ -59,6 +62,7 @@ public class GoodsDAO {
 
     /**
      * 根据productId返回Goods
+     *
      * @param productId
      * @return productId所属的商品
      */
@@ -73,6 +77,7 @@ public class GoodsDAO {
 
     /**
      * 根据参数的id更新对应的goods
+     *
      * @param goods
      * @return 更新是否成功
      */
@@ -80,20 +85,10 @@ public class GoodsDAO {
         return goodsMapper.updateByPrimaryKey(goods) == 1;
     }
 
-    public boolean isGoodsOnSale(Integer id) {
-        return true;
-    }
-
-    public List<Goods> selectGoodsByCondition(String goodsSn, String name, Integer page, Integer limit) {
-        return null;
-    }
-
-    public List<Goods> selectByCategoryId(Integer id) {
-        return null;
-    }
 
     /**
      * 将GoodsPo转换成Goods对象
+     *
      * @param goodsPo
      * @return goods pojo
      */
@@ -104,5 +99,25 @@ public class GoodsDAO {
         } else {
             return null;
         }
+    }
+
+    public List<GoodsPo> selectByCategoryId(Integer id, Integer page, Integer limit) {
+        return null;
+    }
+
+    public List<GoodsPo> selectByCondition(String goodsSn, String goodsName, Integer status, Integer page, Integer limit) {
+        return null;
+    }
+
+    public List<GoodsPo> selectByCondition(String goodsSn, String goodsName, Integer page, Integer limit) {
+        return null;
+    }
+
+    public boolean updateById(GoodsPo goodsPo) {
+        return true;
+    }
+
+    public GoodsPo insert(GoodsPo goodsPo) {
+        return null;
     }
 }

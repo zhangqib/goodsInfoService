@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import xmu.oomall.domain.*;
+import xmu.oomall.domain.po.BrandPo;
+import xmu.oomall.domain.po.GoodsCategoryPo;
 import xmu.oomall.domain.po.GoodsPo;
 import xmu.oomall.domain.po.ProductPo;
 import xmu.oomall.service.GoodsService;
@@ -43,7 +45,7 @@ public class GoodsController {
      * 内部接口————————————判断商品是否在售
      *
      * @param id：Integer
-     * @return Boolean
+     * @return Integer，0表示该商品下架，1表示该商品在售，-1表示该商品不存在
      */
     @GetMapping("/goods/{id}/isOnSale")
     public Object isGoodsOnSale(@PathVariable Integer id) {
@@ -104,11 +106,11 @@ public class GoodsController {
     /**
      * 管理员新建商品
      *
-     * @param goods：Goods(RequestBody
+     * @param goodsPo：GoodsPo(RequestBody
      * @return GoodsPo，新建的商品
      */
     @PostMapping("/admin/goods")
-    public Object addGoods(@RequestBody Goods goods) {
+    public Object addGoods(@RequestBody GoodsPo goodsPo) {
         return null;
     }
 
@@ -129,7 +131,7 @@ public class GoodsController {
      * 管理员根据id删除商品
      *
      * @param id：Integer(PathVariable
-     * @return ResponseUtil.ok()或者ResponseUtil.fail()
+     * @return ResponseUtil.ok(xxx)或者ResponseUtil.fail(xxx)
      */
     @DeleteMapping("/goods/{id}")
     public Object deleteGoodsById(@PathVariable Integer id) {
@@ -171,7 +173,7 @@ public class GoodsController {
      *
      * @param id:Integer(PathVariable
      * @param productPo:ProductPo(RequestBody
-     * @return List<ProductPo>，属于这个商品的产品列表
+     * @return ProductPo，新建的商品
      */
     @PostMapping("/goods/{id}/products")
     public Object addProduct(@PathVariable Integer id,
@@ -196,7 +198,7 @@ public class GoodsController {
      * 管理员根据id删除产品
      *
      * @param id:Integer(PathVariable
-     * @return ResponseUtil.ok()或者ResponseUtil.fail()
+     * @return ResponseUtil.ok(xxx)或者ResponseUtil.fail(xxx)
      */
     @DeleteMapping("/products/{id}")
     public Object deleteProductById(@PathVariable Integer id) {
@@ -253,12 +255,11 @@ public class GoodsController {
     /**
      * 管理员创建品牌
      *
-     * @param brand
-     * @param brand:Brand 要添加的品牌
-     * @return Brand
+     * @param brandPo:BrandPo 要添加的品牌
+     * @return BrandPo
      */
     @PostMapping("/brands")
-    public Object addBrand(@RequestBody Brand brand) {
+    public Object addBrand(@RequestBody BrandPo brandPo) {
         return null;
     }
 
@@ -266,11 +267,11 @@ public class GoodsController {
      * 管理员修改品牌
      *
      * @param id：Integer（PathVariable
-     * @param brand：Brand（RequestBody
-     * @return Brand
+     * @param brandPo：BrandPo（RequestBody
+     * @return BrandPo
      */
     @PutMapping("/brands/{id}")
-    public Object updateBrandById(@PathVariable Integer id, @RequestBody Brand brand) {
+    public Object updateBrandById(@PathVariable Integer id, @RequestBody BrandPo brandPo) {
         return null;
     }
 
@@ -278,7 +279,7 @@ public class GoodsController {
      * 管理员根据id删除品牌
      *
      * @param id：Integer
-     * @return Brand
+     * @return ResponseUtil.ok(xxx)或者ResponseUtil.fail(xxx)
      */
     @DeleteMapping("/brands/{id}")
     public Object deleteBrandById(@PathVariable Integer id) {
@@ -345,11 +346,11 @@ public class GoodsController {
     /**
      * 管理员新建分类
      *
-     * @param goodsCategory：GoodsCategory
-     * @return GoodsCategory
+     * @param goodsCategoryPo：GoodsCategoryPo
+     * @return GoodsCategoryPo
      */
     @PostMapping("/categories")
-    public Object addGoodsCategory(@RequestBody GoodsCategory goodsCategory) {
+    public Object addGoodsCategory(@RequestBody GoodsCategoryPo goodsCategoryPo) {
         return null;
     }
 
@@ -357,11 +358,11 @@ public class GoodsController {
      * 管理员修改分类
      *
      * @param id：Integer
-     * @param goodsCategory：GoodsCategory
-     * @return GoodsCategory
+     * @param goodsCategoryPo：GoodsCategoryPo
+     * @return GoodsCategoryPo
      */
     @PutMapping("/categories/{id}")
-    public Object updateGoodsCategoryById(@PathVariable Integer id, @RequestBody GoodsCategory goodsCategory) {
+    public Object updateGoodsCategoryById(@PathVariable Integer id, @RequestBody GoodsCategoryPo goodsCategoryPo) {
         return null;
     }
 
@@ -369,7 +370,7 @@ public class GoodsController {
      * 管理员删除分类
      *
      * @param id：Integer
-     * @return GoodsCategory
+     * @return ResponseUtil.ok(xxx)或者ResponseUtil.fail(xxx)
      */
     @DeleteMapping("/categories/{id}")
     public Object deleteGoodsCategory(@PathVariable Integer id) {

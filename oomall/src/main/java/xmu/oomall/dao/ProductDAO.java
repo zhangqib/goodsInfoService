@@ -3,6 +3,7 @@ package xmu.oomall.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import xmu.oomall.domain.Product;
+import xmu.oomall.domain.po.ProductPo;
 import xmu.oomall.mapper.ProductMapper;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class ProductDAO {
 
     /**
      * 插入一个product
+     *
      * @param product
      * @return 更新完id的product
      */
@@ -28,6 +30,7 @@ public class ProductDAO {
 
     /**
      * 根据productId删除对应的product
+     *
      * @param id
      * @return 删除是否成功
      */
@@ -37,6 +40,7 @@ public class ProductDAO {
 
     /**
      * 根据id查找product
+     *
      * @param id
      * @return product
      */
@@ -50,17 +54,27 @@ public class ProductDAO {
      * @param id
      * @return products
      */
-    public List<Product> selectByGoodsId(Integer id) {
-//        return productMapper.selectByGoodsId(id);
-        return new ArrayList<Product>();
-    }
+
 
     /**
      * 根据productId修改product
+     *
      * @param product
      * @return 更新是否成功
      */
     public boolean updateById(Product product) {
         return productMapper.updateByPrimaryKey(product) == 1;
+    }
+
+    public List<ProductPo> selectByGoodsId(Integer id, Integer page, Integer limit) {
+        return null;
+    }
+
+    public boolean updateById(ProductPo productPo) {
+        return false;
+    }
+
+    public boolean insert(ProductPo productPo) {
+        return false;
     }
 }
