@@ -66,4 +66,14 @@ class GoodsMapperTest {
     void selectByCondition() {
         System.out.println(goodsMapper.selectByCondition("1", "test goods", 0));
     }
+
+    @Test
+    void cleanBrand() {
+        System.out.println(goodsMapper.cleanBrand(1));
+    }
+
+    @Test
+    void cleanCategory() {
+        System.out.println(goodsMapper.cleanCategory(2));
+    }
 }
