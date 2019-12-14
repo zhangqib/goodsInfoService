@@ -61,4 +61,9 @@ class GoodsMapperTest {
     void selectByCategoryId() {
         System.out.println(goodsMapper.selectByCategoryId(1));
     }
+
+    @Test
+    void selectByCondition() {
+        System.out.println(goodsMapper.selectByCondition("1", "test goods", 0));
+    }
 }

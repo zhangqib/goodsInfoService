@@ -8,6 +8,7 @@ import xmu.oomall.domain.po.ProductPo;
 import xmu.oomall.mapper.GoodsMapper;
 import xmu.oomall.mapper.ProductMapper;
 import xmu.oomall.util.Copyer;
+import com.github.pagehelper.PageHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,17 +87,15 @@ public class GoodsDAO {
         return goodsMapper.updateByPrimaryKey(goods) == 1;
     }
 
-    public boolean isGoodsOnSale(Integer id) {
-        return true;
-    }
-
-    public List<GoodsPo> selectByCondition(String goodsSn, String goodsName, Integer status, Integer page, Integer limit) {
-        return null;
-    }
-
     public List<GoodsPo> selectByCategoryId(Integer id, Integer page, Integer limit) {
+        PageHelper.startPage(page, limit);
         List<GoodsPo> goodsPos = goodsMapper.selectByCategoryId(id);
         return goodsPos;
+    }
+
+    public List<GoodsPo> selectByCondition(String goodsSn, String name, Integer statusCode, Integer page, Integer limit) {
+        PageHelper.startPage(page,limit);
+        return goodsMapper.selectByCondition(goodsSn, name, statusCode);
     }
 
     /**

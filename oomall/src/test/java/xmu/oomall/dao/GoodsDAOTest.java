@@ -32,7 +32,7 @@ class GoodsDAOTest {
         goods.setShareUrl("test url");
         goods.setShortName("t");
         goods.setSpecialFreightId(1);
-        goods.setStatusCode(false);
+        goods.setStatusCode(0);
         goods.setVolume("1");
         goods.setWeight(new BigDecimal(1));
         goodsDAO.insert(goods);
@@ -55,14 +55,11 @@ class GoodsDAOTest {
     }
 
     @Test
-    void isGoodsOnSale() {
+    void selectByCategoryId() {
+        System.out.println(goodsDAO.selectByCategoryId(3, 1, 3));
     }
 
     @Test
     void selectGoodsByCondition() {
-    }
-
-    @Test
-    void selectByCategoryId() {
     }
 }

@@ -73,6 +73,27 @@
     from goods
     where goods_category_id = #{categoryId}
   </select>
+  <select id="selectByCondition" resultMap="goodsMap">
+    select
+    <include refid="Base_Column_List" />
+    from goods
+    <trim>
+      <if test="goodsSn != null || goodsName != null || statusCode != null">
+        where
+      </if>
+    </trim>
+    <trim suffixOverrides="and">
+      <if test="goodsSn != null">
+        `goods_sn` = #{goodsSn} and
+      </if>
+      <if test="name != null">
+        `name` = #{name} and
+      </if>
+      <if test="statusCode != null" >
+        `status` = #{statusCode} and
+      </if>
+    </trim>
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--
       WARNING - @mbg.generated
