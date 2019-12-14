@@ -4,14 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import xmu.oomall.domain.*;
 import xmu.oomall.domain.po.BrandPo;
 import xmu.oomall.domain.po.GoodsCategoryPo;
 import xmu.oomall.domain.po.GoodsPo;
 import xmu.oomall.domain.po.ProductPo;
 import xmu.oomall.service.GoodsService;
-
-import java.util.List;
 
 
 /**
