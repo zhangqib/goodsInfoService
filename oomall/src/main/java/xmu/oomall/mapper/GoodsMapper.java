@@ -1,6 +1,7 @@
 package xmu.oomall.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import xmu.oomall.domain.po.GoodsPo;
 
 import java.util.List;
@@ -32,10 +33,11 @@ public interface GoodsMapper {
      *
      * @mbg.generated Mon Dec 09 20:12:20 CST 2019
      */
-    GoodsPo selectByPrimaryKey(Integer id);
+    GoodsPo selectByPrimaryKey(@Param("id") Integer id);
 
     /**
      * 通过类别查询
+     *
      * @param categoryId
      * @return 对应的商品列表
      */
@@ -43,6 +45,7 @@ public interface GoodsMapper {
 
     /**
      * 条件查询
+     *
      * @param goodsSn
      * @param name
      * @param statusCode
@@ -58,5 +61,19 @@ public interface GoodsMapper {
      */
     int updateByPrimaryKey(GoodsPo record);
 
+    /**
+     * 将商品品牌brandId的商品的品牌置为空值
+     *
+     * @param brandId
+     * @return 更新的商品数量
+     */
+    int cleanBrand(Integer brandId);
 
+    /**
+     * 将类别为categoryId的商品类别置为空值
+     *
+     * @param categoryId
+     * @return 更新的商品数量
+     */
+    int cleanCategory(Integer categoryId);
 }

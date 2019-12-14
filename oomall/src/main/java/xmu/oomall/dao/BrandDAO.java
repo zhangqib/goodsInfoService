@@ -3,8 +3,8 @@ package xmu.oomall.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import xmu.oomall.domain.Brand;
-import xmu.oomall.domain.po.BrandPo;
 import xmu.oomall.mapper.BrandMapper;
+import xmu.oomall.mapper.GoodsMapper;
 
 import java.util.List;
 
@@ -16,6 +16,9 @@ public class BrandDAO {
 
     @Autowired
     private BrandMapper brandMapper;
+
+    @Autowired
+    private GoodsMapper goodsMapper;
 
     /**
      * 将商品插入数据库
@@ -34,6 +37,7 @@ public class BrandDAO {
      * @return 删除是否成功
      */
     public boolean deleteById(Integer id) {
+        goodsMapper.cleanBrand(id);
         return brandMapper.deleteByPrimaryKey(id) == 1;
     }
 

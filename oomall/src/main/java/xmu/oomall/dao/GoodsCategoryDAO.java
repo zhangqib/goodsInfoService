@@ -3,7 +3,6 @@ package xmu.oomall.dao;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import xmu.oomall.domain.Goods;
 import xmu.oomall.domain.GoodsCategory;
 import xmu.oomall.domain.po.GoodsCategoryPo;
 import xmu.oomall.mapper.GoodsCategoryMapper;
