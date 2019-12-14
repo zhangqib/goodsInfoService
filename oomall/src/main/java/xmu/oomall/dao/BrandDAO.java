@@ -1,8 +1,10 @@
 package xmu.oomall.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import xmu.oomall.domain.Brand;
 import xmu.oomall.domain.po.BrandPo;
+import xmu.oomall.mapper.BrandMapper;
 
 import java.util.List;
 
@@ -11,13 +13,18 @@ import java.util.List;
  */
 @Repository
 public class BrandDAO {
+
+    @Autowired
+    private BrandMapper brandMapper;
+
     /**
      * 将商品插入数据库
      *
      * @return 更新完id的商品
      */
     public Brand insert(Brand brand) {
-        return null;
+        brandMapper.insert(brand);
+        return brand;
     }
 
     /**
@@ -27,7 +34,7 @@ public class BrandDAO {
      * @return 删除是否成功
      */
     public boolean deleteById(Integer id) {
-        return false;
+        return brandMapper.deleteByPrimaryKey(id) == 1;
     }
 
     /**
@@ -37,7 +44,7 @@ public class BrandDAO {
      * @return Goods
      */
     public Brand selectById(Integer id) {
-        return null;
+        return (Brand) brandMapper.selectByPrimaryKey(id);
     }
 
     /**
@@ -46,26 +53,14 @@ public class BrandDAO {
      * @return 更新是否成功
      */
     public boolean updateById(Brand brand) {
-        return true;
+        return brandMapper.updateByPrimaryKey(brand) == 1;
     }
 
     public List<Brand> selectAllBrand() {
         return null;
     }
 
-    public List<Brand> selectBrandsByCondition(String brandId, String brandName, Integer page, Integer limit) {
-        return null;
-    }
-
-    public List<Brand> selectBrandsByCondition(Integer page, Integer limit) {
-        return null;
-    }
-
-    public boolean updateById(BrandPo brandPo) {
-        return true;
-    }
-
-    public BrandPo insert(BrandPo brandPo) {
+    public List<Brand> selectBrandsByCondition(String brandName, Integer page, Integer limit) {
         return null;
     }
 }
