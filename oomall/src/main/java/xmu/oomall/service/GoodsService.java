@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @Author Ke
  * @Description: GoodsServiceInterface
- * @create 2019/12/14 22:08
+ * @create 2019/12/15 2:22
  */
 
 
@@ -21,18 +21,18 @@ public interface GoodsService {
     /**
      * 用户根据id搜索商品
      *
-     * @param id：Integer(PathVariable
+     * @param id：Integer
      * @return Goods（不可获取下架商品）
      */
-    public Goods getGoodsByIdUser(Integer id);
+    public Goods getGoodsForSaleById(Integer id);
 
     /**
      * 管理员根据id搜索商品
      *
-     * @param id：Integer(PathVariable
+     * @param id：Integer
      * @return Goods(可获取下架商品)
      */
-    public Goods getGoodsByIdAdmin(Integer id);
+    public Goods getGoodsById(Integer id);
 
     /**
      * 内部接口————————————判断商品是否在售
@@ -75,7 +75,7 @@ public interface GoodsService {
     /**
      * 用户根据商品分类id搜索该分类下的所有商品
      *
-     * @param id:Integer(PathVariable
+     * @param id:Integer
      * @param page:Integer            第几页
      * @param limit:Integer           一页多少
      * @return List<Goods>，搜索到的商品的列表
@@ -87,7 +87,7 @@ public interface GoodsService {
     /**
      * 管理员或用户根据品牌id搜索该品牌下的所有商品
      *
-     * @param id:Integer(PathVariable
+     * @param id:Integer
      * @param page:                   Integer 第几页
      * @param limit:                  Integer 一页多少
      * @return List<Goods>，搜索到的商品的列表
@@ -99,7 +99,7 @@ public interface GoodsService {
     /**
      * 管理员新建商品
      *
-     * @param goods：Goods(RequestBody
+     * @param goods：Goods
      * @return Goods，新建的商品
      */
     public Goods addGoods(Goods goods);
@@ -107,17 +107,15 @@ public interface GoodsService {
     /**
      * 管理员根据id修改商品
      *
-     * @param id：Integer(PathVariable
-     * @param goods:Goods(RequestBody
+     * @param goods:Goods
      * @return Goods，修改后的商品
      */
-    public Goods updateGoodsById(Integer id,
-                                  Goods goods);
+    public Goods updateGoodsById(Goods goods);
 
     /**
      * 管理员根据id删除商品
      *
-     * @param id：Integer(PathVariable
+     * @param id：Integer
      * @return Integer,-1表示删除失败，0表示该商品仍在售，1表示删除成功
      */
     public Integer deleteGoodsById(Integer id);
@@ -129,7 +127,7 @@ public interface GoodsService {
     /**
      * 管理员根据id搜索产品
      *
-     * @param id:Integer(PathVariable
+     * @param id:Integer
      * @return Product，搜索到的产品
      */
     public Product getProductById(Integer id);
@@ -137,7 +135,7 @@ public interface GoodsService {
     /**
      * 管理员搜索某个商品下的所有产品
      *
-     * @param id:Integer(PathVariable
+     * @param id:Integer
      * @param page:Integer            第几页
      * @param limit:Integer           一页多少
      * @return List<Product>，所属该商品的产品列表
@@ -149,28 +147,24 @@ public interface GoodsService {
     /**
      * 管理员新建某个商品下的产品
      *
-     * @param id:Integer(PathVariable
-     * @param product:Product(RequestBody
+     * @param product:Product
      * @return Product，新建的商品
      */
-    public Product addProduct(Integer id,
-                             Product product);
+    public Product addProduct(Product product);
 
     /**
      * 管理员根据id修改产品
      *
-     * @param id:Integer(PathVariable
-     * @param product:Product(RequestBody
+     * @param product:Product
      * @return Product，修改后的产品
      */
-    public Product updateProductById(Integer id,
-                                    Product product);
+    public Product updateProductById(Product product);
 
     /**
      * 管理员根据id删除产品
      *
-     * @param id:Integer(PathVariable
-     * @return Integer,-1表示删除失败，0表示该商品仍在售，1表示删除成功
+     * @param id:Integer
+     * @return Integer,-1表示删除失败，1表示删除成功
      */
     public Integer deleteProductById(Integer id);
 
@@ -183,7 +177,7 @@ public interface GoodsService {
     /**
      * 管理员或用户根据id搜索品牌
      *
-     * @param id:Integer(PathVariable
+     * @param id:Integer
      * @return Brand
      */
     public Brand getBrandById(Integer id);
@@ -223,11 +217,10 @@ public interface GoodsService {
     /**
      * 管理员修改品牌
      *
-     * @param id：Integer（PathVariable
-     * @param brand：Brand（RequestBody)(body包含name、description、picURL(上传图片产生))
+     * @param brand：Brand)(body包含name、description、picURL(上传图片产生))
      * @return Brand
      */
-    public Brand updateBrandById(Integer id, Brand brand);
+    public Brand updateBrandById(Brand brand);
 
     /**
      * 管理员根据id删除品牌
@@ -293,12 +286,10 @@ public interface GoodsService {
     /**
      * 管理员修改分类
      *
-     * @param id：Integer
      * @param goodsCategory：GoodsCategory(body包含name、pid(可以为空)、picURL(上传图片产生))
      * @return GoodsCategory
      */
-    public GoodsCategory updateGoodsCategoryById(Integer id,
-                                          GoodsCategory goodsCategory);
+    public GoodsCategory updateGoodsCategoryById(GoodsCategory goodsCategory);
 
     /**
      * 管理员删除分类

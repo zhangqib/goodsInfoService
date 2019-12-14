@@ -14,7 +14,7 @@ import xmu.oomall.service.GoodsService;
 /**
  * @Author Ke
  * @Description: GoodsController
- * @create 2019/12/14 22:08
+ * @create 2019/12/15 2:22
  */
 
 @RestController
@@ -34,7 +34,7 @@ public class GoodsController {
      * @return Goods（不可获取下架商品）
      */
     @GetMapping("/goods/{id}")
-    public Object getGoodsByIdUser(@PathVariable Integer id) {
+    public Object getGoodsForSaleById(@PathVariable Integer id) {
         return null;
     }
 
@@ -45,7 +45,7 @@ public class GoodsController {
      * @return Goods(可获取下架商品)
      */
     @GetMapping("/admin/goods/{id}")
-    public Object getGoodsByIdAdmin(@PathVariable Integer id) {
+    public Object getGoodsById(@PathVariable Integer id) {
         return null;
     }
 
