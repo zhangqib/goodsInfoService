@@ -1,5 +1,6 @@
 package xmu.oomall.dao;
 
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import xmu.oomall.domain.Product;
@@ -45,16 +46,8 @@ public class ProductDAO {
      * @return product
      */
     public Product selectById(Integer id) {
-//        return productMapper.selectByPrimaryKey(id);
-        return new Product();
+        return (Product) productMapper.selectByPrimaryKey(id);
     }
-
-    /**
-     * 根据goodsId查找对应的product列表
-     * @param id
-     * @return products
-     */
-
 
     /**
      * 根据productId修改product
@@ -66,15 +59,23 @@ public class ProductDAO {
         return productMapper.updateByPrimaryKey(product) == 1;
     }
 
+    /**
+     * 通过goods查找它的所有product
+     * @param id
+     * @param page
+     * @param limit
+     * @return product列表
+     */
     public List<ProductPo> selectByGoodsId(Integer id, Integer page, Integer limit) {
-        return null;
+        PageHelper.startPage(page,limit);
+        return productMapper.selectByGoodsId(id);
     }
 
     public boolean updateById(ProductPo productPo) {
-        return false;
+        return productMapper.updateByPrimaryKey(productPo) == 1;
     }
 
     public boolean insert(ProductPo productPo) {
-        return false;
+        return productMapper.insert(productPo) == 1;
     }
 }

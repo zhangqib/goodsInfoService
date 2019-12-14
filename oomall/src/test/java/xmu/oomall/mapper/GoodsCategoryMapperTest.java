@@ -3,9 +3,11 @@ package xmu.oomall.mapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import xmu.oomall.domain.GoodsCategory;
 import xmu.oomall.domain.po.GoodsCategoryPo;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @SpringBootTest
 class GoodsCategoryMapperTest {
@@ -33,6 +35,17 @@ class GoodsCategoryMapperTest {
     @Test
     void selectByPrimaryKey() {
         System.out.println(goodsCategoryMapper.selectByPrimaryKey(3));
+    }
+
+    @Test
+    void selectOneLevelGoodsCategories() {
+        System.out.println(goodsCategoryMapper.selectOneLevelGoodsCategories());
+    }
+
+    @Test
+    void selectSecondLevelGoodsCategories() {
+        List<GoodsCategoryPo> goodsCategoryList = goodsCategoryMapper.selectSecondLevelGoodsCategories(2);
+        goodsCategoryList.forEach(goodsCategoryPo -> System.out.println(goodsCategoryPo));
     }
 
     @Test
