@@ -30,11 +30,13 @@ public class GoodsCategoryDAO {
 
     /**
      * 将商品插入数据库
-     *
      * @param goodsCategory
      * @return 更新完id的商品
      */
     public GoodsCategory insert(GoodsCategory goodsCategory) {
+        if (isArgsInvalid(goodsCategory)) {
+            return null;
+        }
         goodsCategoryMapper.insert(goodsCategory);
         return goodsCategory;
     }
@@ -42,12 +44,16 @@ public class GoodsCategoryDAO {
     /**
      * 删除分类及其所有子分类, 并将所有属于被删除分类的商品的分类设为空
      * @param id
-     * @return
+     * @return 删除是否成功
      */
     public boolean deleteById(Integer id) {
-        List<GoodsCategoryPo> subGoodsCategory = selectSecondLevelGoodsCategories(id);
-
-        return true;
+        List<GoodsCategoryPo> subGoodsCategories = selectSecondLevelGoodsCategories(id);
+        subGoodsCategories.forEach(subGoodsCategory -> {
+            goodsMapper.cleanCategory(subGoodsCategory.getId());
+            goodsCategoryMapper.deleteByPrimaryKey(subGoodsCategory.getId());
+        });
+        goodsMapper.cleanCategory(id);
+        return goodsCategoryMapper.deleteByPrimaryKey(id) == 1;
     }
 
     /**
@@ -65,8 +71,15 @@ public class GoodsCategoryDAO {
      * @param goodsCategory
      * @return 更新是否成功
      */
-    public boolean updateById(GoodsCategory goodsCategory) {
-        return goodsCategoryMapper.updateByPrimaryKey(goodsCategory) == 1;
+    public GoodsCategory updateById(GoodsCategory goodsCategory) {
+        if (isArgsInvalid(goodsCategory)) {
+            return null;
+        }
+        if (goodsCategoryMapper.updateByPrimaryKey(goodsCategory) == 0) {
+            return null;
+        }
+        GoodsCategory newGoodsCategory = (GoodsCategory) goodsCategoryMapper.selectByPrimaryKey(goodsCategory.getId());
+        return newGoodsCategory;
     }
 
     /**
@@ -92,8 +105,16 @@ public class GoodsCategoryDAO {
         return goodsCategories(goodsCategoryMapper.selectSecondLevelGoodsCategories(pid));
     }
 
+    /**
+     * 分页返回类别列表
+     *
+     * @param page
+     * @param limit
+     * @return
+     */
     public List<GoodsCategory> selectGoodsCategoriesByCondition(Integer page, Integer limit) {
-        return null;
+        PageHelper.startPage(page, limit);
+        return goodsCategories(goodsCategoryMapper.selectAll());
     }
 
     /**
@@ -132,4 +153,11 @@ public class GoodsCategoryDAO {
         return goodsCategories;
     }
 
+    private boolean isArgsInvalid(GoodsCategory goodsCategory) {
+        if (goodsCategory.getBeDeleted()) {
+            return true;
+        }
+        Integer pid = goodsCategory.getPid();
+        return pid != null && goodsCategoryMapper.selectByPrimaryKey(pid) == null;
+    }
 }

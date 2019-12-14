@@ -1,7 +1,6 @@
 package xmu.oomall.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import xmu.oomall.domain.GoodsCategory;
 import xmu.oomall.domain.po.GoodsCategoryPo;
 
 import java.util.List;
@@ -34,6 +33,11 @@ public interface GoodsCategoryMapper {
      * @mbg.generated Mon Dec 09 20:12:20 CST 2019
      */
     GoodsCategoryPo selectByPrimaryKey(Integer id);
+
+    /**
+     * 查询全部分类
+     */
+    List<GoodsCategoryPo> selectAll();
 
     /**
      * 查询一级分类

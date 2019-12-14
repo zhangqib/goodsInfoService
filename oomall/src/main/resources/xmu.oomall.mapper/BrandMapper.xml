@@ -40,8 +40,13 @@
     -->
     select 
     <include refid="Base_Column_List" />
-    from brand
+    from `brand`
     where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BrandMap">
+    select
+    <include refid="Base_Column_List"/>
+    from `brand`
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--

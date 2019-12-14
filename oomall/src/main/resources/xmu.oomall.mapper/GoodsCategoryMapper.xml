@@ -39,6 +39,11 @@
     from goods_category
     where pid = #{pid}
   </select>
+  <select id="selectAll" resultMap="GoodsCategoryMap">
+    select
+    <include refid="Base_Column_List"/>
+    from goods_category
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--
       WARNING - @mbg.generated
@@ -76,4 +81,5 @@
       is_deleted = #{beDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
 </mapper>

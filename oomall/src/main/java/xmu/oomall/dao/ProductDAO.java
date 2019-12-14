@@ -5,9 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import xmu.oomall.domain.Product;
 import xmu.oomall.domain.po.ProductPo;
+import xmu.oomall.mapper.GoodsMapper;
 import xmu.oomall.mapper.ProductMapper;
+import xmu.oomall.util.Copyer;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -18,13 +20,19 @@ public class ProductDAO {
     @Autowired
     private ProductMapper productMapper;
 
+    @Autowired
+    private GoodsMapper goodsMapper;
+
     /**
      * 插入一个product
      *
      * @param product
-     * @return 更新完id的product
+     * @return 成功：更新完id的product 失败： null
      */
     public Product insert(Product product) {
+        if (isArgsInvalid(product)) {
+            return null;
+        }
         productMapper.insert(product);
         return product;
     }
@@ -50,32 +58,59 @@ public class ProductDAO {
     }
 
     /**
-     * 根据productId修改product
-     *
-     * @param product
-     * @return 更新是否成功
-     */
-    public boolean updateById(Product product) {
-        return productMapper.updateByPrimaryKey(product) == 1;
-    }
-
-    /**
      * 通过goods查找它的所有product
      * @param id
      * @param page
      * @param limit
      * @return product列表
      */
-    public List<ProductPo> selectByGoodsId(Integer id, Integer page, Integer limit) {
+    public List<Product> selectByGoodsId(Integer id, Integer page, Integer limit) {
         PageHelper.startPage(page,limit);
-        return productMapper.selectByGoodsId(id);
+        return products(productMapper.selectByGoodsId(id));
     }
 
-    public boolean updateById(ProductPo productPo) {
-        return productMapper.updateByPrimaryKey(productPo) == 1;
+    /**
+     * 根据productId修改product
+     *
+     * @param product
+     * @return 更新是否成功
+     */
+    public Product updateById(Product product) {
+        if (isArgsInvalid(product)) {
+            return null;
+        }
+        if (productMapper.updateByPrimaryKey(product) == 0) {
+            return null;
+        }
+        return product(productMapper.selectByPrimaryKey(product.getId()));
     }
 
-    public boolean insert(ProductPo productPo) {
-        return productMapper.insert(productPo) == 1;
+    private Product product(ProductPo productPo) {
+       if (productPo == null) {
+           return null;
+       }
+       Product product = new Product();
+        if (!Copyer.Copy(product, productPo)) {
+            return null;
+        }
+        return product;
+    }
+    private List<Product> products(List<ProductPo> productPos) {
+        if (productPos == null) {
+            return null;
+        }
+       List<Product> products = new LinkedList<>();
+        for (ProductPo productPo : productPos) {
+            products.add(product(productPo));
+        }
+        return products;
+    }
+
+    boolean isArgsInvalid(Product product) {
+        if (product.getBeDeleted()) {
+            return true;
+        }
+        Integer goodsId = product.getGoodsId();
+        return goodsId != null && goodsMapper.selectByPrimaryKey(goodsId) == null;
     }
 }

@@ -1,11 +1,14 @@
 package xmu.oomall.dao;
 
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import xmu.oomall.domain.Brand;
+import xmu.oomall.domain.po.BrandPo;
 import xmu.oomall.mapper.BrandMapper;
 import xmu.oomall.mapper.GoodsMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +29,9 @@ public class BrandDAO {
      * @return 更新完id的商品
      */
     public Brand insert(Brand brand) {
+        if (isArgsInvalid(brand)) {
+            return null;
+        }
         brandMapper.insert(brand);
         return brand;
     }
@@ -56,15 +62,30 @@ public class BrandDAO {
      *
      * @return 更新是否成功
      */
-    public boolean updateById(Brand brand) {
-        return brandMapper.updateByPrimaryKey(brand) == 1;
+    public Brand updateById(Brand brand) {
+        if (isArgsInvalid(brand)) {
+            return null;
+        }
+        if (brandMapper.updateByPrimaryKey(brand) == 0) {
+            return null;
+        }
+        return (Brand) brandMapper.selectByPrimaryKey(brand.getId());
+    }
+    
+    public List<Brand> selectAll(Integer page, Integer limit) {
+        PageHelper.startPage(page, limit);
+        return brands(brandMapper.selectAll());
     }
 
-    public List<Brand> selectAllBrand() {
-        return null;
+    private List<Brand> brands(List<BrandPo> brandPos) {
+        List<Brand> brands = new ArrayList<>();
+        for (BrandPo brandPo : brandPos) {
+           brands.add((Brand)brandPo);
+        }
+        return brands;
     }
-
-    public List<Brand> selectBrandsByCondition(String brandName, Integer page, Integer limit) {
-        return null;
+    
+    private boolean isArgsInvalid(Brand brand) {
+        return brand.isBeDeleted();
     }
 }
