@@ -3,18 +3,8 @@ package xmu.oomall.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import xmu.oomall.dao.BrandDAO;
-import xmu.oomall.dao.GoodsCategoryDAO;
-import xmu.oomall.dao.GoodsDAO;
-import xmu.oomall.dao.ProductDAO;
-import xmu.oomall.domain.Brand;
-import xmu.oomall.domain.Goods;
-import xmu.oomall.domain.GoodsCategory;
-import xmu.oomall.domain.Product;
-import xmu.oomall.domain.po.BrandPo;
-import xmu.oomall.domain.po.GoodsCategoryPo;
-import xmu.oomall.domain.po.GoodsPo;
-import xmu.oomall.domain.po.ProductPo;
+import xmu.oomall.dao.*;
+import xmu.oomall.domain.*;
 import xmu.oomall.service.GoodsService;
 
 import java.util.List;
@@ -22,7 +12,7 @@ import java.util.List;
 /**
  * @Author Ke
  * @Description: GoodsServiceImpl
- * @create 2019/12/13 15:15
+ * @create 2019/12/14 22:08
  */
 
 @Service
@@ -71,10 +61,10 @@ public class GoodsServiceImpl implements GoodsService {
      * @param status    :Integer   商品是否上架，这个域的取值以数据字典为准
      * @param page      :            Integer 第几页
      * @param limit     :           Integer 一页多少
-     * @return List<GoodsPo>,搜索到的商品的列表
+     * @return List<Goods>,搜索到的商品的列表
      */
     @Override
-    public List<GoodsPo> listGoodsByCondition(String goodsSn, String goodsName, Integer status, Integer page, Integer limit) {
+    public List<Goods> listGoodsByCondition(String goodsSn, String goodsName, Integer status, Integer page, Integer limit) {
         return goodsDao.selectByCondition(goodsSn, goodsName, status, page, limit);
     }
 
@@ -85,11 +75,11 @@ public class GoodsServiceImpl implements GoodsService {
      * @param goodsName :String 商品的名字
      * @param page      :Integer     第几页
      * @param limit     :Integer    一页多少
-     * @return List<GoodsPo>,搜索到的商品的列表
+     * @return List<Goods>,搜索到的商品的列表
      */
     @Override
-    public List<GoodsPo> listGoodsByCondition(String goodsSn, String goodsName, Integer page, Integer limit) {
-        return goodsDao.selectByCondition(goodsSn, goodsName, null,page, limit);
+    public List<Goods> listGoodsByCondition(String goodsSn, String goodsName, Integer page, Integer limit) {
+        return goodsDao.selectByCondition(goodsSn, goodsName, null, page, limit);
     }
 
     /**
@@ -98,36 +88,36 @@ public class GoodsServiceImpl implements GoodsService {
      * @param id    :Integer
      * @param page  :Integer            第几页
      * @param limit :Integer           一页多少
-     * @return List<GoodsPo>，搜索到的商品的列表
+     * @return List<Goods>，搜索到的商品的列表
      */
     @Override
-    public List<GoodsPo> ListGoodsByCategoryId(Integer id, Integer page, Integer limit) {
+    public List<Goods> ListGoodsByCategoryId(Integer id, Integer page, Integer limit) {
         return goodsDao.selectByCategoryId(id, page, limit);
     }
 
     /**
      * 管理员新建商品
      *
-     * @param goodsPo ：GoodsPo
-     * @return GoodsPo，新建的商品
+     * @param goods ：Goods
+     * @return Goods，新建的商品
      */
     @Override
-    public GoodsPo addGoods(GoodsPo goodsPo) {
-        return goodsDao.insert(goodsPo);
+    public Goods addGoods(Goods goods) {
+        return goodsDao.insert(goods);
     }
 
     /**
      * 管理员根据id修改商品
      *
-     * @param id      ：Integer
-     * @param goodsPo :GoodsPo
-     * @return GoodsPo，修改后的商品
+     * @param id    ：Integer
+     * @param goods :Goods
+     * @return Goods，修改后的商品
      */
     @Override
-    public GoodsPo updateGoodsById(Integer id, GoodsPo goodsPo) {
-        if (goodsPo.getId().equals(id)) {
-            if (goodsDao.updateById(goodsPo)) {
-                return goodsPo;
+    public Goods updateGoodsById(Integer id, Goods goods) {
+        if (goods.getId().equals(id)) {
+            if (goodsDao.updateById(goods)) {
+                return goods;
             }
         }
         return null;
@@ -171,25 +161,25 @@ public class GoodsServiceImpl implements GoodsService {
      * @param id    :Integer
      * @param page  :Integer            第几页
      * @param limit :Integer           一页多少
-     * @return List<ProductPo>，所属该商品的产品列表
+     * @return List<Product>，所属该商品的产品列表
      */
     @Override
-    public List<ProductPo> listProductsByGoodsId(Integer id, Integer page, Integer limit) {
+    public List<Product> listProductsByGoodsId(Integer id, Integer page, Integer limit) {
         return productDao.selectByGoodsId(id, page, limit);
     }
 
     /**
      * 管理员新建某个商品下的产品
      *
-     * @param id        :Integer
-     * @param productPo :ProductPo
-     * @return ProductPo，属于这个商品的产品列表
+     * @param id      :Integer
+     * @param product :Product
+     * @return Product，属于这个商品的产品列表
      */
     @Override
-    public ProductPo addProduct(Integer id, ProductPo productPo) {
-        if (productPo.getGoodsId().equals(id)) {
-            if (productDao.insert(productPo)) {
-                return productPo;
+    public Product addProduct(Integer id, Product product) {
+        if (product.getGoodsId().equals(id)) {
+            if (productDao.insert(product)) {
+                return product;
             }
         }
         return null;
@@ -198,15 +188,15 @@ public class GoodsServiceImpl implements GoodsService {
     /**
      * 管理员根据id修改产品
      *
-     * @param id        :Integer
-     * @param productPo :ProductPo
-     * @return ProductPo，修改后的产品
+     * @param id      :Integer
+     * @param product :Product
+     * @return Product，修改后的产品
      */
     @Override
-    public ProductPo updateProductById(Integer id, ProductPo productPo) {
-        if (productPo.getId().equals(id)) {
-            if (productDao.updateById(productPo)) {
-                return productPo;
+    public Product updateProductById(Integer id, Product product) {
+        if (product.getId().equals(id)) {
+            if (productDao.updateById(product)) {
+                return product;
             }
         }
         return null;
@@ -267,26 +257,26 @@ public class GoodsServiceImpl implements GoodsService {
     /**
      * 管理员创建品牌
      *
-     * @param brandPo:BrandPo
-     * @return BrandPo
+     * @param brand:Brand
+     * @return Brand
      */
     @Override
-    public BrandPo addBrand(BrandPo brandPo) {
-        return brandDao.insert(brandPo);
+    public Brand addBrand(Brand brand) {
+        return brandDao.insert(brand);
     }
 
     /**
      * 管理员修改品牌
      *
-     * @param id      ：Integer
-     * @param brandPo ：BrandPo
-     * @return BrandPo
+     * @param id    ：Integer
+     * @param brand ：Brand
+     * @return Brand
      */
     @Override
-    public BrandPo updateBrandById(Integer id, BrandPo brandPo) {
-        if (brandPo.getId().equals(id)) {
-            if (brandDao.updateById(brandPo)) {
-                return brandPo;
+    public Brand updateBrandById(Integer id, Brand brand) {
+        if (brand.getId().equals(id)) {
+            if (brandDao.updateById(brand)) {
+                return brand;
             }
         }
         return null;
@@ -358,26 +348,26 @@ public class GoodsServiceImpl implements GoodsService {
     /**
      * 管理员新建分类
      *
-     * @param goodsCategoryPo ：GoodsCategoryPo
-     * @return GoodsCategoryPo
+     * @param goodsCategory ：GoodsCategory
+     * @return GoodsCategory
      */
     @Override
-    public GoodsCategoryPo addGoodsCategory(GoodsCategoryPo goodsCategoryPo) {
-        return goodsCategoryDao.insert(goodsCategoryPo);
+    public GoodsCategory addGoodsCategory(GoodsCategory goodsCategory) {
+        return goodsCategoryDao.insert(goodsCategory);
     }
 
     /**
      * 管理员修改分类
      *
-     * @param id              ：Integer
-     * @param goodsCategoryPo ：GoodsCategoryPo
-     * @return GoodsCategoryPo
+     * @param id            ：Integer
+     * @param goodsCategory ：GoodsCategory
+     * @return GoodsCategory
      */
     @Override
-    public GoodsCategoryPo updateGoodsCategoryById(Integer id, GoodsCategoryPo goodsCategoryPo) {
-        if (goodsCategoryPo.getId().equals(id)) {
-            if (goodsCategoryDao.updateById(goodsCategoryPo)) {
-                return goodsCategoryPo;
+    public GoodsCategory updateGoodsCategoryById(Integer id, GoodsCategory goodsCategory) {
+        if (goodsCategory.getId().equals(id)) {
+            if (goodsCategoryDao.updateById(goodsCategory)) {
+                return goodsCategory;
             }
         }
         return null;
