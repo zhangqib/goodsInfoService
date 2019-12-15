@@ -71,18 +71,14 @@
     select
     <include refid="Base_Column_List" />
     from goods
-    where goods_category_id = #{categoryId}
+    where goods_category_id = #{categoryId} and is_deleted != 1
   </select>
   <select id="selectByCondition" resultMap="GoodsMap">
     select
     <include refid="Base_Column_List" />
     from goods
+    where
     <trim>
-      <if test="goodsSn != null || goodsName != null || statusCode != null">
-        where
-      </if>
-    </trim>
-    <trim suffixOverrides="and">
       <if test="goodsSn != null">
         `goods_sn` = #{goodsSn} and
       </if>
@@ -93,6 +89,7 @@
         `status` = #{statusCode} and
       </if>
     </trim>
+      is_deleted != 1
   </select>
   <!-- 逻辑删除 -->
   <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
@@ -129,27 +126,60 @@
       This element was generated on Mon Dec 09 20:12:20 CST 2019.
     -->
     update goods
-    set gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-    
-      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-      name = #{name,jdbcType=VARCHAR},
-      goods_sn = #{goodsSn,jdbcType=VARCHAR},
-      short_name = #{shortName,jdbcType=VARCHAR},
-      description = #{description,jdbcType=VARCHAR},
-      brief = #{brief,jdbcType=VARCHAR},
-      pic_url = #{picUrl,jdbcType=VARCHAR},
-      detail = #{detail,jdbcType=VARCHAR},
-      status = #{statusCode,jdbcType=TINYINT},
-      share_url = #{shareUrl,jdbcType=VARCHAR},
-      gallery = #{gallery,jdbcType=VARCHAR},
-      goods_category_id = #{goodsCategoryId,jdbcType=BIGINT},
-      brand_id = #{brandId,jdbcType=BIGINT},
-      is_deleted = #{beDeleted,jdbcType=BIT},
-      weight = #{weight,jdbcType=DECIMAL},
-      volume = #{volume,jdbcType=VARCHAR},
-      special_freight_id = #{specialFreightId,jdbcType=BIGINT},
-      is_special = #{beSpecial,jdbcType=BIT}
-    where id = #{id,jdbcType=BIGINT}
+    <set>
+      <if test="goods.gmtModified != null">
+        gmt_modified = #{goods.gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="goods.name != null">
+        name = #{goods.name,jdbcType=VARCHAR},
+      </if>
+      <if test="goods.goodsSn != null">
+        goods_sn = #{goods.goodsSn,jdbcType=VARCHAR},
+      </if>
+      <if test="goods.shortName != null">
+        short_name = #{goods.shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="goods.description != null">
+        description = #{goods.description,jdbcType=VARCHAR},
+      </if>
+      <if test="goods.brief != null">
+        brief = #{goods.brief,jdbcType=VARCHAR},
+      </if>
+      <if test="goods.picUrl != null">
+        pic_url = #{goods.picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="goods.detail != null">
+        detail = #{goods.detail,jdbcType=VARCHAR},
+      </if>
+      <if test="goods.statusCode != null">
+        status = #{goods.status,jdbcType=TINYINT},
+      </if>
+      <if test="goods.shareUrl != null">
+        share_url = #{goods.shareUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="goods.gallery != null">
+        gallery = #{goods.gallery,jdbcType=VARCHAR},
+      </if>
+      <if test="goods.goodsCategoryId != null">
+        goods_category_id = #{goods.goodsCategoryId,jdbcType=BIGINT},
+      </if>
+      <if test="goods.brandId != null">
+        brand_id = #{goods.brandId,jdbcType=BIGINT},
+      </if>
+      <if test="goods.weight != null">
+        weight = #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="goods.volume != null">
+        volume = #{goods.volume,jdbcType=VARCHAR},
+      </if>
+      <if test="goods.specialFreightId != null">
+        special_freight_id = #{goods.specialFreightId,jdbcType=BIGINT},
+      </if>
+      <if test="goods.beSpecial != null">
+        is_special = #{goods.beSpecial,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{goods.id,jdbcType=BIGINT}
   </update>
   <update id="cleanBrand" parameterType="java.lang.Integer">
     update goods

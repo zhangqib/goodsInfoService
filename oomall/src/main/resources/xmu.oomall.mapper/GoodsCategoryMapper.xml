@@ -31,18 +31,19 @@
     select
     <include refid="Base_Column_List" />
     from goods_category
-    where pid is null
+    where pid is null and is_deleted != 1
   </select>
   <select id="selectSecondLevelGoodsCategories" parameterType="java.lang.Integer" resultMap="GoodsCategoryMap" >
     select
     <include refid="Base_Column_List" />
     from goods_category
-    where pid = #{pid}
+    where pid = #{pid} and is_deleted != 1
   </select>
   <select id="selectAll" resultMap="GoodsCategoryMap">
     select
     <include refid="Base_Column_List"/>
     from goods_category
+    where is_deleted != 1
   </select>
   <!-- 逻辑删除 -->
   <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
@@ -62,12 +63,20 @@
   </insert>
   <update id="updateByPrimaryKey" parameterType="GoodsCategoryPo">
     update goods_category
-    set name = #{goodsCategory.name,jdbcType=VARCHAR},
-      pid = #{pgoodsCategory.id,jdbcType=BIGINT},
-      pic_url = #{goodsCategory.picUrl},
-      gmt_create = #{goodsCategory.gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modified = #{goodsCategory.gmtModified,jdbcType=TIMESTAMP},
-      is_deleted = #{goodsCategory.beDeleted,jdbcType=BIT}
+    <set>
+      <if test = "goodsCategory.name != null" >
+        name = #{goodsCategory.name,jdbcType=VARCHAR},
+      </if>
+      <if test = "goodsCategory.pid != null" >
+        pid = #{goodsCategory.pid,jdbcType=BIGINT},
+      </if>
+      <if test = "goodsCategory.picUrl != null" >
+        pic_url = #{goodsCategory.picUrl},
+      </if>
+      <if test = "goodsCategory.gmtModified != null" >
+        gmt_modified = #{goodsCategory.gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </set>
     where id = #{goodsCategory.id,jdbcType=BIGINT}
   </update>
 
