@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import xmu.oomall.Application;
+import xmu.oomall.domain.Goods;
 import xmu.oomall.domain.po.GoodsPo;
 
 import java.math.BigDecimal;
@@ -16,7 +17,7 @@ class GoodsMapperTest {
 
     @Test
     void deleteByPrimaryKey() {
-        System.out.println(goodsMapper.deleteByPrimaryKey(4));
+        System.out.println(goodsMapper.deleteByPrimaryKey(1));
     }
 
     @Test
@@ -32,7 +33,6 @@ class GoodsMapperTest {
         goods.setGmtCreate(LocalDateTime.now());
         goods.setGmtModified(LocalDateTime.now());
         goods.setGoodsCategoryId(1);
-        goods.setGoodsSn("1");
         goods.setName("test goods");
         goods.setPicUrl("test url");
         goods.setShareUrl("test url");
@@ -52,19 +52,23 @@ class GoodsMapperTest {
 
     @Test
     void updateByPrimaryKey() {
-        GoodsPo goods = goodsMapper.selectByPrimaryKey(4);
-        goods.setGoodsSn("12");
+//        GoodsPo goods = goodsMapper.selectByPrimaryKey(4);
+        Goods goods = new Goods();
+        goods.setId(7);
+        goods.setShortName("ee");
         System.out.println(goodsMapper.updateByPrimaryKey(goods));
     }
 
     @Test
     void selectByCategoryId() {
-        System.out.println(goodsMapper.selectByCategoryId(1));
+        goodsMapper.selectByCategoryId(1).forEach(goodsPo -> System.out.println(goodsPo));
     }
 
     @Test
     void selectByCondition() {
-        System.out.println(goodsMapper.selectByCondition("1", "test goods", 0));
+       goodsMapper.selectByCondition( null, "test goods", 0).forEach(
+               goodsPo -> System.out.println(goodsPo)
+       );
     }
 
     @Test
@@ -74,6 +78,6 @@ class GoodsMapperTest {
 
     @Test
     void cleanCategory() {
-        System.out.println(goodsMapper.cleanCategory(2));
+        System.out.println(goodsMapper.cleanCategory(1));
     }
 }

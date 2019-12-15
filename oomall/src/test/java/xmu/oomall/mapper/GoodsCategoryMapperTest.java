@@ -3,7 +3,6 @@ package xmu.oomall.mapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import xmu.oomall.domain.GoodsCategory;
 import xmu.oomall.domain.po.GoodsCategoryPo;
 
 import java.time.LocalDateTime;
@@ -16,7 +15,7 @@ class GoodsCategoryMapperTest {
 
     @Test
     void deleteByPrimaryKey() {
-        System.out.println(goodsCategoryMapper.deleteByPrimaryKey(3));
+        System.out.println(goodsCategoryMapper.deleteByPrimaryKey(7));
     }
 
     @Test
@@ -27,7 +26,6 @@ class GoodsCategoryMapperTest {
         goodsCategory.setPicUrl("test url");
         goodsCategory.setGmtCreate(LocalDateTime.now());
         goodsCategory.setGmtModified(LocalDateTime.now());
-        goodsCategory.setPid(2);
         goodsCategoryMapper.insert(goodsCategory);
         System.out.println(goodsCategory);
     }
@@ -39,7 +37,10 @@ class GoodsCategoryMapperTest {
 
     @Test
     void selectOneLevelGoodsCategories() {
-        System.out.println(goodsCategoryMapper.selectOneLevelGoodsCategories());
+        List<GoodsCategoryPo> goodsCategoryPos = goodsCategoryMapper.selectOneLevelGoodsCategories();
+        goodsCategoryPos.forEach(goodsCategoryPo -> {
+            System.out.println(goodsCategoryPo);
+        });
     }
 
     @Test
@@ -53,6 +54,5 @@ class GoodsCategoryMapperTest {
         GoodsCategoryPo goodsCategory = goodsCategoryMapper.selectByPrimaryKey(3);
         goodsCategory.setName("test name");
         System.out.println(goodsCategoryMapper.updateByPrimaryKey(goodsCategory));
-        selectByPrimaryKey();
     }
 }

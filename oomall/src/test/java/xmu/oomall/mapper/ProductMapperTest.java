@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import xmu.oomall.Application;
+import xmu.oomall.domain.Product;
 import xmu.oomall.domain.po.ProductPo;
 
 import java.math.BigDecimal;
@@ -18,7 +19,7 @@ class ProductMapperTest {
 
     @Test
     void deleteByPrimaryKey() {
-        System.out.println(productMapper.deleteByPrimaryKey(2));
+        System.out.println(productMapper.deleteByPrimaryKey(22));
     }
 
     @Test
@@ -29,7 +30,6 @@ class ProductMapperTest {
         product.setGoodsId(5);
         product.setPicUrl("test url");
         product.setPrice(new BigDecimal(21));
-        product.setSafetyStock(1);
         product.setSpecifications("test sp");
         product.setGmtModified(LocalDateTime.now());
         productMapper.insert(product);
@@ -49,20 +49,19 @@ class ProductMapperTest {
 
     @Test
     void selectByPrimaryKey() {
-        System.out.println(productMapper.selectByPrimaryKey(3));
+        System.out.println(productMapper.selectByPrimaryKey(24));
     }
 
     @Test
     void selectByGoodsId() {
-        List<ProductPo> productList = productMapper.selectByGoodsId(3);
-        for(ProductPo product: productList) {
-            System.out.println(product);
-        }
+       productMapper.selectByGoodsId(3).forEach(productPo -> System.out.println(productPo));
     }
 
     @Test
     void updateByPrimaryKey() {
-        ProductPo product = productMapper.selectByPrimaryKey(3);
+//        ProductPo product = productMapper.selectByPrimaryKey(3);
+        Product product = new Product();
+        product.setId(6);
         product.setSafetyStock(12);
         System.out.println(productMapper.updateByPrimaryKey(product));
     }

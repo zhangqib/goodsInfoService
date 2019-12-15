@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import xmu.oomall.Application;
+import xmu.oomall.domain.Brand;
 import xmu.oomall.domain.po.BrandPo;
 
 import java.time.LocalDateTime;
@@ -16,7 +17,7 @@ class BrandMapperTest {
 
     @Test
     void deleteByPrimaryKey() {
-        System.out.println(brandMapper.deleteByPrimaryKey(3));
+        System.out.println(brandMapper.deleteByPrimaryKey(1));
     }
 
     @Test
@@ -27,20 +28,26 @@ class BrandMapperTest {
         brand.setPicUrl("test pic url");
         brand.setGmtCreate(LocalDateTime.now());
         brand.setGmtModified(LocalDateTime.now());
-        brand.setBeDeleted(false);
         brandMapper.insert(brand);
         System.out.println(brand);
     }
 
     @Test
     void selectByPrimaryKey() {
-        System.out.println(brandMapper.selectByPrimaryKey(3));
+        System.out.println(brandMapper.selectByPrimaryKey(1));
+    }
+
+    @Test
+    void selectAll() {
+        brandMapper.selectAll().forEach(brandPo -> System.out.println(brandPo));
     }
 
     @Test
     void updateByPrimaryKey() {
-        BrandPo brand = brandMapper.selectByPrimaryKey(3);
-        brand.setBeDeleted(true);
+//        BrandPo brand = brandMapper.selectByPrimaryKey(3);
+        Brand brand = new Brand();
+        brand.setId(1);
+        brand.setName("update brand test");
         System.out.println(brandMapper.updateByPrimaryKey(brand));
     }
 }
