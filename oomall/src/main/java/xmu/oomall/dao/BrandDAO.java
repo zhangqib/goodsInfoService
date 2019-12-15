@@ -88,4 +88,8 @@ public class BrandDAO {
     private boolean isArgsInvalid(Brand brand) {
         return brand.isBeDeleted();
     }
+
+    public List<Brand> selectBrandsByCondition(String brandId, String brandName, Integer page, Integer limit) {
+        return null;
+    }
 }

@@ -1,9 +1,7 @@
 package xmu.oomall.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import xmu.oomall.domain.Brand;
-import xmu.oomall.mapper.BrandMapper;
 
 import java.util.List;
 
@@ -29,7 +27,7 @@ public class BrandDAOKKK {
         return null;
     }
 
-    public Integer deleteById(Integer id) {
-        return -1;
+    public Boolean deleteById(Integer id) {
+        return true;
     }
 }

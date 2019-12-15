@@ -12,19 +12,19 @@ import java.util.List;
 /**
  * @Author Ke
  * @Description: GoodsServiceImpl
- * @create 2019/12/15 2:22
+ * @create 2019/12/15 18:22
  */
 
 @Service
 public class GoodsServiceImpl implements GoodsService {
     @Autowired
-    private GoodsDAOKKK goodsDaoKKK;
+    private GoodsDAO goodsDao;
     @Autowired
-    private ProductDAOKKK productDaoKKK;
+    private ProductDAO productDao;
     @Autowired
-    private BrandDAOKKK brandDaoKKK;
+    private BrandDAO brandDao;
     @Autowired
-    private GoodsCategoryDAOKKK goodsCategoryDaoKKK;
+    private GoodsCategoryDAO goodsCategoryDao;
 
     /**
      * 用户根据id搜索商品
@@ -34,7 +34,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Goods getGoodsForSaleById(Integer id) {
-        Goods goods = goodsDaoKKK.selectById(id);
+        Goods goods = goodsDao.selectById(id);
         if (goods != null) {
             if (goods.getStatusCode() != 0) {
                 return goods;
@@ -51,7 +51,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Goods getGoodsById(Integer id) {
-        return goodsDaoKKK.selectById(id);
+        return goodsDao.selectById(id);
     }
 
     /**
@@ -62,7 +62,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Integer isGoodsOnSale(Integer id) {
-        Goods goods = goodsDaoKKK.selectById(id);
+        Goods goods = goodsDao.selectById(id);
         if (goods != null) {
             return goods.getStatusCode();
         }
@@ -81,7 +81,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public List<Goods> listGoodsByCondition(String goodsSn, String goodsName, Integer status, Integer page, Integer limit) {
-        return goodsDaoKKK.selectByCondition(goodsSn,goodsName,status,page,limit);
+        return goodsDao.selectByCondition(goodsSn, goodsName, status, page, limit);
     }
 
     /**
@@ -95,7 +95,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public List<Goods> listGoodsByCondition(String goodsSn, String goodsName, Integer page, Integer limit) {
-        return goodsDaoKKK.selectByCondition(goodsSn,goodsName,null,page,limit);
+        return goodsDao.selectByCondition(goodsSn, goodsName, null, page, limit);
     }
 
     /**
@@ -107,8 +107,8 @@ public class GoodsServiceImpl implements GoodsService {
      * @return List<Goods>，搜索到的商品的列表
      */
     @Override
-    public List<Goods> ListGoodsByCategoryId(Integer id, Integer page, Integer limit) {
-        return goodsDaoKKK.selectByCategoryId(id,page,limit);
+    public List<Goods> listGoodsByCategoryId(Integer id, Integer page, Integer limit) {
+        return goodsDao.selectByCategoryId(id, page, limit);
     }
 
     /**
@@ -120,8 +120,8 @@ public class GoodsServiceImpl implements GoodsService {
      * @return List<Goods>，搜索到的商品的列表
      */
     @Override
-    public List<Goods> ListGoodsByBrandId(Integer id, Integer page, Integer limit) {
-        return goodsDaoKKK.selectByBrandId(id,page,limit);
+    public List<Goods> listGoodsByBrandId(Integer id, Integer page, Integer limit) {
+        return goodsDao.selectByBrandId(id, page, limit);
     }
 
     /**
@@ -132,7 +132,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Goods addGoods(Goods goods) {
-        return goodsDaoKKK.insert(goods);
+        return goodsDao.insert(goods);
     }
 
     /**
@@ -143,7 +143,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Goods updateGoodsById(Goods goods) {
-        return goodsDaoKKK.updateById(goods);
+        return goodsDao.updateById(goods);
     }
 
     /**
@@ -154,7 +154,18 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Integer deleteGoodsById(Integer id) {
-        return goodsDaoKKK.deleteById(id);
+        Goods goods=goodsDao.selectById(id);
+        if(goods!=null){
+            if(goods.getStatusCode()==0){
+                if(goodsDao.deleteById(id)){
+                    return 1;
+                }
+            }
+            else{
+                return 0;
+            }
+        }
+        return -1;
     }
 
     /**
@@ -165,7 +176,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Product getProductById(Integer id) {
-        return productDaoKKK.selectById(id);
+        return productDao.selectById(id);
     }
 
     /**
@@ -178,7 +189,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public List<Product> listProductsByGoodsId(Integer id, Integer page, Integer limit) {
-        return productDaoKKK.selectByGoodsId(id, page, limit);
+        return productDao.selectByGoodsId(id, page, limit);
     }
 
     /**
@@ -189,7 +200,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Product addProduct(Product product) {
-        return productDaoKKK.insert(product);
+        return productDao.insert(product);
     }
 
     /**
@@ -200,18 +211,18 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Product updateProductById(Product product) {
-        return productDaoKKK.updateById(product);
+        return productDao.updateById(product);
     }
 
     /**
      * 管理员根据id删除产品
      *
      * @param id :Integer
-     * @return Integer,-1表示删除失败，1表示删除成功
+     * @return Boolean
      */
     @Override
-    public Integer deleteProductById(Integer id) {
-        return productDaoKKK.deleteById(id);
+    public Boolean deleteProductById(Integer id) {
+        return productDao.deleteById(id);
     }
 
     /**
@@ -222,7 +233,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Brand getBrandById(Integer id) {
-        return brandDaoKKK.selectById(id);
+        return brandDao.selectById(id);
     }
 
     /**
@@ -236,7 +247,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public List<Brand> listBrandsByCondition(String brandId, String brandName, Integer page, Integer limit) {
-        return brandDaoKKK.selectBrandsByCondition(brandId, brandName, page, limit);
+        return brandDao.selectBrandsByCondition(brandId, brandName, page, limit);
     }
 
     /**
@@ -248,7 +259,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public List<Brand> listBrandsByCondition(Integer page, Integer limit) {
-        return brandDaoKKK.selectBrandsByCondition(null,null,page, limit);
+        return brandDao.selectBrandsByCondition(null, null, page, limit);
     }
 
     /**
@@ -259,7 +270,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Brand addBrand(Brand brand) {
-        return brandDaoKKK.insert(brand);
+        return brandDao.insert(brand);
     }
 
     /**
@@ -270,18 +281,18 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Brand updateBrandById(Brand brand) {
-        return brandDaoKKK.updateById(brand);
+        return brandDao.updateById(brand);
     }
 
     /**
      * 管理员根据id删除品牌
      *
      * @param id ：Integer
-     * @return Integer,-1表示删除失败，0表示该商品仍在售，1表示删除成功
+     * @return Boolean
      */
     @Override
-    public Integer deleteBrandById(Integer id) {
-        return brandDaoKKK.deleteById(id);
+    public Boolean deleteBrandById(Integer id) {
+        return brandDao.deleteById(id);
     }
 
     /**
@@ -292,7 +303,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public GoodsCategory getGoodsCategoryById(Integer id) {
-        return goodsCategoryDaoKKK.selectById(id);
+        return goodsCategoryDao.selectById(id);
     }
 
     /**
@@ -304,7 +315,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public List<GoodsCategory> listGoodsCategories(Integer page, Integer limit) {
-        return goodsCategoryDaoKKK.selectGoodsCategoriesByCondition(page, limit);
+        return goodsCategoryDao.selectGoodsCategoriesByCondition(page, limit);
     }
 
     /**
@@ -316,7 +327,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public List<GoodsCategory> listOneLevelGoodsCategories(Integer page, Integer limit) {
-        return goodsCategoryDaoKKK.selectOneLevelGoodsCategories(page, limit);
+        return goodsCategoryDao.selectOneLevelGoodsCategories(page, limit);
     }
 
     /**
@@ -329,7 +340,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public List<GoodsCategory> listSecondLevelGoodsCategoryById(Integer id, Integer page, Integer limit) {
-        return goodsCategoryDaoKKK.selectSecondLevelGoodsCategories(id, page, limit);
+        return goodsCategoryDao.selectSecondLevelGoodsCategories(id, page, limit);
     }
 
     /**
@@ -340,7 +351,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public GoodsCategory addGoodsCategory(GoodsCategory goodsCategory) {
-        return goodsCategoryDaoKKK.insert(goodsCategory);
+        return goodsCategoryDao.insert(goodsCategory);
     }
 
     /**
@@ -351,17 +362,17 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public GoodsCategory updateGoodsCategoryById(GoodsCategory goodsCategory) {
-        return goodsCategoryDaoKKK.updateById(goodsCategory);
+        return goodsCategoryDao.updateById(goodsCategory);
     }
 
     /**
      * 管理员删除分类
      *
      * @param id ：Integer
-     * @return Integer,-1表示删除失败，0表示该商品仍在售，1表示删除成功
+     * @return Boolean
      */
     @Override
-    public Integer deleteGoodsCategory(Integer id) {
-        return goodsCategoryDaoKKK.deleteById(id);
+    public Boolean deleteGoodsCategoryById(Integer id) {
+        return goodsCategoryDao.deleteById(id);
     }
 }

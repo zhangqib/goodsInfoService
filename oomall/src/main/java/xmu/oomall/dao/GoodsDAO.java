@@ -169,4 +169,8 @@ public class GoodsDAO {
         Integer goodsCategoryId = goods.getGoodsCategoryId();
         return goodsCategoryId != null && goodsCategoryMapper.selectByPrimaryKey(goodsCategoryId) == null;
     }
+
+    public List<Goods> selectByBrandId(Integer id, Integer page, Integer limit) {
+        return null;
+    }
 }

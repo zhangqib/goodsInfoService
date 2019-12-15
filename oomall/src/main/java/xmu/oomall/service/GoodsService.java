@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @Author Ke
  * @Description: GoodsServiceInterface
- * @create 2019/12/15 2:22
+ * @create 2019/12/15 18:22
  */
 
 
@@ -53,10 +53,10 @@ public interface GoodsService {
      * @return List<Goods>,搜索到的商品的列表
      */
     public List<Goods> listGoodsByCondition(String goodsSn,
-                                       String goodsName,
-                                       Integer status,
-                                       Integer page,
-                                       Integer limit);
+                                            String goodsName,
+                                            Integer status,
+                                            Integer page,
+                                            Integer limit);
 
     /**
      * 用户根据条件搜素商品
@@ -68,33 +68,33 @@ public interface GoodsService {
      * @return List<Goods>,搜索到的商品的列表
      */
     public List<Goods> listGoodsByCondition(String goodsSn,
-                                       String goodsName,
-                                       Integer page,
-                                       Integer limit);
+                                            String goodsName,
+                                            Integer page,
+                                            Integer limit);
 
     /**
      * 用户根据商品分类id搜索该分类下的所有商品
      *
      * @param id:Integer
-     * @param page:Integer            第几页
-     * @param limit:Integer           一页多少
+     * @param page:Integer  第几页
+     * @param limit:Integer 一页多少
      * @return List<Goods>，搜索到的商品的列表
      */
-    public List<Goods> ListGoodsByCategoryId(Integer id,
-                                        Integer page,
-                                        Integer limit);
+    public List<Goods> listGoodsByCategoryId(Integer id,
+                                             Integer page,
+                                             Integer limit);
 
     /**
      * 管理员或用户根据品牌id搜索该品牌下的所有商品
      *
      * @param id:Integer
-     * @param page:                   Integer 第几页
-     * @param limit:                  Integer 一页多少
+     * @param page:      Integer 第几页
+     * @param limit:     Integer 一页多少
      * @return List<Goods>，搜索到的商品的列表
      */
-    public List<Goods> ListGoodsByBrandId(Integer id,
-                                     Integer page,
-                                     Integer limit);
+    public List<Goods> listGoodsByBrandId(Integer id,
+                                          Integer page,
+                                          Integer limit);
 
     /**
      * 管理员新建商品
@@ -136,13 +136,13 @@ public interface GoodsService {
      * 管理员搜索某个商品下的所有产品
      *
      * @param id:Integer
-     * @param page:Integer            第几页
-     * @param limit:Integer           一页多少
+     * @param page:Integer  第几页
+     * @param limit:Integer 一页多少
      * @return List<Product>，所属该商品的产品列表
      */
     public List<Product> listProductsByGoodsId(Integer id,
-                                        Integer page,
-                                        Integer limit);
+                                               Integer page,
+                                               Integer limit);
 
     /**
      * 管理员新建某个商品下的产品
@@ -164,9 +164,9 @@ public interface GoodsService {
      * 管理员根据id删除产品
      *
      * @param id:Integer
-     * @return Integer,-1表示删除失败，1表示删除成功
+     * @return Boolean
      */
-    public Integer deleteProductById(Integer id);
+    public Boolean deleteProductById(Integer id);
 
     //-----------------Product-------------Product-------------Product--------
     //-----------------Product-------------Product-------------Product--------
@@ -192,9 +192,9 @@ public interface GoodsService {
      * @return List<Brand>,搜索到的品牌列表
      */
     public List<Brand> listBrandsByCondition(String brandId,
-                                        String brandName,
-                                        Integer page,
-                                        Integer limit);
+                                             String brandName,
+                                             Integer page,
+                                             Integer limit);
 
     /**
      * 用户搜索所有品牌
@@ -204,7 +204,7 @@ public interface GoodsService {
      * @return List<Brand>,搜索到的品牌列表
      */
     public List<Brand> listBrandsByCondition(Integer page,
-                                        Integer limit);
+                                             Integer limit);
 
     /**
      * 管理员创建品牌
@@ -226,9 +226,9 @@ public interface GoodsService {
      * 管理员根据id删除品牌
      *
      * @param id：Integer
-     * @return Integer,-1表示删除失败，0表示该商品仍在售，1表示删除成功
+     * @return Boolean
      */
-    public Integer deleteBrandById(Integer id);
+    public Boolean deleteBrandById(Integer id);
 
     //-----------------Brand---------------Brand-----------Brand---------
     //-----------------Brand---------------Brand-----------Brand---------
@@ -251,7 +251,7 @@ public interface GoodsService {
      * @return List<GoodsCategory>
      */
     public List<GoodsCategory> listGoodsCategories(Integer page,
-                                      Integer limit);
+                                                   Integer limit);
 
     /**
      * 内部接口————————搜索所有一级分类
@@ -261,7 +261,7 @@ public interface GoodsService {
      * @return List<GoodsCategory>
      */
     public List<GoodsCategory> listOneLevelGoodsCategories(Integer page,
-                                              Integer limit);
+                                                           Integer limit);
 
     /**
      * 管理员或用户搜索某一级分类下的所有二级分类
@@ -272,8 +272,8 @@ public interface GoodsService {
      * @return List<GoodsCategory>
      */
     public List<GoodsCategory> listSecondLevelGoodsCategoryById(Integer id,
-                                                   Integer page,
-                                                   Integer limit);
+                                                                Integer page,
+                                                                Integer limit);
 
     /**
      * 管理员新建分类
@@ -295,9 +295,9 @@ public interface GoodsService {
      * 管理员删除分类
      *
      * @param id：Integer
-     * @return Integer,-1表示删除失败，0表示该商品仍在售，1表示删除成功
+     * @return Boolean
      */
-    public Integer deleteGoodsCategory(Integer id);
+    public Boolean deleteGoodsCategoryById(Integer id);
     //-----------------GoodsCategory---------------GoodsCategory-----------GoodsCategory---------
     //-----------------GoodsCategory---------------GoodsCategory-----------GoodsCategory---------
 }

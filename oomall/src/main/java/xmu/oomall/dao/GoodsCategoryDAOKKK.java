@@ -1,16 +1,8 @@
 package xmu.oomall.dao;
 
-import com.github.pagehelper.PageHelper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import xmu.oomall.domain.GoodsCategory;
-import xmu.oomall.domain.po.GoodsCategoryPo;
-import xmu.oomall.mapper.GoodsCategoryMapper;
-import xmu.oomall.mapper.GoodsMapper;
-import xmu.oomall.mapper.ProductMapper;
-import xmu.oomall.util.Copyer;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,7 +35,7 @@ public class GoodsCategoryDAOKKK {
         return null;
     }
 
-    public Integer deleteById(Integer id) {
-        return -1;
+    public Boolean deleteById(Integer id) {
+        return true;
     }
 }

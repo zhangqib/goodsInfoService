@@ -1,11 +1,7 @@
 package xmu.oomall.dao;
 
-import com.github.pagehelper.PageHelper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import xmu.oomall.domain.Product;
-import xmu.oomall.domain.po.ProductPo;
-import xmu.oomall.mapper.ProductMapper;
 
 import java.util.List;
 
@@ -31,7 +27,7 @@ public class ProductDAOKKK {
         return null;
     }
 
-    public Integer deleteById(Integer id) {
-        return -1;
+    public Boolean deleteById(Integer id) {
+        return true;
     }
 }
