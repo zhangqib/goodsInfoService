@@ -8,6 +8,7 @@ import xmu.oomall.domain.po.GoodsCategoryPo;
 import xmu.oomall.domain.po.GoodsPo;
 import xmu.oomall.domain.po.ProductPo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -29,5 +30,10 @@ public class Goods extends GoodsPo {
     @Override
     public String toString() {
         return super.toString();
+    }
+
+    public Goods() {
+        this.setGmtCreate(LocalDateTime.now());
+        this.setGmtModified(LocalDateTime.now());
     }
 }
