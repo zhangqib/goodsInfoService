@@ -157,32 +157,41 @@ public class GoodsDAO {
     /**
      * 判断goods的品牌和类别是否合法
      */
-    private boolean isArgsInvalid(GoodsPo goods) {
+    private boolean isArgsInvalid(Goods goods) {
         // beDeleted不能为true
         if (goods.getBeDeleted()) {
             return true;
         }
+        // 维护外键
+        //   brandId
         Integer brandId = goods.getBrandId();
         if (brandId != null && brandMapper.selectByPrimaryKey(brandId) == null) {
             return true;
         }
+        //   categoryId
         Integer goodsCategoryId = goods.getGoodsCategoryId();
         return goodsCategoryId != null && goodsCategoryMapper.selectByPrimaryKey(goodsCategoryId) == null;
+        //   spcialFreightId
+        //    未完成(需要调用运费服务)
     }
 
     public List<Goods> selectByBrandId(Integer id, Integer page, Integer limit) {
-        return null;
+        PageHelper.startPage(page, limit);
+        return goodsList(goodsMapper.selectByBrandId(id));
     }
 
-    public List<Goods> selectForSaleByCondition(String goodsSn, String goodsName, Integer page, Integer limit) {
-   return null;
+    public List<Goods> selectForSaleByCondition(String goodsSn, String name, Integer page, Integer limit) {
+        PageHelper.startPage(page, limit);
+        return goodsList(goodsMapper.selectForSaleByCondition(goodsSn, name));
     }
 
-    public List<Goods> selectForSaleByCategoryId(Integer id, Integer page, Integer limit) {
-        return null;
+    public List<Goods> selectForSaleByCategoryId(Integer categoryId, Integer page, Integer limit) {
+        PageHelper.startPage(page, limit);
+        return goodsList(goodsMapper.selectForSaleByCategoryId(categoryId));
     }
 
-    public List<Goods> selectForSaleByBrandId(Integer id, Integer page, Integer limit) {
-        return null;
+    public List<Goods> selectForSaleByBrandId(Integer brandId, Integer page, Integer limit) {
+        PageHelper.startPage(page, limit);
+        return goodsList(goodsMapper.selectForSaleByBrandId(brandId));
     }
 }

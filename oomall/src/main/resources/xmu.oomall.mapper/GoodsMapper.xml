@@ -73,6 +73,12 @@
     from goods
     where goods_category_id = #{categoryId} and is_deleted != 1
   </select>
+  <select id="selectForSaleByCategoryId" resultMap="GoodsMap">
+    select
+    <include refid="Base_Column_List" />
+    from goods
+    where goods_category_id = #{categoryId} and is_deleted != 1 and status != 0
+  </select>
   <select id="selectByCondition" resultMap="GoodsMap">
     select
     <include refid="Base_Column_List" />
@@ -91,11 +97,32 @@
     </trim>
       is_deleted != 1
   </select>
-  <select id="selectByBrandId" resultType="xmu.oomall.domain.po.GoodsPo">
+  <select id="selectForSaleByCondition" resultMap="GoodsMap">
+    select
+    <include refid="Base_Column_List" />
+    from goods
+    where
+    <trim>
+      <if test="goodsSn != null">
+        `goods_sn` = #{goodsSn} and
+      </if>
+      <if test="name != null">
+        `name` = #{name} and
+      </if>
+    </trim>
+    is_deleted != 1 and status != 0
+  </select>
+  <select id="selectByBrandId" resultMap="GoodsMap">
     select
     <include refid="Base_Column_List" />
     from goods
     where brand_id = #{brandId} and is_deleted != 1
+  </select>
+  <select id="selectForSaleByBrandId" resultMap="GoodsMap">
+    select
+    <include refid="Base_Column_List" />
+    from goods
+    where brand_id = #{brandId} and is_deleted != 1 and status != 0
   </select>
   <!-- 逻辑删除 -->
   <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
@@ -138,9 +165,6 @@
       </if>
       <if test="goods.name != null">
         name = #{goods.name,jdbcType=VARCHAR},
-      </if>
-      <if test="goods.goodsSn != null">
-        goods_sn = #{goods.goodsSn,jdbcType=VARCHAR},
       </if>
       <if test="goods.shortName != null">
         short_name = #{goods.shortName,jdbcType=VARCHAR},
@@ -197,4 +221,5 @@
     set goods_category_id=null
     where goods_category_id = #{categoryId}
   </update>
+
 </mapper>

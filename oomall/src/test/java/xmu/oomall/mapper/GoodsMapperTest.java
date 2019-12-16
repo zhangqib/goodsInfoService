@@ -71,10 +71,33 @@ class GoodsMapperTest {
     }
 
     @Test
+    void selectForSaleByCategoryId() {
+        goodsMapper.selectForSaleByCategoryId(3).forEach(goodsPo -> System.out.println(goodsPo));
+    }
+
+    @Test
+    void selectByBrandId() {
+        goodsMapper.selectByBrandId(3).forEach(goodsPo -> System.out.println(goodsPo));
+    }
+
+    @Test
+    void selectForSaleByBrandId() {
+        goodsMapper.selectForSaleByBrandId(3).forEach(
+                goodsPo -> System.out.println(goodsPo)
+        );
+    }
+
+    @Test
     void selectByCondition() {
        goodsMapper.selectByCondition( null, "test goods", 0).forEach(
                goodsPo -> System.out.println(goodsPo)
        );
+    }
+
+    @Test
+    void selectForSaleByCondition() {
+        goodsMapper.selectForSaleByCondition("3", null).forEach(
+                goodsPo -> System.out.println(goodsPo));
     }
 
     @Test
@@ -87,8 +110,5 @@ class GoodsMapperTest {
         System.out.println(goodsMapper.cleanCategory(1));
     }
 
-    @Test
-    void selectByBrandId() {
-        goodsMapper.selectByBrandId(3).forEach(goodsPo -> System.out.println(goodsPo));
-    }
+
 }
