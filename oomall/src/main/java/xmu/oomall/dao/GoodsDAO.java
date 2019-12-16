@@ -177,4 +177,12 @@ public class GoodsDAO {
     public List<Goods> selectForSaleByCondition(String goodsSn, String goodsName, Integer page, Integer limit) {
    return null;
     }
+
+    public List<Goods> selectForSaleByCategoryId(Integer id, Integer page, Integer limit) {
+        return null;
+    }
+
+    public List<Goods> selectForSaleByBrandId(Integer id, Integer page, Integer limit) {
+        return null;
+    }
 }

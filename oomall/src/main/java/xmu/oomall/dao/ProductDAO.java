@@ -113,4 +113,8 @@ public class ProductDAO {
         Integer goodsId = product.getGoodsId();
         return goodsId != null && goodsMapper.selectByPrimaryKey(goodsId) == null;
     }
+
+    public Boolean updateStockByProductId() {
+        return true;
+    }
 }
