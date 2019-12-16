@@ -3,6 +3,7 @@ package xmu.oomall.mapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DuplicateKeyException;
 import xmu.oomall.Application;
 import xmu.oomall.domain.Goods;
 import xmu.oomall.domain.po.GoodsPo;
@@ -41,8 +42,13 @@ class GoodsMapperTest {
         goods.setStatusCode(0);
         goods.setVolume("1");
         goods.setWeight(new BigDecimal(1));
-        goodsMapper.insert(goods);
-        System.out.println(goods);
+        goods.setGoodsSn("1");
+        try {
+            goodsMapper.insert(goods);
+            System.out.println(goods);
+        } catch(DuplicateKeyException e) {
+            System.out.println("goodsSn error");
+        }
     }
 
     @Test
@@ -79,5 +85,10 @@ class GoodsMapperTest {
     @Test
     void cleanCategory() {
         System.out.println(goodsMapper.cleanCategory(1));
+    }
+
+    @Test
+    void selectByBrandId() {
+        goodsMapper.selectByBrandId(3).forEach(goodsPo -> System.out.println(goodsPo));
     }
 }

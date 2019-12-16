@@ -43,6 +43,14 @@ public interface GoodsMapper {
      */
     List<GoodsPo> selectByCategoryId(@Param("categoryId") Integer categoryId);
 
+
+    /**
+     * 通过品牌id查询商品
+     *
+     * @return 商品列表
+     */
+    List<GoodsPo> selectByBrandId(@Param("brandId") Integer brandId);
+
     /**
      * 条件查询
      *
