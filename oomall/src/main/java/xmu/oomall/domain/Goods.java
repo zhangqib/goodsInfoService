@@ -36,4 +36,8 @@ public class Goods extends GoodsPo {
         this.setGmtCreate(LocalDateTime.now());
         this.setGmtModified(LocalDateTime.now());
     }
+
+    public void setModified() {
+        this.setGmtModified(LocalDateTime.now());
+    }
 }
