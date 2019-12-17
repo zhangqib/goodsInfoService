@@ -24,35 +24,35 @@
     -->
     select 
     <include refid="Base_Column_List" />
-    from goods_category
+    from `oomall_goods_category`
     where id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectOneLevelGoodsCategories" resultMap="GoodsCategoryMap">
     select
     <include refid="Base_Column_List" />
-    from goods_category
+    from `oomall_goods_category`
     where pid is null and is_deleted != 1
   </select>
   <select id="selectSecondLevelGoodsCategories" parameterType="java.lang.Integer" resultMap="GoodsCategoryMap" >
     select
     <include refid="Base_Column_List" />
-    from goods_category
+    from `oomall_goods_category`
     where pid = #{pid} and is_deleted != 1
   </select>
   <select id="selectAll" resultMap="GoodsCategoryMap">
     select
     <include refid="Base_Column_List"/>
-    from goods_category
+    from `oomall_goods_category`
     where is_deleted != 1
   </select>
   <!-- 逻辑删除 -->
   <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    update goods_category
+    update `oomall_goods_category`
     set is_deleted = 1
-    where id = #{id}
+    where id = #{id} and is_deleted = 0
   </update>
   <insert id="insert" parameterType="GoodsCategoryPo" keyProperty="id" useGeneratedKeys="true">
-    insert into goods_category (id, name, pid, pic_url,
+    insert into `oomall_goods_category` (id, name, pid, pic_url,
       gmt_create, gmt_modified, is_deleted
       )
     values (#{goodsCategory.id,jdbcType=BIGINT}, #{goodsCategory.name,jdbcType=VARCHAR},
@@ -62,7 +62,7 @@
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="GoodsCategoryPo">
-    update goods_category
+    update `oomall_goods_category`
     <set>
       <if test = "goodsCategory.name != null" >
         name = #{goodsCategory.name,jdbcType=VARCHAR},

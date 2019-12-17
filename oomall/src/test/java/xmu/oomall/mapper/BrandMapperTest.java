@@ -3,6 +3,8 @@ package xmu.oomall.mapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import xmu.oomall.Application;
 import xmu.oomall.domain.Brand;
 import xmu.oomall.domain.po.BrandPo;
@@ -10,6 +12,7 @@ import xmu.oomall.domain.po.BrandPo;
 import java.time.LocalDateTime;
 
 @SpringBootTest(classes = Application.class)
+@Transactional
 class BrandMapperTest {
 
     @Autowired
@@ -17,7 +20,13 @@ class BrandMapperTest {
 
     @Test
     void deleteByPrimaryKey() {
-        System.out.println(brandMapper.deleteByPrimaryKey(1));
+        Assert.isTrue(brandMapper.deleteByPrimaryKey(72) == 1, "delete brand failed");
+    }
+
+    @Test
+    void deleteByPrimaryKeyFail() {
+        Assert.isTrue(brandMapper.deleteByPrimaryKey(3) == 0, "delete brand error");
+//        Assert.isTrue(brandMapper.deleteByPrimaryKey(77) == 0, "delete brand error");
     }
 
     @Test
@@ -28,26 +37,30 @@ class BrandMapperTest {
         brand.setPicUrl("test pic url");
         brand.setGmtCreate(LocalDateTime.now());
         brand.setGmtModified(LocalDateTime.now());
-        brandMapper.insert(brand);
-        System.out.println(brand);
+        Assert.isTrue(brandMapper.insert(brand) == 1, "insert brand failed");
     }
 
     @Test
     void selectByPrimaryKey() {
-        System.out.println(brandMapper.selectByPrimaryKey(1));
+        Assert.notNull(brandMapper.selectByPrimaryKey(71), "select brand failed");
     }
 
     @Test
     void selectAll() {
-        brandMapper.selectAll().forEach(brandPo -> System.out.println(brandPo));
+        Assert.notEmpty(brandMapper.selectAll(), "select all brand failed");
+        brandMapper.selectAll().forEach(
+                brandPo -> Assert.isTrue(!brandPo.isBeDeleted(), "get wrong brand in select all")
+        );
     }
 
     @Test
     void updateByPrimaryKey() {
-//        BrandPo brand = brandMapper.selectByPrimaryKey(3);
         Brand brand = new Brand();
-        brand.setId(1);
-        brand.setName("update brand test");
-        System.out.println(brandMapper.updateByPrimaryKey(brand));
+        Integer brandId = 71;
+        String name = "update brand test";
+        brand.setId(brandId);
+        brand.setName(name);
+        Assert.isTrue(brandMapper.updateByPrimaryKey(brand) == 1, "update brand failed");
+        Assert.isTrue(brandMapper.selectByPrimaryKey(brandId).getName().equals(name), "update brand name failed");
     }
 }

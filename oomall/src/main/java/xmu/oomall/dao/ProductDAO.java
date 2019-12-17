@@ -114,7 +114,15 @@ public class ProductDAO {
         return goodsId != null && goodsMapper.selectByPrimaryKey(goodsId) == null;
     }
 
-    public Boolean updateStockByProductId() {
-        return true;
+    public Boolean descStock(Integer productId, int dStock) {
+        ProductPo product = productMapper.selectByPrimaryKey(productId);
+        if (product == null) {
+            return false;
+        } else if (product.getSafetyStock() < dStock){
+            return false;
+        } else {
+            product.setSafetyStock(product.getSafetyStock() - dStock);
+            return productMapper.updateByPrimaryKey(product) == 1;
+        }
     }
 }

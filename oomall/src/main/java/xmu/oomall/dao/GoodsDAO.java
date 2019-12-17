@@ -41,15 +41,38 @@ public class GoodsDAO {
      */
     public Goods insert(Goods goods) {
         /* 判断参数是否合法 */
-        if (isArgsInvalid(goods)) {
+        // beDeleted不能为true
+        if (goods.getBeDeleted()) {
             return null;
         }
+        // 维护外键
+        //   brandId
+        Integer brandId = goods.getBrandId();
+        if (brandId != null && brandMapper.selectByPrimaryKey(brandId) == null) {
+            return null;
+        }
+        //   categoryId
+        Integer goodsCategoryId = goods.getGoodsCategoryId();
+        if (goodsCategoryId != null && goodsCategoryMapper.selectByPrimaryKey(goodsCategoryId) == null) {
+           return null;
+        }
+        //   spcialFreightId
+        //    未完成(需要调用运费服务)
+        //    .......
+
+        // 判断goodsSn是否重复
+        String goodsSn = goods.getGoodsSn();
+        if (goodsSn != null && goodsMapper.selectByCondition(goodsSn, null, null) != null) {
+           return null;
+        }
+        /* 参数合法性判断完成 */
 
         /* 判断插入是否成功 */
         if (goodsMapper.insert(goods) > 0) {
             return goods;
+        } else {
+            return null;
         }
-        return null;
     }
 
     /**
@@ -77,6 +100,20 @@ public class GoodsDAO {
     public Goods selectById(Integer id) {
         GoodsPo goods = goodsMapper.selectByPrimaryKey(id);
         return goods(goods);
+    }
+
+    /**
+     * 查询所有商品
+     */
+    public List<Goods> selectAll(Integer page, Integer limit) {
+        return this.selectByCondition(null, null, null, page, limit);
+    }
+
+    /**
+     * 查询所有未下架的商品
+     */
+    public List<Goods> selectAllForSale(Integer page, Integer limit) {
+       return this.selectForSaleByCondition(null, null, page, limit);
     }
 
     /**
@@ -108,6 +145,10 @@ public class GoodsDAO {
         if (goodsMapper.updateByPrimaryKey(goods) == 0) {
             return null;
         }
+
+        // 判断是否有可更新的属性(若是空对象，只有id会出错）
+        // 感觉应该放在controller
+
         return goods(goodsMapper.selectByPrimaryKey(goods.getId()));
     }
 
@@ -175,21 +216,33 @@ public class GoodsDAO {
         //    未完成(需要调用运费服务)
     }
 
+    /**
+     * 通过brand查找商品
+     */
     public List<Goods> selectByBrandId(Integer id, Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
         return goodsList(goodsMapper.selectByBrandId(id));
     }
 
+    /**
+     * 条件查询未下架商品
+     */
     public List<Goods> selectForSaleByCondition(String goodsSn, String name, Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
         return goodsList(goodsMapper.selectForSaleByCondition(goodsSn, name));
     }
 
+    /**
+     * 查询类别下的未下架商品
+     */
     public List<Goods> selectForSaleByCategoryId(Integer categoryId, Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
         return goodsList(goodsMapper.selectForSaleByCategoryId(categoryId));
     }
 
+    /**
+     * 通过brand查询未下架商品
+     */
     public List<Goods> selectForSaleByBrandId(Integer brandId, Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
         return goodsList(goodsMapper.selectForSaleByBrandId(brandId));

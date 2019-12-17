@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.transaction.annotation.Transactional;
 import xmu.oomall.Application;
 import xmu.oomall.domain.Goods;
 import xmu.oomall.domain.po.GoodsPo;
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @SpringBootTest(classes = Application.class)
+@Transactional
 class GoodsMapperTest {
     @Autowired
     private GoodsMapper goodsMapper;
@@ -109,6 +111,4 @@ class GoodsMapperTest {
     void cleanCategory() {
         System.out.println(goodsMapper.cleanCategory(1));
     }
-
-
 }
