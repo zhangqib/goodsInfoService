@@ -1,9 +1,8 @@
 package xmu.oomall.service;
 
+import xmu.oomall.domain.GoodsCategory;
 import org.springframework.stereotype.Service;
-
 import xmu.oomall.domain.*;
-
 
 import java.util.List;
 
@@ -19,80 +18,108 @@ public interface GoodsService {
     //-----------------Goods---------------Goods-----------Goods---------
 
     /**
-     * 用户根据id搜索商品
-     *
-     * @param id：Integer
-     * @return Goods（不可获取下架商品）
-     */
-    public Goods getGoodsForSaleById(Integer id);
-
-    /**
      * 管理员根据id搜索商品
      *
      * @param id：Integer
      * @return Goods(可获取下架商品)
      */
-    public Goods getGoodsById(Integer id);
+    Goods getGoodsById(Integer id);
 
     /**
-     * 内部接口————————————判断商品是否在售
+     * 用户根据id搜索商品
      *
      * @param id：Integer
-     * @return Integer，0表示该商品下架，1表示该商品在售，-1表示该商品不存在
+     * @return Goods（不可获取下架商品）
      */
-    public Integer isGoodsOnSale(Integer id);
+    Goods getGoodsForSaleById(Integer id);
+
+//    /**
+//     * 管理员根据id搜索商品的特殊运费规则
+//     *
+//     * @param id：Integer
+//     * @return SpecialFreight（可获取下架商品）
+//     */
+//    SpecialFreight getSpecialFreightsByGoodsId(Integer id);
+//
+//    /**
+//     * 用户根据id搜索商品的特殊运费规则
+//     *
+//     * @param id：Integer
+//     * @return SpecialFreight（不可获取下架商品）
+//     */
+//    SpecialFreight getSpecialFreightsByForSaleGoodsId(Integer id);
 
     /**
      * 管理员根据条件搜索商品
      *
      * @param goodsSn:String   商品的序列号
      * @param goodsName:String 商品的名字
-     * @param status:Integer   商品是否上架，这个域的取值以数据字典为准
      * @param page:            Integer 第几页
      * @param limit:           Integer 一页多少
-     * @return List<Goods>,搜索到的商品的列表
+     * @return List<Goods>,搜索到的商品的列表(可获取下架商品)
      */
-    public List<Goods> listGoodsByCondition(String goodsSn,
-                                            String goodsName,
-                                            Integer status,
-                                            Integer page,
-                                            Integer limit);
+    List<Goods> listGoodsByCondition(String goodsSn,
+                                     String goodsName,
+                                     Integer page,
+                                     Integer limit);
 
     /**
      * 用户根据条件搜素商品
      *
-     * @param goodsSn:String   商品的序列号
      * @param goodsName:String 商品的名字
      * @param page:Integer     第几页
      * @param limit:Integer    一页多少
-     * @return List<Goods>,搜索到的商品的列表
+     * @return List<Goods>,搜索到的商品的列表（不可获取下架商品）
      */
-    public List<Goods> listGoodsByCondition(String goodsSn,
-                                            String goodsName,
+    List<Goods> listGoodsForSaleByCondition(String goodsName,
                                             Integer page,
                                             Integer limit);
 
     /**
-     * 用户根据商品分类id搜索该分类下的所有商品
+     * 管理员根据商品分类id搜索该分类下的所有商品（看得到下架商品）
      *
      * @param id:Integer
      * @param page:Integer  第几页
      * @param limit:Integer 一页多少
      * @return List<Goods>，搜索到的商品的列表
      */
-    public List<Goods> listGoodsByCategoryId(Integer id,
+    List<Goods> listGoodsByCategoryId(Integer id,
+                                      Integer page,
+                                      Integer limit);
+
+    /**
+     * 用户根据商品分类id搜索该分类下的所有商品(看不到下架商品)
+     *
+     * @param id:Integer
+     * @param page:Integer  第几页
+     * @param limit:Integer 一页多少
+     * @return List<Goods>，搜索到的商品的列表
+     */
+    List<Goods> listGoodsForSaleByCategoryId(Integer id,
                                              Integer page,
                                              Integer limit);
 
     /**
-     * 管理员或用户根据品牌id搜索该品牌下的所有商品
+     * 管理员根据品牌id搜索该品牌下的所有商品（可以看到下架商品）
      *
      * @param id:Integer
      * @param page:      Integer 第几页
      * @param limit:     Integer 一页多少
      * @return List<Goods>，搜索到的商品的列表
      */
-    public List<Goods> listGoodsByBrandId(Integer id,
+    List<Goods> listGoodsByBrandId(Integer id,
+                                   Integer page,
+                                   Integer limit);
+
+    /**
+     * 用户根据品牌id搜索该品牌下的所有商品（无法看到下架商品）
+     *
+     * @param id:Integer
+     * @param page:      Integer 第几页
+     * @param limit:     Integer 一页多少
+     * @return List<Goods>，搜索到的商品的列表
+     */
+    List<Goods> listGoodsForSaleByBrandId(Integer id,
                                           Integer page,
                                           Integer limit);
 
@@ -102,7 +129,7 @@ public interface GoodsService {
      * @param goods：Goods
      * @return Goods，新建的商品
      */
-    public Goods addGoods(Goods goods);
+    Goods addGoods(Goods goods);
 
     /**
      * 管理员根据id修改商品
@@ -110,7 +137,7 @@ public interface GoodsService {
      * @param goods:Goods
      * @return Goods，修改后的商品
      */
-    public Goods updateGoodsById(Goods goods);
+    Goods updateGoodsById(Goods goods);
 
     /**
      * 管理员根据id删除商品
@@ -118,7 +145,15 @@ public interface GoodsService {
      * @param id：Integer
      * @return Integer,-1表示删除失败，0表示该商品仍在售，1表示删除成功
      */
-    public Integer deleteGoodsById(Integer id);
+    Integer deleteGoodsById(Integer id);
+
+    /**
+     * 内部接口————————————判断商品是否在售
+     *
+     * @param id：Integer
+     * @return Boolean
+     */
+    Integer isGoodsOnSale(Integer id);
     //-----------------Goods---------------Goods-----------Goods---------
     //-----------------Goods---------------Goods-----------Goods---------
 
@@ -130,7 +165,7 @@ public interface GoodsService {
      * @param id:Integer
      * @return Product，搜索到的产品
      */
-    public Product getProductById(Integer id);
+    Product getProductById(Integer id);
 
     /**
      * 管理员搜索某个商品下的所有产品
@@ -140,9 +175,9 @@ public interface GoodsService {
      * @param limit:Integer 一页多少
      * @return List<Product>，所属该商品的产品列表
      */
-    public List<Product> listProductsByGoodsId(Integer id,
-                                               Integer page,
-                                               Integer limit);
+    List<Product> listProductsByGoodsId(Integer id,
+                                        Integer page,
+                                        Integer limit);
 
     /**
      * 管理员新建某个商品下的产品
@@ -150,7 +185,7 @@ public interface GoodsService {
      * @param product:Product
      * @return Product，新建的商品
      */
-    public Product addProduct(Product product);
+    Product addProduct(Product product);
 
     /**
      * 管理员根据id修改产品
@@ -158,7 +193,16 @@ public interface GoodsService {
      * @param product:Product
      * @return Product，修改后的产品
      */
-    public Product updateProductById(Product product);
+    Product updateProductById(Product product);
+
+    /**
+     * 管理员根据id修改Product的库存
+     *
+     * @param id：Integer
+     * @param quantity:Integer(RequestParam
+     * @return Boolean ，修改成功与否
+     */
+    Boolean updateStockByProductId(Integer id, Integer quantity);
 
     /**
      * 管理员根据id删除产品
@@ -166,7 +210,7 @@ public interface GoodsService {
      * @param id:Integer
      * @return Boolean
      */
-    public Boolean deleteProductById(Integer id);
+    Boolean deleteProductById(Integer id);
 
     //-----------------Product-------------Product-------------Product--------
     //-----------------Product-------------Product-------------Product--------
@@ -180,7 +224,7 @@ public interface GoodsService {
      * @param id:Integer
      * @return Brand
      */
-    public Brand getBrandById(Integer id);
+    Brand getBrandById(Integer id);
 
     /**
      * 管理员根据条件搜索品牌
@@ -191,10 +235,10 @@ public interface GoodsService {
      * @param limit:           Integer 一页多少
      * @return List<Brand>,搜索到的品牌列表
      */
-    public List<Brand> listBrandsByCondition(String brandId,
-                                             String brandName,
-                                             Integer page,
-                                             Integer limit);
+    List<Brand> listBrandsByCondition(String brandId,
+                                      String brandName,
+                                      Integer page,
+                                      Integer limit);
 
     /**
      * 用户搜索所有品牌
@@ -203,8 +247,8 @@ public interface GoodsService {
      * @param limit: Integer 一页多少
      * @return List<Brand>,搜索到的品牌列表
      */
-    public List<Brand> listBrandsByCondition(Integer page,
-                                             Integer limit);
+    List<Brand> listBrandsByCondition(Integer page,
+                                      Integer limit);
 
     /**
      * 管理员创建品牌
@@ -212,15 +256,15 @@ public interface GoodsService {
      * @param brand:Brand 要添加的品牌(body包含name、description、picURL(上传图片产生))
      * @return Brand
      */
-    public Brand addBrand(Brand brand);
+    Brand addBrand(Brand brand);
 
     /**
      * 管理员修改品牌
      *
-     * @param brand：Brand)(body包含name、description、picURL(上传图片产生))
+     * @param brand：Brand(body包含name、description、picURL(上传图片产生))
      * @return Brand
      */
-    public Brand updateBrandById(Brand brand);
+    Brand updateBrandById(Brand brand);
 
     /**
      * 管理员根据id删除品牌
@@ -228,7 +272,7 @@ public interface GoodsService {
      * @param id：Integer
      * @return Boolean
      */
-    public Boolean deleteBrandById(Integer id);
+    Boolean deleteBrandById(Integer id);
 
     //-----------------Brand---------------Brand-----------Brand---------
     //-----------------Brand---------------Brand-----------Brand---------
@@ -241,7 +285,7 @@ public interface GoodsService {
      * @param id：Integer
      * @return GoodsCategory
      */
-    public GoodsCategory getGoodsCategoryById(Integer id);
+    GoodsCategory getGoodsCategoryById(Integer id);
 
     /**
      * 管理员或用户搜索所有分类
@@ -250,8 +294,8 @@ public interface GoodsService {
      * @param limit: Integer 一页多少
      * @return List<GoodsCategory>
      */
-    public List<GoodsCategory> listGoodsCategories(Integer page,
-                                                   Integer limit);
+    List<GoodsCategory> listGoodsCategories(Integer page,
+                                            Integer limit);
 
     /**
      * 内部接口————————搜索所有一级分类
@@ -260,8 +304,8 @@ public interface GoodsService {
      * @param limit: Integer 一页多少
      * @return List<GoodsCategory>
      */
-    public List<GoodsCategory> listOneLevelGoodsCategories(Integer page,
-                                                           Integer limit);
+    List<GoodsCategory> listOneLevelGoodsCategories(Integer page,
+                                                    Integer limit);
 
     /**
      * 管理员或用户搜索某一级分类下的所有二级分类
@@ -271,9 +315,9 @@ public interface GoodsService {
      * @param limit:     Integer 一页多少
      * @return List<GoodsCategory>
      */
-    public List<GoodsCategory> listSecondLevelGoodsCategoryById(Integer id,
-                                                                Integer page,
-                                                                Integer limit);
+    List<GoodsCategory> listSecondLevelGoodsCategoryById(Integer id,
+                                                         Integer page,
+                                                         Integer limit);
 
     /**
      * 管理员新建分类
@@ -281,7 +325,7 @@ public interface GoodsService {
      * @param goodsCategory：GoodsCategory(body包含name、pid(可以为空) 、picURL(上传图片产生))
      * @return GoodsCategory
      */
-    public GoodsCategory addGoodsCategory(GoodsCategory goodsCategory);
+    GoodsCategory addGoodsCategory(GoodsCategory goodsCategory);
 
     /**
      * 管理员修改分类
@@ -289,7 +333,7 @@ public interface GoodsService {
      * @param goodsCategory：GoodsCategory(body包含name、pid(可以为空)、picURL(上传图片产生))
      * @return GoodsCategory
      */
-    public GoodsCategory updateGoodsCategoryById(GoodsCategory goodsCategory);
+    GoodsCategory updateGoodsCategoryById(GoodsCategory goodsCategory);
 
     /**
      * 管理员删除分类
@@ -297,7 +341,15 @@ public interface GoodsService {
      * @param id：Integer
      * @return Boolean
      */
-    public Boolean deleteGoodsCategoryById(Integer id);
+    Boolean deleteGoodsCategoryById(Integer id);
     //-----------------GoodsCategory---------------GoodsCategory-----------GoodsCategory---------
     //-----------------GoodsCategory---------------GoodsCategory-----------GoodsCategory---------
+
+    /**
+     * 上传图片
+     *
+     * @param
+     * @return picUrl：String，上传图片的url
+     */
+    String uploadPic();
 }
