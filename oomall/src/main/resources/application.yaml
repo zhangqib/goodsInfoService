@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: GOODSINFOSERVICE
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://www.wangwangwang.fun:3306/oomall
@@ -26,6 +28,11 @@ spring:
           slow-sql-millis: 100
   redis:
     host: localhost
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://handsomeyida.xyz:8761/eureka
 
 mybatis:
   type-aliases-package: xmu.oomall.domain.po
