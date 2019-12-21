@@ -3,7 +3,9 @@ package xmu.oomall.dao;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import xmu.oomall.IRedisService;
 import xmu.oomall.domain.Product;
+import xmu.oomall.domain.po.GoodsPo;
 import xmu.oomall.domain.po.ProductPo;
 import xmu.oomall.mapper.GoodsMapper;
 import xmu.oomall.mapper.ProductMapper;
@@ -23,6 +25,9 @@ public class ProductDAO {
     @Autowired
     private GoodsMapper goodsMapper;
 
+    @Autowired
+    private IRedisService iRedisService;
+
     /**
      * 插入一个product
      *
@@ -40,11 +45,19 @@ public class ProductDAO {
     /**
      * 根据productId删除对应的product
      *
-     * @param id
+     * @param product 要删除的对象
      * @return 删除是否成功
      */
+    public boolean deleteById(Product product) {
+        if (product.getBeDeleted()) {
+            return false;
+        }
+        iRedisService.remove(product.getRedisKey());
+        return productMapper.deleteByPrimaryKey(product.getId()) == 1;
+    }
+
     public boolean deleteById(Integer id) {
-        return productMapper.deleteByPrimaryKey(id) == 1;
+        return true;
     }
 
     /**
@@ -54,7 +67,14 @@ public class ProductDAO {
      * @return product
      */
     public Product selectById(Integer id) {
-        return (Product) productMapper.selectByPrimaryKey(id);
+        ProductPo product = (ProductPo) iRedisService.get(Product.getRedisKey(id));
+        if (product == null) {
+            product =  product(productMapper.selectByPrimaryKey(id));
+            if (product != null) {
+                iRedisService.set(product.getRedisKey(), product);
+            }
+        }
+        return product(product);
     }
 
     /**
@@ -76,8 +96,15 @@ public class ProductDAO {
      * @return 更新是否成功
      */
     public Product updateById(Product product) {
-        if (isArgsInvalid(product)) {
+        if (product.getBeDeleted()) {
             return null;
+        }
+        Integer goodsId = product.getGoodsId();
+        if(goodsId != null) {
+             GoodsPo goods = goodsMapper.selectByPrimaryKey(goodsId);
+             if (goods == null || goods.getBeDeleted()) {
+                 return null;
+             }
         }
         if (productMapper.updateByPrimaryKey(product) == 0) {
             return null;
@@ -85,7 +112,7 @@ public class ProductDAO {
         return product(productMapper.selectByPrimaryKey(product.getId()));
     }
 
-    private Product product(ProductPo productPo) {
+    public Product product(ProductPo productPo) {
        if (productPo == null) {
            return null;
        }
@@ -95,7 +122,7 @@ public class ProductDAO {
         }
         return product;
     }
-    private List<Product> products(List<ProductPo> productPos) {
+    public List<Product> products(List<ProductPo> productPos) {
         if (productPos == null) {
             return null;
         }
