@@ -18,4 +18,9 @@ import xmu.oomall.domain.po.ProductPo;
 @EqualsAndHashCode(callSuper = true)
 public class Product extends ProductPo {
     private GoodsPo goodsPo;
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

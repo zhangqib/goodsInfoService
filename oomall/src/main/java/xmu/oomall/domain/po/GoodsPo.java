@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 import xmu.oomall.domain.Goods;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class GoodsPo {
+public class GoodsPo implements Serializable {
 
     private Integer id;
     /**
@@ -97,6 +98,13 @@ public class GoodsPo {
     private LocalDateTime gmtCreate;
     private LocalDateTime gmtModified;
 
+    public String getRedisKey() {
+        return "Goods:Id:" + this.id;
+    }
+
+    public String getProductRedisKeys() {
+        return "Goods:Id" + this.id + ":Product:Ids";
+    }
     public GoodsPo(Goods goods) {
         this.id = goods.getId();
         this.name = goods.getName();

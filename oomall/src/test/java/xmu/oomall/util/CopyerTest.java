@@ -13,14 +13,21 @@ class CopyerTest {
     private GoodsMapper goodsMapper;
 
     @Test
-    void copy() {
-        GoodsPo goodsPo = goodsMapper.selectByPrimaryKey(3);
-        goodsPo.setGoodsSn("2");
-        goodsPo = null;
+    void copyFail() {
+        GoodsPo goodsPo = null;
         Goods goods = new Goods();
         if (Copyer.Copy(goodsPo, goods)) {
             System.out.println(goods);
         }
-        System.out.println("null");
+    }
+
+    @Test
+    void copySuccess() {
+        GoodsPo goodsPo = goodsMapper.selectByPrimaryKey(273);
+        goodsPo.setGoodsSn("273");
+        Goods goods = new Goods();
+        if (Copyer.Copy(goodsPo, goods)) {
+            System.out.println(goods);
+        }
     }
 }

@@ -40,4 +40,14 @@ public class Goods extends GoodsPo {
     public void setModified() {
         this.setGmtModified(LocalDateTime.now());
     }
+
+    public boolean insertAble() {
+        if (this.getBeDeleted()) {
+            return false;
+        }
+        if (this.getBrandId() != null && brandPo == null) {
+            return false;
+        }
+        return this.getGoodsCategoryId() == null || goodsCategoryPo != null;
+    }
 }
