@@ -4,20 +4,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import xmu.oomall.domain.*;
-import xmu.oomall.domain.po.*;
-import xmu.oomall.service.*;
-
-import xmu.oomall.util.ResponseUtil;
-
-import java.util.ArrayList;
-import java.util.List;
+import xmu.oomall.domain.po.BrandPo;
+import xmu.oomall.domain.po.GoodsCategoryPo;
+import xmu.oomall.domain.po.GoodsPo;
+import xmu.oomall.domain.po.ProductPo;
+import xmu.oomall.service.GoodsService;
 
 
 /**
  * @Author Ke
  * @Description: GoodsController
- * @create 2019/12/15 18:22
+ * @create 2019/12/15 2:22
  */
 
 @RestController
@@ -38,20 +35,7 @@ public class GoodsController {
      */
     @GetMapping("/goods/{id}")
     public Object getGoodsForSaleById(@PathVariable Integer id) {
-        if (id == null) {
-            //401
-            return ResponseUtil.badArgument();
-        } else {
-            Goods goods = goodsService.getGoodsForSaleById(id);
-            if (goods == null) {
-                //402
-                return ResponseUtil.badArgumentValue();
-            } else {
-                //1.获取userId
-                //2.有的话调用足迹服务（@PostMapping("/footprints") ），没有的话跳过
-                return ResponseUtil.ok(goods);
-            }
-        }
+        return null;
     }
 
     /**
@@ -62,45 +46,18 @@ public class GoodsController {
      */
     @GetMapping("/admin/goods/{id}")
     public Object getGoodsById(@PathVariable Integer id) {
-        if (id == null) {
-            //401
-            return ResponseUtil.badArgument();
-        } else {
-            Goods goods = goodsService.getGoodsById(id);
-            if (goods == null) {
-                //402
-                return ResponseUtil.badArgumentValue();
-            } else {
-                return ResponseUtil.ok(goods);
-            }
-        }
+        return null;
     }
 
     /**
      * 内部接口————————————判断商品是否在售
      *
      * @param id：Integer
-     * @return Boolean
+     * @return Integer，0表示该商品下架，1表示该商品在售，-1表示该商品不存在
      */
     @GetMapping("/goods/{id}/isOnSale")
     public Object isGoodsOnSale(@PathVariable Integer id) {
-        if (id == null) {
-            //401
-            return ResponseUtil.badArgument();
-        } else {
-            Goods goods = goodsService.getGoodsById(id);
-            if (goods == null) {
-                //402
-                return ResponseUtil.badArgumentValue();
-            } else {
-                //商品不在售
-                if (goods.getStatusCode() == 0) {
-                    return ResponseUtil.ok(false);
-                } else {
-                    return ResponseUtil.ok(true);
-                }
-            }
-        }
+        return null;
     }
 
     /**
@@ -119,12 +76,7 @@ public class GoodsController {
                                        @RequestParam Integer status,
                                        @RequestParam Integer page,
                                        @RequestParam Integer limit) {
-        List<Goods> listGoods = goodsService.listGoodsByCondition(goodsSn, goodsName, status, page, limit);
-        List<GoodsPo> listGoodsPo = new ArrayList<GoodsPo>(listGoods.size());
-        for (Goods goods : listGoods) {
-            listGoodsPo.add(goods);
-        }
-        return ResponseUtil.ok(listGoodsPo);
+        return null;
     }
 
     /**
@@ -141,12 +93,7 @@ public class GoodsController {
                                        @RequestParam String goodsName,
                                        @RequestParam Integer page,
                                        @RequestParam Integer limit) {
-        List<Goods> listGoods = goodsService.listGoodsByCondition(goodsSn, goodsName, null, page, limit);
-        List<GoodsPo> listGoodsPo = new ArrayList<GoodsPo>(listGoods.size());
-        for (Goods goods : listGoods) {
-            listGoodsPo.add(goods);
-        }
-        return ResponseUtil.ok(listGoodsPo);
+        return null;
     }
 
     /**
@@ -161,16 +108,7 @@ public class GoodsController {
     public Object ListGoodsByCategoryId(@PathVariable Integer id,
                                         @RequestParam Integer page,
                                         @RequestParam Integer limit) {
-        if (id == null) {
-            return ResponseUtil.badArgument();
-        } else {
-            List<Goods> listGoods = goodsService.listGoodsByCategoryId(id, page, limit);
-            List<GoodsPo> listGoodsPo = new ArrayList<GoodsPo>(listGoods.size());
-            for (Goods goods : listGoods) {
-                listGoodsPo.add(goods);
-            }
-            return ResponseUtil.ok(listGoodsPo);
-        }
+        return null;
     }
 
     /**
@@ -185,16 +123,7 @@ public class GoodsController {
     public Object ListGoodsByBrandId(@PathVariable Integer id,
                                      @RequestParam Integer page,
                                      @RequestParam Integer limit) {
-        if (id == null) {
-            return ResponseUtil.badArgument();
-        } else {
-            List<Goods> listGoods = goodsService.listGoodsByBrandId(id, page, limit);
-            List<GoodsPo> listGoodsPo = new ArrayList<GoodsPo>(listGoods.size());
-            for (Goods goods : listGoods) {
-                listGoodsPo.add(goods);
-            }
-            return ResponseUtil.ok(listGoodsPo);
-        }
+        return null;
     }
 
     /**
@@ -205,13 +134,7 @@ public class GoodsController {
      */
     @PostMapping("/goods")
     public Object addGoods(@RequestBody GoodsPo goodsPo) {
-        if (goodsPo == null) {
-            return ResponseUtil.badArgument();
-        } else {
-            Goods goods = (Goods) goodsPo;
-            goods = goodsService.addGoods(goods);
-            return ResponseUtil.ok(goods);
-        }
+        return null;
     }
 
     /**
@@ -224,39 +147,18 @@ public class GoodsController {
     @PutMapping("/goods/{id}")
     public Object updateGoodsById(@PathVariable Integer id,
                                   @RequestBody GoodsPo goodsPo) {
-        if (id == null || goodsPo == null) {
-            return ResponseUtil.badArgument();
-        } else {
-            goodsPo.setId(id);
-            Goods goods = (Goods) goodsPo;
-            goods = goodsService.updateGoodsById(goods);
-            if (goods == null) {
-                return ResponseUtil.updatedDataFailed();
-            } else {
-                return ResponseUtil.ok(goods);
-            }
-        }
+        return null;
     }
 
     /**
      * 管理员根据id删除商品
      *
      * @param id：Integer(PathVariable
-     * @return ResponseUtil.ok()或者ResponseUtil.fail(xxx)
+     * @return ResponseUtil.ok(xxx)或者ResponseUtil.fail(xxx)
      */
     @DeleteMapping("/goods/{id}")
     public Object deleteGoodsById(@PathVariable Integer id) {
-        if (id == null) {
-            return ResponseUtil.badArgument();
-        } else {
-            if (goodsService.deleteGoodsById(id) == -1) {
-                return ResponseUtil.badArgumentValue();
-            } else if (goodsService.deleteGoodsById(id) == 0) {
-                return ResponseUtil.fail(505, "更新数据失败，因为未下架商品无法删除。");
-            } else {
-                return ResponseUtil.ok();
-            }
-        }
+        return null;
     }
     //-----------------Goods---------------Goods-----------Goods---------
     //-----------------Goods---------------Goods-----------Goods---------
@@ -271,18 +173,7 @@ public class GoodsController {
      */
     @GetMapping("/products/{id}")
     public Object getProductById(@PathVariable Integer id) {
-        if (id == null) {
-            //401
-            return ResponseUtil.badArgument();
-        } else {
-            Product product = goodsService.getProductById(id);
-            if (product == null) {
-                //402
-                return ResponseUtil.badArgumentValue();
-            } else {
-                return ResponseUtil.ok(product);
-            }
-        }
+        return null;
     }
 
     /**
@@ -297,16 +188,7 @@ public class GoodsController {
     public Object listProductsByGoodsId(@PathVariable Integer id,
                                         @RequestParam Integer page,
                                         @RequestParam Integer limit) {
-        if (id == null) {
-            return ResponseUtil.badArgument();
-        } else {
-            List<Product> listProducts = goodsService.listProductsByGoodsId(id, page, limit);
-            List<ProductPo> listProductPos = new ArrayList<ProductPo>(listProducts.size());
-            for (Product product : listProducts) {
-                listProductPos.add(product);
-            }
-            return ResponseUtil.ok(listProductPos);
-        }
+        return null;
     }
 
     /**
@@ -319,14 +201,7 @@ public class GoodsController {
     @PostMapping("/goods/{id}/products")
     public Object addProduct(@PathVariable Integer id,
                              @RequestBody ProductPo productPo) {
-        if (id == null || productPo == null) {
-            return ResponseUtil.badArgument();
-        } else {
-            productPo.setGoodsId(id);
-            Product product = (Product) productPo;
-            product = goodsService.addProduct(product);
-            return ResponseUtil.ok(product);
-        }
+        return null;
     }
 
     /**
@@ -339,18 +214,7 @@ public class GoodsController {
     @PutMapping("/products/{id}")
     public Object updateProductById(@PathVariable Integer id,
                                     @RequestBody ProductPo productPo) {
-        if (id == null || productPo == null) {
-            return ResponseUtil.badArgument();
-        } else {
-            productPo.setId(id);
-            Product product = (Product) productPo;
-            product = goodsService.updateProductById(product);
-            if (product == null) {
-                return ResponseUtil.updatedDataFailed();
-            } else {
-                return ResponseUtil.ok(product);
-            }
-        }
+        return null;
     }
 
     /**
@@ -361,15 +225,7 @@ public class GoodsController {
      */
     @DeleteMapping("/products/{id}")
     public Object deleteProductById(@PathVariable Integer id) {
-        if (id == null) {
-            return ResponseUtil.badArgument();
-        } else {
-            if (goodsService.deleteProductById(id)) {
-                return ResponseUtil.ok();
-            } else {
-                return ResponseUtil.badArgumentValue();
-            }
-        }
+        return null;
     }
 
     //-----------------Product-------------Product-------------Product--------
@@ -386,18 +242,7 @@ public class GoodsController {
      */
     @GetMapping("/brands/{id}")
     public Object getBrandById(@PathVariable Integer id) {
-        if (id == null) {
-            //401
-            return ResponseUtil.badArgument();
-        } else {
-            Brand brand = goodsService.getBrandById(id);
-            if (brand == null) {
-                //402
-                return ResponseUtil.badArgumentValue();
-            } else {
-                return ResponseUtil.ok(brand);
-            }
-        }
+        return null;
     }
 
     /**
@@ -414,12 +259,7 @@ public class GoodsController {
                                         @RequestParam String brandName,
                                         @RequestParam Integer page,
                                         @RequestParam Integer limit) {
-        List<Brand> listBrands = goodsService.listBrandsByCondition(brandId, brandName, page, limit);
-        List<BrandPo> listBrandPos = new ArrayList<BrandPo>(listBrands.size());
-        for (Brand brand : listBrands) {
-            listBrandPos.add(brand);
-        }
-        return ResponseUtil.ok(listBrandPos);
+        return null;
     }
 
     /**
@@ -432,12 +272,7 @@ public class GoodsController {
     @GetMapping("/brands")
     public Object listBrandsByCondition(@RequestParam Integer page,
                                         @RequestParam Integer limit) {
-        List<Brand> listBrands = goodsService.listBrandsByCondition(null, null, page, limit);
-        List<BrandPo> listBrandPos = new ArrayList<BrandPo>(listBrands.size());
-        for (Brand brand : listBrands) {
-            listBrandPos.add(brand);
-        }
-        return ResponseUtil.ok(listBrandPos);
+        return null;
     }
 
     /**
@@ -448,13 +283,7 @@ public class GoodsController {
      */
     @PostMapping("/brands")
     public Object addBrand(@RequestBody BrandPo brandPo) {
-        if (brandPo == null) {
-            return ResponseUtil.badArgument();
-        } else {
-            Brand brand = (Brand) brandPo;
-            brand = goodsService.addBrand(brand);
-            return ResponseUtil.ok(brand);
-        }
+        return null;
     }
 
     /**
@@ -466,18 +295,7 @@ public class GoodsController {
      */
     @PutMapping("/brands/{id}")
     public Object updateBrandById(@PathVariable Integer id, @RequestBody BrandPo brandPo) {
-        if (id == null || brandPo == null) {
-            return ResponseUtil.badArgument();
-        } else {
-            brandPo.setId(id);
-            Brand brand = (Brand) brandPo;
-            brand = goodsService.updateBrandById(brand);
-            if (brand == null) {
-                return ResponseUtil.updatedDataFailed();
-            } else {
-                return ResponseUtil.ok(brand);
-            }
-        }
+        return null;
     }
 
     /**
@@ -488,15 +306,7 @@ public class GoodsController {
      */
     @DeleteMapping("/brands/{id}")
     public Object deleteBrandById(@PathVariable Integer id) {
-        if (id == null) {
-            return ResponseUtil.badArgument();
-        } else {
-            if (goodsService.deleteBrandById(id)) {
-                return ResponseUtil.ok();
-            } else {
-                return ResponseUtil.badArgumentValue();
-            }
-        }
+        return null;
     }
 
     //-----------------Brand---------------Brand-----------Brand---------
@@ -512,18 +322,7 @@ public class GoodsController {
      */
     @GetMapping("/categories/{id}")
     public Object getGoodsCategoryById(@PathVariable Integer id) {
-        if (id == null) {
-            //401
-            return ResponseUtil.badArgument();
-        } else {
-            GoodsCategory goodsCategory = goodsService.getGoodsCategoryById(id);
-            if (goodsCategory == null) {
-                //402
-                return ResponseUtil.badArgumentValue();
-            } else {
-                return ResponseUtil.ok(goodsCategory);
-            }
-        }
+        return null;
     }
 
     /**
@@ -536,12 +335,7 @@ public class GoodsController {
     @GetMapping("/categories")
     public Object listGoodsCategories(@RequestParam Integer page,
                                       @RequestParam Integer limit) {
-        List<GoodsCategory> listGoodsCategories = goodsService.listGoodsCategories(page, limit);
-        List<GoodsCategoryPo> listGoodsCategoryPos = new ArrayList<GoodsCategoryPo>(listGoodsCategories.size());
-        for (GoodsCategory goodsCategory : listGoodsCategories) {
-            listGoodsCategoryPos.add(goodsCategory);
-        }
-        return ResponseUtil.ok(listGoodsCategoryPos);
+        return null;
     }
 
     /**
@@ -554,12 +348,7 @@ public class GoodsController {
     @GetMapping("/categories/l1")
     public Object listOneLevelGoodsCategories(@RequestParam Integer page,
                                               @RequestParam Integer limit) {
-        List<GoodsCategory> listGoodsCategories = goodsService.listOneLevelGoodsCategories(page, limit);
-        List<GoodsCategoryPo> listGoodsCategoryPos = new ArrayList<GoodsCategoryPo>(listGoodsCategories.size());
-        for (GoodsCategory goodsCategory : listGoodsCategories) {
-            listGoodsCategoryPos.add(goodsCategory);
-        }
-        return ResponseUtil.ok(listGoodsCategoryPos);
+        return null;
     }
 
     /**
@@ -574,17 +363,7 @@ public class GoodsController {
     public Object listSecondLevelGoodsCategoryById(@PathVariable Integer id,
                                                    @RequestParam Integer page,
                                                    @RequestParam Integer limit) {
-        if (id == null) {
-            return ResponseUtil.badArgument();
-        } else {
-            List<GoodsCategory> listGoodsCategories = goodsService.listSecondLevelGoodsCategoryById(id, page, limit);
-            List<GoodsCategoryPo> listGoodsCategoryPos = new ArrayList<GoodsCategoryPo>(listGoodsCategories.size());
-            for (GoodsCategory goodsCategory : listGoodsCategories) {
-                listGoodsCategoryPos.add(goodsCategory);
-            }
-            return ResponseUtil.ok(listGoodsCategoryPos);
-        }
-
+        return null;
     }
 
     /**
@@ -595,13 +374,7 @@ public class GoodsController {
      */
     @PostMapping("/categories")
     public Object addGoodsCategory(@RequestBody GoodsCategoryPo goodsCategoryPo) {
-        if (goodsCategoryPo == null) {
-            return ResponseUtil.badArgument();
-        } else {
-            GoodsCategory goodsCategory = (GoodsCategory) goodsCategoryPo;
-            goodsCategory = goodsService.addGoodsCategory(goodsCategory);
-            return ResponseUtil.ok(goodsCategory);
-        }
+        return null;
     }
 
     /**
@@ -614,18 +387,7 @@ public class GoodsController {
     @PutMapping("/categories/{id}")
     public Object updateGoodsCategoryById(@PathVariable Integer id,
                                           @RequestBody GoodsCategoryPo goodsCategoryPo) {
-        if (id == null || goodsCategoryPo == null) {
-            return ResponseUtil.badArgument();
-        } else {
-            goodsCategoryPo.setId(id);
-            GoodsCategory goodsCategory = (GoodsCategory) goodsCategoryPo;
-            goodsCategory = goodsService.updateGoodsCategoryById(goodsCategory);
-            if (goodsCategory == null) {
-                return ResponseUtil.updatedDataFailed();
-            } else {
-                return ResponseUtil.ok(goodsCategory);
-            }
-        }
+        return null;
     }
 
     /**
@@ -636,15 +398,7 @@ public class GoodsController {
      */
     @DeleteMapping("/categories/{id}")
     public Object deleteGoodsCategory(@PathVariable Integer id) {
-        if (id == null) {
-            return ResponseUtil.badArgument();
-        } else {
-            if (goodsService.deleteGoodsCategoryById(id)) {
-                return ResponseUtil.ok();
-            } else {
-                return ResponseUtil.badArgumentValue();
-            }
-        }
+        return null;
     }
     //-----------------GoodsCategory---------------GoodsCategory-----------GoodsCategory---------
     //-----------------GoodsCategory---------------GoodsCategory-----------GoodsCategory---------

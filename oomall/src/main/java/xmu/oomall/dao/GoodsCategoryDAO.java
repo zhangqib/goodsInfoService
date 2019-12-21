@@ -160,4 +160,8 @@ public class GoodsCategoryDAO {
         Integer pid = goodsCategory.getPid();
         return pid != null && goodsCategoryMapper.selectByPrimaryKey(pid) == null;
     }
+
+    public GoodsCategory updatePidById(GoodsCategory goodsCategory) {
+        return null;
+    }
 }
