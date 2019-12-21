@@ -114,6 +114,8 @@ public class GoodsPo implements Serializable {
         return "Goods:Id" + id + ":Product:Ids";
     }
 
+    public GoodsPo() {}
+
     public GoodsPo(Goods goods) {
         this.id = goods.getId();
         this.name = goods.getName();

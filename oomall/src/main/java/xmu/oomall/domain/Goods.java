@@ -27,6 +27,10 @@ public class Goods extends GoodsPo {
     private ShareRule shareRule;
     private PresaleRule presaleRule;
 
+    public Goods(Goods goods) {
+        super(goods);
+    }
+
     @Override
     public String toString() {
         return super.toString();
