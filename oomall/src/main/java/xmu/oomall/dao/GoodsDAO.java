@@ -3,6 +3,7 @@ package xmu.oomall.dao;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import xmu.oomall.IRedisService;
 import xmu.oomall.domain.Goods;
 import xmu.oomall.domain.po.GoodsPo;
 import xmu.oomall.domain.po.ProductPo;
@@ -20,6 +21,10 @@ import java.util.List;
  */
 @Repository
 public class GoodsDAO {
+
+    @Autowired
+    IRedisService iRedisService;
+
     @Autowired
     private GoodsMapper goodsMapper;
 
@@ -62,7 +67,7 @@ public class GoodsDAO {
 
         // 判断goodsSn是否重复
         String goodsSn = goods.getGoodsSn();
-        if (goodsSn != null && goodsMapper.selectByCondition(goodsSn, null, null) != null) {
+        if (goodsSn != null && !goodsMapper.selectByCondition(goodsSn, null, null).isEmpty()) {
            return null;
         }
         /* 参数合法性判断完成 */
@@ -98,7 +103,14 @@ public class GoodsDAO {
      * @return Goods
      */
     public Goods selectById(Integer id) {
-        GoodsPo goods = goodsMapper.selectByPrimaryKey(id);
+        GoodsPo goods = (Goods)iRedisService.get("Goods:Id" + id);
+        if (goods == null) {
+            goods = goodsMapper.selectByPrimaryKey(id);
+            if (goods == null) {
+                return null;
+            }
+            iRedisService.set("Goods:Id"+goods.getId(), goods.toString());
+        }
         return goods(goods);
     }
 

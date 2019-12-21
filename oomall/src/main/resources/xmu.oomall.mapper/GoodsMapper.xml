@@ -221,5 +221,4 @@
     set goods_category_id=null
     where goods_category_id = #{categoryId}
   </update>
-
 </mapper>

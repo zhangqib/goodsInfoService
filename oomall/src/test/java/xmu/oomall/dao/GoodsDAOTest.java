@@ -3,12 +3,15 @@ package xmu.oomall.dao;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import xmu.oomall.domain.Goods;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @SpringBootTest
+@Transactional
 class GoodsDAOTest {
     @Autowired
     private GoodsDAO goodsDAO;
@@ -18,14 +21,14 @@ class GoodsDAOTest {
         Goods goods = new Goods();
         goods.setBeDeleted(false);
         goods.setBeSpecial(false);
-        goods.setBrandId(1);
+        goods.setBrandId(71);
         goods.setBrief("test goods");
         goods.setDescription("test description");
         goods.setDetail("test detail");
         goods.setGallery("test Gallery");
         goods.setGmtCreate(LocalDateTime.now());
         goods.setGmtModified(LocalDateTime.now());
-        goods.setGoodsCategoryId(1);
+        goods.setGoodsCategoryId(122);
         goods.setGoodsSn("1");
         goods.setName("test goods");
         goods.setPicUrl("test url");
@@ -37,6 +40,7 @@ class GoodsDAOTest {
         goods.setWeight(new BigDecimal(1));
         goodsDAO.insert(goods);
         System.out.println(goods);
+        Assert.notNull(goods.getId(), "insert fail");
     }
 
     @Test

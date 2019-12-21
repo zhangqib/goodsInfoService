@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class ProductPo {
+public class ProductPo implements Serializable {
 
     private Integer id;
     /**
@@ -48,4 +49,15 @@ public class ProductPo {
     private LocalDateTime gmtModified;
     private Boolean beDeleted;
 
+    public String getRedisKey() {
+        return "Product:Id:" + this.id;
+    }
+
+    public String getGoodsRedisKey() {
+        return "Product:Id:"+this.id+":Goods:Id";
+    }
+
+    static public String getRedisKey(Integer id) {
+        return "Product:Id:" + id;
+    }
 }
