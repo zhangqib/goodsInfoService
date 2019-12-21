@@ -7,6 +7,7 @@ import xmu.oomall.domain.Brand;
 import xmu.oomall.domain.po.BrandPo;
 import xmu.oomall.mapper.BrandMapper;
 import xmu.oomall.mapper.GoodsMapper;
+import xmu.oomall.util.Copyer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +55,7 @@ public class BrandDAO {
      * @return Goods
      */
     public Brand selectById(Integer id) {
-        return (Brand) brandMapper.selectByPrimaryKey(id);
+        return  brand(brandMapper.selectByPrimaryKey(id));
     }
 
     /**
@@ -69,7 +70,7 @@ public class BrandDAO {
         if (brandMapper.updateByPrimaryKey(brand) == 0) {
             return null;
         }
-        return (Brand) brandMapper.selectByPrimaryKey(brand.getId());
+        return  brand(brandMapper.selectByPrimaryKey(brand.getId()));
     }
     
     public List<Brand> selectAll(Integer page, Integer limit) {
@@ -91,5 +92,16 @@ public class BrandDAO {
 
     public List<Brand> selectBrandsByCondition(String brandId, String brandName, Integer page, Integer limit) {
         return null;
+    }
+
+    private Brand brand(BrandPo brandPo) {
+        if (brandPo == null) {
+            return null;
+        }
+        Brand brand = new Brand();
+        if (!Copyer.Copy(brandPo, brand)) {
+            return null;
+        }
+        return brand;
     }
 }
