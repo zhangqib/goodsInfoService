@@ -60,4 +60,8 @@ public class ProductPo implements Serializable {
     static public String getRedisKey(Integer id) {
         return "Product:Id:" + id;
     }
+
+    static public String getGoodsRedisKey(Integer id) {
+        return "Product:Id:"+id+":Goods:Id";
+    }
 }

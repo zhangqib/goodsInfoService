@@ -4,7 +4,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import xmu.oomall.domain.Goods;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -103,7 +102,7 @@ public class GoodsPo implements Serializable {
     }
 
     public String getProductRedisKeys() {
-        return "Goods:Id" + this.id + ":Product:Ids";
+        return "Goods:Id:" + this.id + ":Product:Ids";
     }
 
     static public String getRedisKey(Integer id) {
@@ -111,33 +110,8 @@ public class GoodsPo implements Serializable {
     }
 
     static public String getProductRedisKeys(Integer id) {
-        return "Goods:Id" + id + ":Product:Ids";
+        return "Goods:Id:" + id + ":Product:Ids";
     }
 
     public GoodsPo() {}
-
-    public GoodsPo(Goods goods) {
-        this.id = goods.getId();
-        this.name = goods.getName();
-        this.goodsSn = goods.getGoodsSn();
-        this.shortName = goods.getShortName();
-        this.description = goods.getDescription();
-        this.brief = goods.getBrief();
-        this.picUrl = goods.getPicUrl();
-        this.detail = goods.getDetail();
-        this.statusCode = goods.getStatusCode();
-        this.shareUrl = goods.getShareUrl();
-        this.gallery = goods.getGallery();
-        this.goodsCategoryId = goods.getGoodsCategoryId();
-        this.brandId = goods.getBrandId();
-        this.weight = goods.getWeight();
-        this.volume = goods.getVolume();
-        this.specialFreightId = goods.getSpecialFreightId();
-        this.beSpecial = goods.getBeSpecial();
-        this.price = goods.getPrice();
-        this.beDeleted = goods.getBeDeleted();
-        this.gmtCreate = goods.getGmtCreate();
-        this.gmtModified = goods.getGmtModified();
-    }
-
 }
