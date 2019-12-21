@@ -3,13 +3,10 @@ package xmu.oomall.dao;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import xmu.oomall.domain.Brand;
 import xmu.oomall.domain.po.BrandPo;
 import xmu.oomall.mapper.BrandMapper;
 import xmu.oomall.mapper.GoodsMapper;
-import xmu.oomall.util.Copyer;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,7 +26,7 @@ public class BrandDAO {
      *
      * @return 更新完id的商品
      */
-    public Brand insert(Brand brand) {
+    public BrandPo insert(BrandPo brand) {
         if (isArgsInvalid(brand)) {
             return null;
         }
@@ -54,8 +51,8 @@ public class BrandDAO {
      * @param id
      * @return Goods
      */
-    public Brand selectById(Integer id) {
-        return  brand(brandMapper.selectByPrimaryKey(id));
+    public BrandPo selectById(Integer id) {
+        return  brandMapper.selectByPrimaryKey(id);
     }
 
     /**
@@ -63,45 +60,28 @@ public class BrandDAO {
      *
      * @return 更新是否成功
      */
-    public Brand updateById(Brand brand) {
+    public BrandPo updateById(BrandPo brand) {
         if (isArgsInvalid(brand)) {
             return null;
         }
         if (brandMapper.updateByPrimaryKey(brand) == 0) {
             return null;
         }
-        return  brand(brandMapper.selectByPrimaryKey(brand.getId()));
+        return  brandMapper.selectByPrimaryKey(brand.getId());
     }
     
-    public List<Brand> selectAll(Integer page, Integer limit) {
+    public List<BrandPo> selectAll(Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
-        return brands(brandMapper.selectAll());
+        return brandMapper.selectAll();
     }
 
-    private List<Brand> brands(List<BrandPo> brandPos) {
-        List<Brand> brands = new ArrayList<>();
-        for (BrandPo brandPo : brandPos) {
-           brands.add(brand(brandPo));
-        }
-        return brands;
-    }
-    
-    private boolean isArgsInvalid(Brand brand) {
+    private boolean isArgsInvalid(BrandPo brand) {
         return brand.isBeDeleted();
     }
 
-    public List<Brand> selectBrandsByCondition(String brandId, String brandName, Integer page, Integer limit) {
-        return null;
+    public List<BrandPo> selectBrandsByCondition(String brandId, String brandName, Integer page, Integer limit) {
+        PageHelper.startPage(page, limit);
+        return brandMapper.selectByCondition(Integer.valueOf(brandId), brandName);
     }
 
-    private Brand brand(BrandPo brandPo) {
-        if (brandPo == null) {
-            return null;
-        }
-        Brand brand = new Brand();
-        if (!Copyer.Copy(brandPo, brand)) {
-            return null;
-        }
-        return brand;
-    }
 }

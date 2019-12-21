@@ -4,16 +4,13 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import xmu.oomall.IRedisService;
-import xmu.oomall.domain.Goods;
 import xmu.oomall.domain.po.GoodsPo;
 import xmu.oomall.domain.po.ProductPo;
 import xmu.oomall.mapper.BrandMapper;
 import xmu.oomall.mapper.GoodsCategoryMapper;
 import xmu.oomall.mapper.GoodsMapper;
 import xmu.oomall.mapper.ProductMapper;
-import xmu.oomall.util.Copyer;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,7 +41,7 @@ public class GoodsDAO {
      * @param goods 要添加的商品
      * @return 成功：更新完id的商品 失败： null
      */
-    public Goods insert(Goods goods) {
+    public GoodsPo insert(GoodsPo goods) {
         /* 判断参数是否合法 */
         // beDeleted不能为true
         if (goods.getBeDeleted()) {
@@ -93,6 +90,7 @@ public class GoodsDAO {
                 return false;
             }
         }
+        iRedisService.remove(xmu.oomall.domain.po.GoodsPo.getRedisKey(id));
         return goodsMapper.deleteByPrimaryKey(id) == 1;
     }
 
@@ -102,8 +100,8 @@ public class GoodsDAO {
      * @param id 要查寻商品的id
      * @return Goods
      */
-    public Goods selectById(Integer id) {
-        GoodsPo goods = (Goods)iRedisService.get("Goods:Id" + id);
+    public GoodsPo selectById(Integer id) {
+        xmu.oomall.domain.po.GoodsPo goods = (GoodsPo)iRedisService.get("Goods:Id" + id);
         if (goods == null) {
             goods = goodsMapper.selectByPrimaryKey(id);
             if (goods == null) {
@@ -111,20 +109,20 @@ public class GoodsDAO {
             }
             iRedisService.set("Goods:Id"+goods.getId(), goods.toString());
         }
-        return goods(goods);
+        return goods;
     }
 
     /**
      * 查询所有商品
      */
-    public List<Goods> selectAll(Integer page, Integer limit) {
+    public List<GoodsPo> selectAll(Integer page, Integer limit) {
         return this.selectByCondition(null, null, null, page, limit);
     }
 
     /**
      * 查询所有未下架的商品
      */
-    public List<Goods> selectAllForSale(Integer page, Integer limit) {
+    public List<GoodsPo> selectAllForSale(Integer page, Integer limit) {
        return this.selectForSaleByCondition(null, null, page, limit);
     }
 
@@ -134,13 +132,13 @@ public class GoodsDAO {
      * @param productId
      * @return productId所属的商品
      */
-    public Goods selectByProductId(Integer productId) {
+    public GoodsPo selectByProductId(Integer productId) {
         ProductPo product = productMapper.selectByPrimaryKey(productId);
         if (product == null) {
             return null;
         }
-        GoodsPo goods = goodsMapper.selectByPrimaryKey(product.getGoodsId());
-        return goods(goods);
+        xmu.oomall.domain.po.GoodsPo goods = goodsMapper.selectByPrimaryKey(product.getGoodsId());
+        return goods;
     }
 
     /**
@@ -149,7 +147,7 @@ public class GoodsDAO {
      * @param goods 新的商品
      * @return 更新是否成功
      */
-    public Goods updateById(Goods goods) {
+    public GoodsPo updateById(GoodsPo goods) {
         /* 判断传入的参数是否合法 */
         if (isArgsInvalid(goods)) {
             return null;
@@ -161,7 +159,7 @@ public class GoodsDAO {
         // 判断是否有可更新的属性(若是空对象，只有id会出错）
         // 感觉应该放在controller
 
-        return goods(goodsMapper.selectByPrimaryKey(goods.getId()));
+        return goodsMapper.selectByPrimaryKey(goods.getId());
     }
 
     /**
@@ -172,45 +170,20 @@ public class GoodsDAO {
      * @param limit 页的大小
      * @return 该类别的商品列表
      */
-    public List<Goods> selectByCategoryId(Integer id, Integer page, Integer limit) {
+    public List<GoodsPo> selectByCategoryId(Integer id, Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
-        List<GoodsPo> goodsPos = goodsMapper.selectByCategoryId(id);
-        return goodsList(goodsPos);
+        return goodsMapper.selectByCategoryId(id);
     }
 
-    public List<Goods> selectByCondition(String goodsSn, String name, Integer statusCode, Integer page, Integer limit) {
+    public List<GoodsPo> selectByCondition(String goodsSn, String name, Integer statusCode, Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
-        return goodsList(goodsMapper.selectByCondition(goodsSn, name, statusCode));
-    }
-
-    /**
-     * 将GoodsPo转换成Goods对象
-     */
-    private Goods goods(GoodsPo goodsPo) {
-        Goods goods = new Goods();
-        return Copyer.Copy(goodsPo, goods) ? goods : null;
-    }
-
-    /**
-     * 将goodsPo列表转换成goods类表
-     *
-     * @return goodsList
-     */
-    private List<Goods> goodsList(List<GoodsPo> goodsPoList) {
-        if (goodsPoList == null) {
-            return null;
-        }
-        List<Goods> goodsList = new ArrayList<>();
-        for (GoodsPo goodsPo : goodsPoList) {
-            goodsList.add(goods(goodsPo));
-        }
-        return goodsList;
+        return goodsMapper.selectByCondition(goodsSn, name, statusCode);
     }
 
     /**
      * 判断goods的品牌和类别是否合法
      */
-    private boolean isArgsInvalid(Goods goods) {
+    private boolean isArgsInvalid(GoodsPo goods) {
         // beDeleted不能为true
         if (goods.getBeDeleted()) {
             return true;
@@ -231,32 +204,32 @@ public class GoodsDAO {
     /**
      * 通过brand查找商品
      */
-    public List<Goods> selectByBrandId(Integer id, Integer page, Integer limit) {
+    public List<GoodsPo> selectByBrandId(Integer id, Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
-        return goodsList(goodsMapper.selectByBrandId(id));
+        return goodsMapper.selectByBrandId(id);
     }
 
     /**
      * 条件查询未下架商品
      */
-    public List<Goods> selectForSaleByCondition(String goodsSn, String name, Integer page, Integer limit) {
+    public List<GoodsPo> selectForSaleByCondition(String goodsSn, String name, Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
-        return goodsList(goodsMapper.selectForSaleByCondition(goodsSn, name));
+        return goodsMapper.selectForSaleByCondition(goodsSn, name);
     }
 
     /**
      * 查询类别下的未下架商品
      */
-    public List<Goods> selectForSaleByCategoryId(Integer categoryId, Integer page, Integer limit) {
+    public List<GoodsPo> selectForSaleByCategoryId(Integer categoryId, Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
-        return goodsList(goodsMapper.selectForSaleByCategoryId(categoryId));
+        return goodsMapper.selectForSaleByCategoryId(categoryId);
     }
 
     /**
      * 通过brand查询未下架商品
      */
-    public List<Goods> selectForSaleByBrandId(Integer brandId, Integer page, Integer limit) {
+    public List<GoodsPo> selectForSaleByBrandId(Integer brandId, Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
-        return goodsList(goodsMapper.selectForSaleByBrandId(brandId));
+        return goodsMapper.selectForSaleByBrandId(brandId);
     }
 }

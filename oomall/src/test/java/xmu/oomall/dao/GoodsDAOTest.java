@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import xmu.oomall.domain.Goods;
+import xmu.oomall.domain.po.GoodsPo;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -18,7 +18,7 @@ class GoodsDAOTest {
 
     @Test
     void insert() {
-        Goods goods = new Goods();
+        GoodsPo goods = new GoodsPo();
         goods.setBeDeleted(false);
         goods.setBeSpecial(false);
         goods.setBrandId(71);

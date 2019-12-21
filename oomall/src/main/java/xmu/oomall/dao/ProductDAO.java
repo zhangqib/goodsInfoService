@@ -4,15 +4,12 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import xmu.oomall.IRedisService;
-import xmu.oomall.domain.Product;
 import xmu.oomall.domain.po.GoodsPo;
 import xmu.oomall.domain.po.ProductPo;
 import xmu.oomall.mapper.GoodsMapper;
 import xmu.oomall.mapper.ProductMapper;
-import xmu.oomall.util.Copyer;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -35,7 +32,7 @@ public class ProductDAO {
      * @param product
      * @return 成功：更新完id的product 失败： null
      */
-    public Product insert(Product product) {
+    public ProductPo insert(ProductPo product) {
         if (isArgsInvalid(product)) {
             return null;
         }
@@ -49,7 +46,7 @@ public class ProductDAO {
      * @param product 要删除的对象
      * @return 删除是否成功
      */
-    public boolean deleteById(Product product) {
+    public boolean deleteById(ProductPo product) {
         if (product.getBeDeleted()) {
             return false;
         }
@@ -67,15 +64,15 @@ public class ProductDAO {
      * @param id
      * @return product
      */
-    public Product selectById(Integer id) {
-        ProductPo product = (ProductPo) iRedisService.get(Product.getRedisKey(id));
+    public ProductPo selectById(Integer id) {
+        ProductPo product = (ProductPo) iRedisService.get(ProductPo.getRedisKey(id));
         if (product == null) {
             product =  productMapper.selectByPrimaryKey(id);
             if (product != null) {
                 iRedisService.set(product.getRedisKey(), product);
             }
         }
-        return product(product);
+        return product;
     }
 
     /**
@@ -85,15 +82,15 @@ public class ProductDAO {
      * @param limit
      * @return product列表
      */
-    public List<Product> selectByGoodsId(Integer id, Integer page, Integer limit) {
+    public List<ProductPo> selectByGoodsId(Integer id, Integer page, Integer limit) {
         PageHelper.startPage(page,limit);
         List<ProductPo> productPos = new ArrayList<>();
-        
+
         List<String> productIds = iRedisService.sget(GoodsPo.getProductRedisKeys(id));
-        if (productIds == null) {
+        if (productIds.isEmpty()) {
             productPos = productMapper.selectByGoodsId(id);
             if (productPos.size() == 0) {
-                return products(productPos);
+                return productPos;
             }
             for (ProductPo productPo: productPos) {
                 productIds.add(productPo.getId().toString());
@@ -104,7 +101,7 @@ public class ProductDAO {
                 productPos.add(selectById(Integer.valueOf(productId)));
             }
         }
-        return products(productPos);
+        return productPos;
     }
 
     /**
@@ -113,7 +110,7 @@ public class ProductDAO {
      * @param product
      * @return 更新是否成功
      */
-    public Product updateById(Product product) {
+    public ProductPo updateById(ProductPo product) {
         if (product.getBeDeleted()) {
             return null;
         }
@@ -127,31 +124,11 @@ public class ProductDAO {
         if (productMapper.updateByPrimaryKey(product) == 0) {
             return null;
         }
-        return product(productMapper.selectByPrimaryKey(product.getId()));
+        iRedisService.remove(product.getRedisKey());
+        return productMapper.selectByPrimaryKey(product.getId());
     }
 
-    private Product product(ProductPo productPo) {
-       if (productPo == null) {
-           return null;
-       }
-       Product product = new Product();
-        if (!Copyer.Copy(productPo, product)) {
-            return null;
-        }
-        return product;
-    }
-    private List<Product> products(List<ProductPo> productPos) {
-        if (productPos == null) {
-            return null;
-        }
-       List<Product> products = new LinkedList<>();
-        for (ProductPo productPo : productPos) {
-            products.add(product(productPo));
-        }
-        return products;
-    }
-
-    boolean isArgsInvalid(Product product) {
+    boolean isArgsInvalid(ProductPo product) {
         if (product.getBeDeleted()) {
             return true;
         }

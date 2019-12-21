@@ -6,7 +6,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import xmu.oomall.IRedisService;
-import xmu.oomall.domain.Product;
+import xmu.oomall.domain.po.GoodsPo;
+import xmu.oomall.domain.po.ProductPo;
 import xmu.oomall.mapper.ProductMapper;
 
 @SpringBootTest
@@ -30,18 +31,21 @@ class ProductDAOTest {
 
     @Test
     void selectById() {
-        Product product = productDAO.selectById(1);
+        ProductPo product = productDAO.selectById(1);
         Assert.notNull(product, "select failed");
         Assert.notNull(iRedisService.get(product.getRedisKey()), "redis get failed");
     }
     @Test
     void selectByIdFailed() {
-        Product product = productDAO.selectById(11111);
+        ProductPo product = productDAO.selectById(11111);
         Assert.isNull(product, "select failed");
     }
 
     @Test
     void selectByGoodsId() {
+        Integer goodsId = 273;
+        Assert.notEmpty(productDAO.selectByGoodsId(goodsId, 1, 1), "select products failed");
+        System.out.println(iRedisService.sget(GoodsPo.getProductRedisKeys(goodsId)));
     }
 
     @Transactional

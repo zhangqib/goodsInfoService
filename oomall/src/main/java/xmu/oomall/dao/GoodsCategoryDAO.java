@@ -3,14 +3,11 @@ package xmu.oomall.dao;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import xmu.oomall.domain.GoodsCategory;
 import xmu.oomall.domain.po.GoodsCategoryPo;
 import xmu.oomall.mapper.GoodsCategoryMapper;
 import xmu.oomall.mapper.GoodsMapper;
 import xmu.oomall.mapper.ProductMapper;
-import xmu.oomall.util.Copyer;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,7 +30,7 @@ public class GoodsCategoryDAO {
      * @param goodsCategory
      * @return 更新完id的商品
      */
-    public GoodsCategory insert(GoodsCategory goodsCategory) {
+    public GoodsCategoryPo insert(GoodsCategoryPo goodsCategory) {
         if (isArgsInvalid(goodsCategory)) {
             return null;
         }
@@ -62,8 +59,8 @@ public class GoodsCategoryDAO {
      * @param id
      * @return Goods
      */
-    public GoodsCategory selectById(Integer id) {
-        return (GoodsCategory) goodsCategoryMapper.selectByPrimaryKey(id);
+    public GoodsCategoryPo selectById(Integer id) {
+        return goodsCategoryMapper.selectByPrimaryKey(id);
     }
 
     /**
@@ -71,15 +68,14 @@ public class GoodsCategoryDAO {
      * @param goodsCategory
      * @return 更新是否成功
      */
-    public GoodsCategory updateById(GoodsCategory goodsCategory) {
+    public GoodsCategoryPo updateById(GoodsCategoryPo goodsCategory) {
         if (isArgsInvalid(goodsCategory)) {
             return null;
         }
         if (goodsCategoryMapper.updateByPrimaryKey(goodsCategory) == 0) {
             return null;
         }
-        GoodsCategory newGoodsCategory = (GoodsCategory) goodsCategoryMapper.selectByPrimaryKey(goodsCategory.getId());
-        return newGoodsCategory;
+        return goodsCategoryMapper.selectByPrimaryKey(goodsCategory.getId());
     }
 
     /**
@@ -88,9 +84,9 @@ public class GoodsCategoryDAO {
      * @param limit
      * @return 一级分类列表
      */
-    public List<GoodsCategory> selectOneLevelGoodsCategories(Integer page, Integer limit) {
+    public List<GoodsCategoryPo> selectOneLevelGoodsCategories(Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
-        return goodsCategories(goodsCategoryMapper.selectOneLevelGoodsCategories());
+        return goodsCategoryMapper.selectOneLevelGoodsCategories();
     }
 
     /**
@@ -100,9 +96,9 @@ public class GoodsCategoryDAO {
      * @param limit
      * @return 子分类列表
      */
-    public List<GoodsCategory> selectSecondLevelGoodsCategories(Integer pid, Integer page, Integer limit) {
+    public List<GoodsCategoryPo> selectSecondLevelGoodsCategories(Integer pid, Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
-        return goodsCategories(goodsCategoryMapper.selectSecondLevelGoodsCategories(pid));
+        return goodsCategoryMapper.selectSecondLevelGoodsCategories(pid);
     }
 
     /**
@@ -112,9 +108,9 @@ public class GoodsCategoryDAO {
      * @param limit
      * @return
      */
-    public List<GoodsCategory> selectGoodsCategoriesByCondition(Integer page, Integer limit) {
+    public List<GoodsCategoryPo> selectGoodsCategoriesByCondition(Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
-        return goodsCategories(goodsCategoryMapper.selectAll());
+        return goodsCategoryMapper.selectAll();
     }
 
     /**
@@ -126,34 +122,7 @@ public class GoodsCategoryDAO {
         return goodsCategoryMapper.selectSecondLevelGoodsCategories(pid);
     }
 
-
-    /**
-     * PO -> POJO
-     * @param goodsCategoryPo
-     * @return POJO
-     */
-    private GoodsCategory goodsCategory(GoodsCategoryPo goodsCategoryPo) {
-        GoodsCategory goodsCategory = new GoodsCategory();
-        return Copyer.Copy(goodsCategoryPo, goodsCategory) ? goodsCategory: null;
-    }
-
-    /**
-     * List<PO> -> List<POJO>
-     * @param goodsCategoryPos
-     * @return List<POJO>
-     */
-    private List<GoodsCategory> goodsCategories(List<GoodsCategoryPo> goodsCategoryPos) {
-        if (goodsCategoryPos == null || goodsCategoryPos.isEmpty()) {
-            return null;
-        }
-        List<GoodsCategory> goodsCategories = new ArrayList<GoodsCategory>();
-        for (GoodsCategoryPo goodsCategoryPo: goodsCategoryPos) {
-            goodsCategories.add(goodsCategory(goodsCategoryPo));
-        }
-        return goodsCategories;
-    }
-
-    private boolean isArgsInvalid(GoodsCategory goodsCategory) {
+    private boolean isArgsInvalid(GoodsCategoryPo goodsCategory) {
         if (goodsCategory.getBeDeleted()) {
             return true;
         }
@@ -161,7 +130,10 @@ public class GoodsCategoryDAO {
         return pid != null && goodsCategoryMapper.selectByPrimaryKey(pid) == null;
     }
 
-    public GoodsCategory updatePidById(GoodsCategory goodsCategory) {
+    public GoodsCategoryPo updatePidById(GoodsCategoryPo goodsCategory) {
+        if (goodsCategoryMapper.updateByPrimaryKey(goodsCategory) == 1) {
+            return goodsCategoryMapper.selectByPrimaryKey(goodsCategory.getId());
+        }
         return null;
     }
 }
