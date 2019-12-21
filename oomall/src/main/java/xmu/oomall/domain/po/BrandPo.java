@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import xmu.oomall.domain.Brand;
 
 import java.time.LocalDateTime;
 
@@ -25,4 +26,35 @@ public class BrandPo {
     private boolean beDeleted;
     private String name;
     private String picUrl;
+
+    public BrandPo() {
+        this.id = null;
+        this.description = null;
+        this.gmtCreate = null;
+        this.gmtModified = null;
+        this.beDeleted = false;
+        this.name = null;
+        this.picUrl = null;
+    }
+
+    public BrandPo(BrandPo brand) {
+        this.id = brand.getId();
+        this.description = brand.getDescription();
+        this.gmtCreate = brand.getGmtCreate();
+        this.gmtModified = brand.getGmtModified();
+        this.beDeleted = brand.isBeDeleted();
+        this.name = brand.getName();
+        this.picUrl = brand.getPicUrl();
+    }
+
+    public BrandPo(Brand brand) {
+        this.id = brand.getId();
+        this.description = brand.getDescription();
+        this.gmtCreate = brand.getGmtCreate();
+        this.gmtModified = brand.getGmtModified();
+        this.beDeleted = brand.isBeDeleted();
+        this.name = brand.getName();
+        this.picUrl = brand.getPicUrl();
+    }
+
 }

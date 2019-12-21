@@ -29,6 +29,8 @@ spring:
           log-slow-sql: true
           #慢SQL执行时间
           slow-sql-millis: 100
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     host: localhost
 

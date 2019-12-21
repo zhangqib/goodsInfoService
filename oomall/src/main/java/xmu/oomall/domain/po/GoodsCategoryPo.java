@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import xmu.oomall.domain.GoodsCategory;
 
 import java.time.LocalDateTime;
 
@@ -35,4 +36,32 @@ public class GoodsCategoryPo {
     private LocalDateTime gmtModified;
     private Boolean beDeleted;
 
+    public GoodsCategoryPo() {
+        this.id = null;
+        this.name = null;
+        this.pid = null;
+        this.picUrl = null;
+        this.gmtCreate = null;
+        this.gmtModified = null;
+        this.beDeleted = null;
+    }
+
+    public GoodsCategoryPo(GoodsCategoryPo goodsCategory) {
+        this.id = goodsCategory.getId();
+        this.name = goodsCategory.getName();
+        this.pid = goodsCategory.getPid();
+        this.picUrl = goodsCategory.getPicUrl();
+        this.gmtCreate = goodsCategory.getGmtCreate();
+        this.gmtModified = goodsCategory.getGmtModified();
+        this.beDeleted = goodsCategory.getBeDeleted();
+    }
+    public GoodsCategoryPo(GoodsCategory goodsCategory) {
+        this.id = goodsCategory.getId();
+        this.name = goodsCategory.getName();
+        this.pid = goodsCategory.getPid();
+        this.picUrl = goodsCategory.getPicUrl();
+        this.gmtCreate = goodsCategory.getGmtCreate();
+        this.gmtModified = goodsCategory.getGmtModified();
+        this.beDeleted = goodsCategory.getBeDeleted();
+    }
 }
