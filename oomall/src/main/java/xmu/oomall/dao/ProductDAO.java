@@ -69,7 +69,7 @@ public class ProductDAO {
     public Product selectById(Integer id) {
         ProductPo product = (ProductPo) iRedisService.get(Product.getRedisKey(id));
         if (product == null) {
-            product =  product(productMapper.selectByPrimaryKey(id));
+            product =  productMapper.selectByPrimaryKey(id);
             if (product != null) {
                 iRedisService.set(product.getRedisKey(), product);
             }
@@ -112,17 +112,17 @@ public class ProductDAO {
         return product(productMapper.selectByPrimaryKey(product.getId()));
     }
 
-    public Product product(ProductPo productPo) {
+    private Product product(ProductPo productPo) {
        if (productPo == null) {
            return null;
        }
        Product product = new Product();
-        if (!Copyer.Copy(product, productPo)) {
+        if (!Copyer.Copy(productPo, product)) {
             return null;
         }
         return product;
     }
-    public List<Product> products(List<ProductPo> productPos) {
+    private List<Product> products(List<ProductPo> productPos) {
         if (productPos == null) {
             return null;
         }
@@ -131,14 +131,6 @@ public class ProductDAO {
             products.add(product(productPo));
         }
         return products;
-    }
-
-    boolean isArgsInvalid(Product product) {
-        if (product.getBeDeleted()) {
-            return true;
-        }
-        Integer goodsId = product.getGoodsId();
-        return goodsId != null && goodsMapper.selectByPrimaryKey(goodsId) == null;
     }
 
     public Boolean descStock(Integer productId, int dStock) {

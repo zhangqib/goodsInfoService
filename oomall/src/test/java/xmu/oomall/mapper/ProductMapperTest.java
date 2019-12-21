@@ -54,8 +54,8 @@ class ProductMapperTest {
 
     @Test
     void selectByPrimaryKey() {
-        Integer id = 512;
-        Assert.notNull(productMapper.selectByPrimaryKey(512), "select product failed");
+        Integer id = 1;
+        Assert.notNull(productMapper.selectByPrimaryKey(id), "select product failed");
     }
 
     @Test

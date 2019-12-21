@@ -55,7 +55,7 @@ class GoodsMapperTest {
 
     @Test
     void selectByPrimaryKey() {
-        System.out.println(goodsMapper.selectByPrimaryKey(21));
+        System.out.println(goodsMapper.selectByPrimaryKey(1));
     }
 
     @Test

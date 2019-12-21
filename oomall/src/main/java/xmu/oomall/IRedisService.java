@@ -25,9 +25,6 @@ public class IRedisService {
     @Autowired
     private Config config;
 
-    /**
-     * 写入redis缓存（不设置expire存活时间）
-     */
     public void set(final String key, Object value){
         try {
             ValueOperations<String, Object> operations = redisTemplate.opsForValue();

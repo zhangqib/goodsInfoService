@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.Assert;
 import xmu.oomall.dao.GoodsDAO;
 import xmu.oomall.domain.po.GoodsPo;
+import xmu.oomall.domain.po.ProductPo;
 import xmu.oomall.util.Config;
 
 import java.util.Arrays;
@@ -31,6 +32,19 @@ class IRedisServiceTest {
        String testKey = "Goods:Id:"+goods.getId();
        iRedisService.set(testKey, goods);
        System.out.println(iRedisService.get(testKey));
+    }
+
+
+    /**
+     * get failed
+     */
+    @Test
+    public void get() {
+        ProductPo product = new ProductPo();
+        product.setId(22);
+        ProductPo productPo = (ProductPo) iRedisService.get(product.getRedisKey());
+        Assert.isNull(productPo, "get fails");
+
     }
 
     @Test
