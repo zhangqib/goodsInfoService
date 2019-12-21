@@ -29,7 +29,7 @@ public class GoodsPo implements Serializable {
     /**
      * 商品序列号
      */
-     private String goodsSn;
+    private String goodsSn;
     /**
      * 商品简称
      */
@@ -114,7 +114,53 @@ public class GoodsPo implements Serializable {
         return "Goods:Id" + id + ":Product:Ids";
     }
 
-    public GoodsPo() {}
+    public GoodsPo() {
+        this.id = null;
+        this.name = null;
+        this.goodsSn = null;
+        this.shortName = null;
+        this.description = null;
+        this.brief = null;
+        this.picUrl = null;
+        this.detail = null;
+        this.statusCode = null;
+        this.shareUrl = null;
+        this.gallery = null;
+        this.goodsCategoryId = null;
+        this.brandId = null;
+        this.weight = null;
+        this.volume = null;
+        this.specialFreightId = null;
+        this.beSpecial = null;
+        this.price = null;
+        this.beDeleted = null;
+        this.gmtCreate = null;
+        this.gmtModified = null;
+    }
+
+    public GoodsPo(GoodsPo goods) {
+        this.id = goods.getId();
+        this.name = goods.getName();
+        this.goodsSn = goods.getGoodsSn();
+        this.shortName = goods.getShortName();
+        this.description = goods.getDescription();
+        this.brief = goods.getBrief();
+        this.picUrl = goods.getPicUrl();
+        this.detail = goods.getDetail();
+        this.statusCode = goods.getStatusCode();
+        this.shareUrl = goods.getShareUrl();
+        this.gallery = goods.getGallery();
+        this.goodsCategoryId = goods.getGoodsCategoryId();
+        this.brandId = goods.getBrandId();
+        this.weight = goods.getWeight();
+        this.volume = goods.getVolume();
+        this.specialFreightId = goods.getSpecialFreightId();
+        this.beSpecial = goods.getBeSpecial();
+        this.price = goods.getPrice();
+        this.beDeleted = goods.getBeDeleted();
+        this.gmtCreate = goods.getGmtCreate();
+        this.gmtModified = goods.getGmtModified();
+    }
 
     public GoodsPo(Goods goods) {
         this.id = goods.getId();

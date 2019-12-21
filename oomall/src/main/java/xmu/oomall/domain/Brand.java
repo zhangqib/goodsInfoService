@@ -22,4 +22,13 @@ public class Brand extends BrandPo {
 
     private List<GoodsPo> goodsPoList;
 
+    public Brand() {
+        super();
+    }
+    public Brand(BrandPo brand) {
+        super(brand);
+    }
+    public Brand(Brand brand) {
+        super(brand);
+    }
 }

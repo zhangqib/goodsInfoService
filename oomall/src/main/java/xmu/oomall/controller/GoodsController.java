@@ -141,7 +141,7 @@ public class GoodsController {
             Goods goods = goodsInfoService.getGoodsById(id);
             if (goods != null) {
                 Goods goods1 = goodsConverter(goodsPo);
-                Goods retGoods = goodsInfoService.updateGoodsById(goods1);
+                Goods retGoods = goodsInfoService.updateGoodsById(goods,goods1);
                 if (retGoods != null) {
                     Log log=new Log(request.getIntHeader("userId"),
                             request.getHeader("ip"),2,"修改商品",1,null);
@@ -180,7 +180,7 @@ public class GoodsController {
     public Object deleteGoodsById(Integer id,HttpServletRequest request) {
         Goods goods = goodsInfoService.getGoodsById(id);
         if (goods != null) {
-            boolean ret = goodsInfoService.deleteGoodsById(id);
+            boolean ret = goodsInfoService.deleteGoodsById(goods);
             if (ret) {
                 Log log=new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"),3,"删除商品",1,null);

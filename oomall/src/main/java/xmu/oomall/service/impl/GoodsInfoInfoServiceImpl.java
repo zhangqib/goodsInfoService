@@ -7,6 +7,7 @@ import xmu.oomall.dao.*;
 import xmu.oomall.domain.*;
 import xmu.oomall.service.GoodsInfoService;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -65,37 +66,32 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
     /**
      * 4.管理员根据id修改商品
      *
-     * @param goods :Goods
+     * @param goodsOld :Goods
+     * @param goodsNew :Goods
      * @return Goods，修改后的商品
      */
     @Override
-    public Goods updateGoodsById(Goods goods) {
-        Goods goods1 = goodsDao.selectById(goods.getId());
-        if (goods1 != null) {
-            if (goods1.getStatusCode() != 0
-                    && goods.getStatusCode() == 0) {
-                //去其他服务查看活动是否下线
-                //如果活动下线则下架 否则失败
-                if (true) {
-                    return goodsDao.updateById(goods);
-                }
-            }
+    public Goods updateGoodsById(Goods goodsOld, Goods goodsNew) {
+        if (goodsOld.getStatusCode() != 0 && goodsNew.getStatusCode() == 0) {
+            //去其他服务看该商品的活动是否下线
+            return goodsDao.updateById(goodsNew);
+        } else {
+            return goodsDao.updateById(goodsNew);
         }
-        return null;
     }
+
 
     /**
      * 5.管理员根据id删除商品
      *
-     * @param id ：Integer
+     * @param goods
      * @return Boolean
      */
     @Override
-    public boolean deleteGoodsById(Integer id) {
-        Goods goods = goodsDao.selectById(id);
+    public boolean deleteGoodsById(Goods goods) {
         if (goods != null) {
             if (goods.getStatusCode() == 0) {
-                boolean ret = goodsDao.deleteById(id);
+                boolean ret = goodsDao.deleteById(goods.getId());
                 if (ret) {
                     return true;
                 }
@@ -237,12 +233,46 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
     /**
      * 4.管理员根据id删除产品
      *
-     * @param id :Integer
+     * @param product
      * @return Boolean
      */
     @Override
-    public Boolean deleteProductById(Integer id) {
-        return productDao.deleteById(id);
+    public Boolean deleteProductById(Product product) {
+        List<Product> productList = productDao.selectByGoodsId(product.getGoodsId(), 1, Integer.MAX_VALUE);
+        if (productList.size() > 1) {
+            Goods goods = goodsDao.selectById(product.getGoodsId());
+            productList.remove(product);
+            BigDecimal temp = new BigDecimal(999999999);
+            for (Product product1 : productList) {
+                if (product1.getPrice().compareTo(temp) == -1) {
+                    temp = product1.getPrice();
+                }
+            }
+            if (goods.getPrice().compareTo(temp) == -1) {
+                goods.setPrice(temp);
+                goodsDao.updateById(goods);
+            }
+            boolean ret = productDao.deleteById(product.getId());
+            return ret;
+        } else if (productList.size() == 1) {
+            Goods goods = goodsDao.selectById(product.getGoodsId());
+            Boolean ret = pullOffGoods(goods);
+            if (ret) {
+                boolean ret2 = productDao.deleteById(product.getId());
+                return ret2;
+            }
+        }
+        return false;
+    }
+
+    private Boolean pullOffGoods(Goods goods) {
+        Goods goodsNew = new Goods(goods);
+        goodsNew.setStatusCode(0);
+        Goods retGoods = updateGoodsById(goods, goodsNew);
+        if (retGoods != null) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -265,7 +295,22 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      */
     @Override
     public Boolean updateStockByProductId(List<OrderItem> orderItemList, boolean operation) {
-        return null;
+        if (operation) {
+            for (OrderItem orderItem : orderItemList) {
+                boolean ret = productDao.descStock(orderItem.getProductId(), -orderItem.getNumber());
+                if (ret) {
+                    return true;
+                }
+            }
+        } else {
+            for (OrderItem orderItem : orderItemList) {
+                boolean ret = productDao.descStock(orderItem.getProductId(), -orderItem.getNumber());
+                if (ret) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**

@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import xmu.oomall.domain.Product;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -49,12 +50,49 @@ public class ProductPo implements Serializable {
     private LocalDateTime gmtModified;
     private Boolean beDeleted;
 
+    public ProductPo() {
+        this.id = null;
+        this.goodsId = null;
+        this.picUrl = null;
+        this.specifications = null;
+        this.price = null;
+        this.safetyStock = null;
+        this.gmtCreate = null;
+        this.gmtModified = null;
+        this.beDeleted = null;
+    }
+
+    public ProductPo(ProductPo productPo) {
+        this.id = productPo.getId();
+        this.goodsId = productPo.getGoodsId();
+        this.picUrl = productPo.getPicUrl();
+        this.specifications = productPo.getSpecifications();
+        this.price = productPo.getPrice();
+        this.safetyStock = productPo.getSafetyStock();
+        this.gmtCreate = productPo.getGmtCreate();
+        this.gmtModified = productPo.getGmtModified();
+        this.beDeleted = productPo.getBeDeleted();
+    }
+
+    public ProductPo(Product productPo) {
+        this.id = productPo.getId();
+        this.goodsId = productPo.getGoodsId();
+        this.picUrl = productPo.getPicUrl();
+        this.specifications = productPo.getSpecifications();
+        this.price = productPo.getPrice();
+        this.safetyStock = productPo.getSafetyStock();
+        this.gmtCreate = productPo.getGmtCreate();
+        this.gmtModified = productPo.getGmtModified();
+        this.beDeleted = productPo.getBeDeleted();
+    }
+
+
     public String getRedisKey() {
         return "Product:Id:" + this.id;
     }
 
     public String getGoodsRedisKey() {
-        return "Product:Id:"+this.id+":Goods:Id";
+        return "Product:Id:" + this.id + ":Goods:Id";
     }
 
     static public String getRedisKey(Integer id) {

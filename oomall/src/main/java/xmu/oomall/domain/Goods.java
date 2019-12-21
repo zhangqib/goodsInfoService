@@ -36,6 +36,10 @@ public class Goods extends GoodsPo {
         super(goods);
     }
 
+    public Goods(GoodsPo goods) {
+        super(goods);
+    }
+
     @Override
     public String toString() {
         return super.toString();

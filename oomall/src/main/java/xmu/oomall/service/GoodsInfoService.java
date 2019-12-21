@@ -48,18 +48,19 @@ public interface GoodsInfoService {
     /**
      * 4.管理员根据id修改商品
      *
-     * @param goods:Goods
+     * @param goodsOld:Goods
+     * @param goodsNew:Goods
      * @return Goods，修改后的商品
      */
-    Goods updateGoodsById(Goods goods);
+    Goods updateGoodsById(Goods goodsOld,Goods goodsNew);
 
     /**
      * 5.管理员根据id删除商品
      *
-     * @param id：Integer
+     * @param goods：Goods
      * @return Boolean
      */
-    boolean deleteGoodsById(Integer id);
+    boolean deleteGoodsById(Goods goods);
 
     /**
      * 1.用户根据id搜索商品
@@ -151,10 +152,10 @@ public interface GoodsInfoService {
     /**
      * 4.管理员根据id删除产品
      *
-     * @param id:Integer
+     * @param product
      * @return Boolean
      */
-    Boolean deleteProductById(Integer id);
+    Boolean deleteProductById(Product product);
 
     /**
      * 1.用户根据id搜索产品（内部接口）

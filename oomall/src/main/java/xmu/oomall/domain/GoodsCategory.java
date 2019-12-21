@@ -20,4 +20,16 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class GoodsCategory extends GoodsCategoryPo {
     private List<GoodsPo> goodsPoList;
+
+    public GoodsCategory() {
+        super();
+    }
+
+    public GoodsCategory(GoodsCategory goodsCategory) {
+        super(goodsCategory);
+    }
+
+    public GoodsCategory(GoodsCategoryPo goodsCategory) {
+        super(goodsCategory);
+    }
 }

@@ -19,6 +19,15 @@ import xmu.oomall.domain.po.ProductPo;
 public class Product extends ProductPo {
     private GoodsPo goodsPo;
 
+    public Product() {
+        super();
+    }
+    public Product(ProductPo productPo) {
+        super(productPo);
+    }
+    public Product(Product productPo) {
+        super(productPo);
+    }
     @Override
     public String toString() {
         return super.toString();
