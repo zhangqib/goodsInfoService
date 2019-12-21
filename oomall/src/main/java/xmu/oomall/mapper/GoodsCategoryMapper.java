@@ -2,6 +2,7 @@ package xmu.oomall.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Component;
 import xmu.oomall.domain.po.GoodsCategoryPo;
 
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
 /**
  * @author zhang
  */
+@Component
 @Mapper
 public interface GoodsCategoryMapper {
     /**
