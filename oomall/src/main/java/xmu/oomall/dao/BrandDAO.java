@@ -81,7 +81,7 @@ public class BrandDAO {
     private List<Brand> brands(List<BrandPo> brandPos) {
         List<Brand> brands = new ArrayList<>();
         for (BrandPo brandPo : brandPos) {
-           brands.add((Brand)brandPo);
+           brands.add(brand(brandPo));
         }
         return brands;
     }
