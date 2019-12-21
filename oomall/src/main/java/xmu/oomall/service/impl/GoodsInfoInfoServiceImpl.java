@@ -5,6 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xmu.oomall.dao.*;
 import xmu.oomall.domain.*;
+import xmu.oomall.domain.po.BrandPo;
+import xmu.oomall.domain.po.GoodsCategoryPo;
+import xmu.oomall.domain.po.GoodsPo;
+import xmu.oomall.domain.po.ProductPo;
 import xmu.oomall.service.GoodsInfoService;
 
 import java.math.BigDecimal;
@@ -31,10 +35,10 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      * 1.管理员根据id搜索商品
      *
      * @param id ：Integer
-     * @return Goods(可获取下架商品)
+     * @return GoodsPo(可获取下架商品)
      */
     @Override
-    public Goods getGoodsById(Integer id) {
+    public GoodsPo getGoodsById(Integer id) {
         return goodsDao.selectById(id);
     }
 
@@ -45,33 +49,33 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      * @param goodsName :String 商品的名字
      * @param page      :            Integer 第几页
      * @param limit     :           Integer 一页多少
-     * @return List<Goods>,搜索到的商品的列表(可获取下架商品)
+     * @return List<GoodsPo>,搜索到的商品的列表(可获取下架商品)
      */
     @Override
-    public List<Goods> listGoodsByCondition(String goodsSn, String goodsName, Integer page, Integer limit) {
+    public List<GoodsPo> listGoodsByCondition(String goodsSn, String goodsName, Integer page, Integer limit) {
         return goodsDao.selectByCondition(goodsSn, goodsName, null, page, limit);
     }
 
     /**
      * 3.管理员新建商品
      *
-     * @param goods ：Goods
-     * @return Goods，新建的商品
+     * @param goods ：GoodsPo
+     * @return GoodsPo，新建的商品
      */
     @Override
-    public Goods addGoods(Goods goods) {
+    public GoodsPo addGoods(GoodsPo goods) {
         return goodsDao.insert(goods);
     }
 
     /**
      * 4.管理员根据id修改商品
      *
-     * @param goodsOld :Goods
-     * @param goodsNew :Goods
-     * @return Goods，修改后的商品
+     * @param goodsOld
+     * @param goodsNew
+     * @return GoodsPo，修改后的商品
      */
     @Override
-    public Goods updateGoodsById(Goods goodsOld, Goods goodsNew) {
+    public GoodsPo updateGoodsById(GoodsPo goodsOld, GoodsPo goodsNew) {
         if (goodsOld.getStatusCode() != 0 && goodsNew.getStatusCode() == 0) {
             //去其他服务看该商品的活动是否下线
             return goodsDao.updateById(goodsNew);
@@ -80,15 +84,14 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
         }
     }
 
-
     /**
      * 5.管理员根据id删除商品
      *
      * @param goods
-     * @return Boolean
+     * @return boolean
      */
     @Override
-    public boolean deleteGoodsById(Goods goods) {
+    public boolean deleteGoodsById(GoodsPo goods) {
         if (goods != null) {
             if (goods.getStatusCode() == 0) {
                 boolean ret = goodsDao.deleteById(goods.getId());
@@ -107,8 +110,8 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      * @return Goods（不可获取下架商品）
      */
     @Override
-    public Goods getGoodsForSaleById(Integer id) {
-        Goods goods = goodsDao.selectById(id);
+    public GoodsPo getGoodsForSaleById(Integer id) {
+        GoodsPo goods = goodsDao.selectById(id);
         if (goods != null) {
             if (goods.getStatusCode() != 0) {
                 //1.获取userId
@@ -125,10 +128,10 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      * @param goodsName :String 商品的名字
      * @param page      :Integer     第几页
      * @param limit     :Integer    一页多少
-     * @return List<Goods>,搜索到的商品的列表(不可获取下架商品)
+     * @return List<GoodsPo>,搜索到的商品的列表(不可获取下架商品)
      */
     @Override
-    public List<Goods> listGoodsForSaleByCondition(String goodsName, Integer page, Integer limit) {
+    public List<GoodsPo> listGoodsForSaleByCondition(String goodsName, Integer page, Integer limit) {
         return goodsDao.selectForSaleByCondition(null, goodsName, page, limit);
     }
 
@@ -138,10 +141,10 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      * @param id    :Integer
      * @param page  :Integer  第几页
      * @param limit :Integer 一页多少
-     * @return List<Goods>，搜索到的商品的列表
+     * @return List<GoodsPo>，搜索到的商品的列表
      */
     @Override
-    public List<Goods> listGoodsForSaleByCategoryId(Integer id, Integer page, Integer limit) {
+    public List<GoodsPo> listGoodsForSaleByCategoryId(Integer id, Integer page, Integer limit) {
         return goodsDao.selectForSaleByCategoryId(id, page, limit);
     }
 
@@ -151,10 +154,10 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      * @param id    :Integer
      * @param page  :      Integer 第几页
      * @param limit :     Integer 一页多少
-     * @return List<Goods>，搜索到的商品的列表
+     * @return List<GoodsPo>，搜索到的商品的列表
      */
     @Override
-    public List<Goods> listGoodsForSaleByBrandId(Integer id, Integer page, Integer limit) {
+    public List<GoodsPo> listGoodsForSaleByBrandId(Integer id, Integer page, Integer limit) {
         return goodsDao.selectForSaleByBrandId(id, page, limit);
     }
 
@@ -162,11 +165,11 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      * 1.判断商品是否在售（内部接口）
      *
      * @param id ：Integer
-     * @return Boolean
+     * @return boolean
      */
     @Override
-    public Boolean isGoodsOnSale(Integer id) {
-        Goods goods = goodsDao.selectById(id);
+    public boolean isGoodsOnSale(Integer id) {
+        GoodsPo goods = goodsDao.selectById(id);
         if (goods != null) {
             if (goods.getStatusCode() != 0) {
                 return true;
@@ -178,12 +181,12 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
     /**
      * 2.根据id搜索商品(内部接口)
      *
-     * @param id ：Integer(PathVariable
-     * @return Goods（不可获取下架商品）
+     * @param id ：Integer
+     * @return GoodsPo（不可获取下架商品）
      */
     @Override
-    public Goods getGoodsInnerById(Integer id) {
-        Goods goods = goodsDao.selectById(id);
+    public GoodsPo getGoodsInnerById(Integer id) {
+        GoodsPo goods = goodsDao.selectById(id);
         if (goods != null) {
             if (goods.getStatusCode() != 0) {
                 //1.获取userId
@@ -194,56 +197,55 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
         return null;
     }
 
-
     /**
      * 1.管理员搜索某个商品下的所有产品
      *
      * @param id    :Integer
      * @param page  :Integer  第几页
      * @param limit :Integer 一页多少
-     * @return List<Product>，所属该商品的产品列表
+     * @return List<ProductPo>，所属该商品的产品列表
      */
     @Override
-    public List<Product> listProductsByGoodsId(Integer id, Integer page, Integer limit) {
+    public List<ProductPo> listProductsByGoodsId(Integer id, Integer page, Integer limit) {
         return productDao.selectByGoodsId(id, page, limit);
     }
 
     /**
      * 2.管理员新建某个商品下的产品
      *
-     * @param product :Product
-     * @return Product，新建的商品
+     * @param product :ProductPo
+     * @return ProductPo，新建的商品
      */
     @Override
-    public Product addProduct(Product product) {
+    public ProductPo addProduct(ProductPo product) {
         return productDao.insert(product);
     }
 
     /**
      * 3.管理员根据id修改产品
      *
-     * @param product :Product
-     * @return Product，修改后的产品
+     * @param product :ProductPo
+     * @return ProductPo，修改后的产品
      */
     @Override
-    public Product updateProductById(Product product) {
+    public ProductPo updateProductById(ProductPo product) {
         return productDao.updateById(product);
     }
 
     /**
      * 4.管理员根据id删除产品
      *
-     * @param product
-     * @return Boolean
+     * @param product:ProductPo
+     * @return boolean
      */
     @Override
-    public Boolean deleteProductById(Product product) {
-        List<Product> productList = productDao.selectByGoodsId(product.getGoodsId(), 1, Integer.MAX_VALUE);
+    public boolean deleteProductById(ProductPo product) {
+        List<ProductPo> productList = productDao.selectByGoodsId(product.getGoodsId(), 1, Integer.MAX_VALUE);
         if (productList.size() > 1) {
-            Goods goods = goodsDao.selectById(product.getGoodsId());
+            GoodsPo goods = goodsDao.selectById(product.getGoodsId());
             productList.remove(product);
             BigDecimal temp = new BigDecimal(999999999);
-            for (Product product1 : productList) {
+            for (ProductPo product1 : productList) {
                 if (product1.getPrice().compareTo(temp) == -1) {
                     temp = product1.getPrice();
                 }
@@ -255,7 +257,7 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
             boolean ret = productDao.deleteById(product.getId());
             return ret;
         } else if (productList.size() == 1) {
-            Goods goods = goodsDao.selectById(product.getGoodsId());
+            GoodsPo goods = goodsDao.selectById(product.getGoodsId());
             Boolean ret = pullOffGoods(goods);
             if (ret) {
                 boolean ret2 = productDao.deleteById(product.getId());
@@ -265,10 +267,10 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
         return false;
     }
 
-    private Boolean pullOffGoods(Goods goods) {
-        Goods goodsNew = new Goods(goods);
+    private Boolean pullOffGoods(GoodsPo goods) {
+        GoodsPo goodsNew = new GoodsPo(goods);
         goodsNew.setStatusCode(0);
-        Goods retGoods = updateGoodsById(goods, goodsNew);
+        GoodsPo retGoods = updateGoodsById(goods, goodsNew);
         if (retGoods != null) {
             return true;
         }
@@ -282,7 +284,7 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      * @return Product，搜索到的产品
      */
     @Override
-    public Product getProductById(Integer id) {
+    public ProductPo getProductById(Integer id) {
         return productDao.selectById(id);
     }
 
@@ -291,10 +293,10 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      *
      * @param orderItemList ：List<OrderItem>(根据orderItemList来修改库存
      * @param operation     :boolean(true加库存，false减库存
-     * @return Boolean ，修改成功与否
+     * @return boolean ，修改成功与否
      */
     @Override
-    public Boolean updateStockByProductId(List<OrderItem> orderItemList, boolean operation) {
+    public boolean updateStockByProductId(List<OrderItem> orderItemList, boolean operation) {
         if (operation) {
             for (OrderItem orderItem : orderItemList) {
                 boolean ret = productDao.descStock(orderItem.getProductId(), -orderItem.getNumber());
@@ -317,10 +319,10 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      * 1.管理员根据id搜索品牌
      *
      * @param id :Integer
-     * @return Brand
+     * @return BrandPo
      */
     @Override
-    public Brand getBrandById(Integer id) {
+    public BrandPo getBrandById(Integer id) {
         return brandDao.selectById(id);
     }
 
@@ -331,32 +333,32 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      * @param brandName :String 品牌的名字
      * @param page      :            Integer 第几页
      * @param limit     :           Integer 一页多少
-     * @return List<Brand>,搜索到的品牌列表
+     * @return List<BrandPo>,搜索到的品牌列表
      */
     @Override
-    public List<Brand> listBrandsByCondition(String brandId, String brandName, Integer page, Integer limit) {
+    public List<BrandPo> listBrandsByCondition(String brandId, String brandName, Integer page, Integer limit) {
         return brandDao.selectBrandsByCondition(brandId, brandName, page, limit);
     }
 
     /**
      * 3.管理员创建品牌
      *
-     * @param brand :Brand 要添加的品牌(body包含name、description、picURL(上传图片产生))
-     * @return Brand
+     * @param brand :BrandPo 要添加的品牌(body包含name、description、picURL(上传图片产生))
+     * @return BrandPo
      */
     @Override
-    public Brand addBrand(Brand brand) {
+    public BrandPo addBrand(BrandPo brand) {
         return brandDao.insert(brand);
     }
 
     /**
      * 4.管理员修改品牌
      *
-     * @param brand ：Brand(body包含name、description、picURL(上传图片产生))
-     * @return Brand
+     * @param brand ：BrandPo(body包含name、description、picURL(上传图片产生))
+     * @return BrandPo
      */
     @Override
-    public Brand updateBrandById(Brand brand) {
+    public BrandPo updateBrandById(BrandPo brand) {
         return brandDao.updateById(brand);
     }
 
@@ -364,10 +366,10 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      * 5.管理员根据id删除品牌
      *
      * @param id ：Integer
-     * @return Boolean
+     * @return boolean
      */
     @Override
-    public Boolean deleteBrandById(Integer id) {
+    public boolean deleteBrandById(Integer id) {
         return brandDao.deleteById(id);
     }
 
@@ -375,10 +377,10 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      * 1.用户根据id搜索品牌
      *
      * @param id :Integer
-     * @return Brand
+     * @return BrandPo
      */
     @Override
-    public Brand getBrandForUserById(Integer id) {
+    public BrandPo getBrandForUserById(Integer id) {
         return brandDao.selectById(id);
     }
 
@@ -387,10 +389,10 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      *
      * @param page  :  Integer 第几页
      * @param limit : Integer 一页多少
-     * @return List<Brand>,搜索到的品牌列表
+     * @return List<BrandPo>,搜索到的品牌列表
      */
     @Override
-    public List<Brand> listBrandsByCondition(Integer page, Integer limit) {
+    public List<BrandPo> listBrandsByCondition(Integer page, Integer limit) {
         return brandDao.selectBrandsByCondition(null, null, page, limit);
     }
 
@@ -398,10 +400,10 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      * 1.管理员根据id搜索分类
      *
      * @param id ：Integer
-     * @return GoodsCategory
+     * @return GoodsCategoryPo
      */
     @Override
-    public GoodsCategory getGoodsCategoryById(Integer id) {
+    public GoodsCategoryPo getGoodsCategoryById(Integer id) {
         return goodsCategoryDao.selectById(id);
     }
 
@@ -410,43 +412,43 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      *
      * @param page  :  Integer 第几页
      * @param limit : Integer 一页多少
-     * @return List<GoodsCategory>
+     * @return List<GoodsCategoryPo>
      */
     @Override
-    public List<GoodsCategory> listGoodsCategories(Integer page, Integer limit) {
+    public List<GoodsCategoryPo> listGoodsCategories(Integer page, Integer limit) {
         return goodsCategoryDao.selectGoodsCategoriesByCondition(page, limit);
     }
 
     /**
      * 3.管理员新建分类
      *
-     * @param goodsCategory ：GoodsCategory(body包含name、pid(可以为空) 、picURL(上传图片产生))
-     * @return GoodsCategory
+     * @param goodsCategory ：GoodsCategoryPo(body包含name、pid(可以为空) 、picURL(上传图片产生))
+     * @return GoodsCategoryPo
      */
     @Override
-    public GoodsCategory addGoodsCategory(GoodsCategory goodsCategory) {
+    public GoodsCategoryPo addGoodsCategory(GoodsCategoryPo goodsCategory) {
         return goodsCategoryDao.insert(goodsCategory);
     }
 
     /**
      * 4.管理员修改分类
      *
-     * @param goodsCategory ：GoodsCategory(body包含name、pid(可以为空)、picURL(上传图片产生))
-     * @return GoodsCategory
+     * @param goodsCategory ：GoodsCategoryPo(body包含name、pid(可以为空)、picURL(上传图片产生))
+     * @return GoodsCategoryPo
      */
     @Override
-    public GoodsCategory updateGoodsCategoryById(GoodsCategory goodsCategory) {
+    public GoodsCategoryPo updateGoodsCategoryById(GoodsCategoryPo goodsCategory) {
         return goodsCategoryDao.updateById(goodsCategory);
     }
 
     /**
      * 5.管理员修改子分类在父分类下的位置
      *
-     * @param goodsCategory ：GoodsCategory(body包含pid(只能修改pid不为空的项，且修改后pid不可为空))
-     * @return GoodsCategory
+     * @param goodsCategory ：GoodsCategoryPo(body包含pid(只能修改pid不为空的项，且修改后pid不可为空))
+     * @return GoodsCategoryPo
      */
     @Override
-    public GoodsCategory updateGoodsCategoryPidById(GoodsCategory goodsCategory) {
+    public GoodsCategoryPo updateGoodsCategoryPidById(GoodsCategoryPo goodsCategory) {
         return goodsCategoryDao.updatePidById(goodsCategory);
     }
 
@@ -454,10 +456,10 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      * 6.管理员删除分类
      *
      * @param id ：Integer
-     * @return Boolean
+     * @return boolean
      */
     @Override
-    public Boolean deleteGoodsCategoryById(Integer id) {
+    public boolean deleteGoodsCategoryById(Integer id) {
         return goodsCategoryDao.deleteById(id);
     }
 
@@ -466,10 +468,10 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      *
      * @param page  :  Integer 第几页
      * @param limit : Integer 一页多少
-     * @return List<GoodsCategory>
+     * @return List<GoodsCategoryPo>
      */
     @Override
-    public List<GoodsCategory> listOneLevelGoodsCategories(Integer page, Integer limit) {
+    public List<GoodsCategoryPo> listOneLevelGoodsCategories(Integer page, Integer limit) {
         return goodsCategoryDao.selectOneLevelGoodsCategories(page, limit);
     }
 
@@ -479,10 +481,10 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      * @param id    ：Integer
      * @param page  :      Integer 第几页
      * @param limit :     Integer 一页多少
-     * @return List<GoodsCategory>
+     * @return List<GoodsCategoryPo>
      */
     @Override
-    public List<GoodsCategory> listSecondLevelGoodsCategoryById(Integer id, Integer page, Integer limit) {
+    public List<GoodsCategoryPo> listSecondLevelGoodsCategoryById(Integer id, Integer page, Integer limit) {
         return goodsCategoryDao.selectSecondLevelGoodsCategories(id, page, limit);
     }
 }

@@ -1,20 +1,15 @@
 package xmu.oomall.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.*;
 import xmu.oomall.controller.feign.LogClientService;
 import xmu.oomall.domain.*;
 import xmu.oomall.domain.po.*;
 import xmu.oomall.service.*;
 
-import xmu.oomall.util.Copyer;
 import xmu.oomall.util.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,8 +20,8 @@ import java.util.List;
 
 @Component
 public class GoodsController {
-    @Autowired
-   private LogClientService logClientService;
+    //@Autowired
+    //private //LogClientService //logClientService;
     @Autowired
     private GoodsInfoService goodsInfoService;
 
@@ -37,28 +32,25 @@ public class GoodsController {
      * @return Goods(可获取下架商品)
      */
     public Object getGoodsById(Integer id, HttpServletRequest request) {
-        Goods retGoods = goodsInfoService.getGoodsById(id);
-        if (retGoods != null) {
-            Log log=new Log(request.getIntHeader("userId"),
-                    request.getHeader("ip"),0,"查询商品",1,null);
-            //logClientService.addLog(log);
-            retGoods.setBrandPo(goodsInfoService.getBrandById(retGoods.getBrandId()));
-            retGoods.setGoodsCategoryPo(goodsInfoService.getGoodsCategoryById(retGoods.getGoodsCategoryId()));
-            //goods.setGrouponRule();
-            //goods.setPresaleRule();
-            List<Product> listProducts = goodsInfoService.listProductsByGoodsId(id, 1, Integer.MAX_VALUE);
-            List<ProductPo> listProductPos = new ArrayList<ProductPo>(listProducts.size());
-            for (Product product : listProducts) {
-                listProductPos.add(product);
-            }
-            retGoods.setProductPoList(listProductPos);
-            //goods.setShareRule();
-
-            Object retObj = ResponseUtil.ok(retGoods);
+        GoodsPo goods = goodsInfoService.getGoodsById(id);
+        if (goods != null) {
+            Goods goodsPojo = new Goods(goods);
+            //Brand
+            BrandPo brandPo = goodsInfoService.getBrandById(goods.getBrandId());
+            goodsPojo.setBrandPo(new Brand(brandPo));
+            //GoodsCategory
+            GoodsCategoryPo goodsCategoryPo = goodsInfoService.getGoodsCategoryById(goods.getGoodsCategoryId());
+            goodsPojo.setGoodsCategoryPo(goodsCategoryPo);
+            //goodsPojo.setGrouponRule();-----------------------
+            //goodsPojo.setPresaleRule();-----------------------
+            List<ProductPo> retProductPoList = goodsInfoService.listProductsByGoodsId(id, 1, Integer.MAX_VALUE);
+            goodsPojo.setProductPoList(retProductPoList);
+            //goods.setShareRule();-------------------------
+            Object retObj = ResponseUtil.ok(goodsPojo);
             return retObj;
         } else {
-            Log log=new Log(request.getIntHeader("userId"),
-                    request.getHeader("ip"),0,"查询商品",0,null);
+            Log log = new Log(request.getIntHeader("userId"),
+                    request.getHeader("ip"), 0, "查询商品", 0, null);
             //logClientService.addLog(log);
             Object retObj = ResponseUtil.fail(775, "该商品不存在");
             return retObj;
@@ -77,19 +69,15 @@ public class GoodsController {
     public Object listGoodsByCondition(String goodsSn, String goodsName, Integer page, Integer limit,
                                        HttpServletRequest request) {
         if (page > 0 && limit > 0) {
-            Log log=new Log(request.getIntHeader("userId"),
-                    request.getHeader("ip"),0,"查询商品",1,null);
+            Log log = new Log(request.getIntHeader("userId"),
+                    request.getHeader("ip"), 0, "查询商品", 1, null);
             //logClientService.addLog(log);
-            List<Goods> listGoods = goodsInfoService.listGoodsByCondition(goodsSn, goodsName, page, limit);
-            List<GoodsPo> retListGoodsPo = new ArrayList<GoodsPo>(listGoods.size());
-            for (Goods goods : listGoods) {
-                retListGoodsPo.add(goods);
-            }
-            Object retObj = ResponseUtil.ok(retListGoodsPo);
+            List<GoodsPo> retGoodsList = goodsInfoService.listGoodsByCondition(goodsSn, goodsName, page, limit);
+            Object retObj = ResponseUtil.ok(retGoodsList);
             return retObj;
         } else {
-            Log log=new Log(request.getIntHeader("userId"),
-                    request.getHeader("ip"),0,"查询商品",0,null);
+            Log log = new Log(request.getIntHeader("userId"),
+                    request.getHeader("ip"), 0, "查询商品", 0, null);
             //logClientService.addLog(log);
             Object retObj = ResponseUtil.fail(776, "分页参数错误，获取商品列表失败");
             return retObj;
@@ -102,26 +90,25 @@ public class GoodsController {
      * @param goodsPo：GoodsPo
      * @return GoodsPo，新建的商品
      */
-    public Object addGoods(GoodsPo goodsPo,HttpServletRequest request) {
+    public Object addGoods(GoodsPo goodsPo, HttpServletRequest request) {
         if (goodsPo != null) {
-            Goods goods = goodsConverter(goodsPo);
-            Goods retGoods = goodsInfoService.addGoods(goods);
+            GoodsPo retGoods = goodsInfoService.addGoods(goodsPo);
             if (retGoods != null) {
-                Log log=new Log(request.getIntHeader("userId"),
-                        request.getHeader("ip"),1,"新建商品",1,null);
+                Log log = new Log(request.getIntHeader("userId"),
+                        request.getHeader("ip"), 1, "新建商品", 1, null);
                 //logClientService.addLog(log);
                 Object retObj = ResponseUtil.ok(retGoods);
                 return retObj;
             } else {
-                Log log=new Log(request.getIntHeader("userId"),
-                        request.getHeader("ip"),1,"新建商品",0,null);
+                Log log = new Log(request.getIntHeader("userId"),
+                        request.getHeader("ip"), 1, "新建商品", 0, null);
                 //logClientService.addLog(log);
                 Object retObj = ResponseUtil.fail(771, "数据库操作失败,商品新建失败");
                 return retObj;
             }
         } else {
-            Log log=new Log(request.getIntHeader("userId"),
-                    request.getHeader("ip"),1,"新建商品",0,null);
+            Log log = new Log(request.getIntHeader("userId"),
+                    request.getHeader("ip"), 1, "新建商品", 0, null);
             //logClientService.addLog(log);
             Object retObj = ResponseUtil.fail(771, "前端传入数据为null,商品新建失败");
             return retObj;
@@ -135,36 +122,35 @@ public class GoodsController {
      * @param goodsPo:GoodsPo
      * @return GoodsPo，修改后的商品
      */
-    public Object updateGoodsById(Integer id, GoodsPo goodsPo,HttpServletRequest request) {
+    public Object updateGoodsById(Integer id, GoodsPo goodsPo, HttpServletRequest request) {
         if (goodsPo != null) {
-            goodsPo.setId(id);
-            Goods goods = goodsInfoService.getGoodsById(id);
-            if (goods != null) {
-                Goods goods1 = goodsConverter(goodsPo);
-                Goods retGoods = goodsInfoService.updateGoodsById(goods,goods1);
+            GoodsPo goodsOld = goodsInfoService.getGoodsById(id);
+            if (goodsOld != null) {
+                goodsPo.setId(id);
+                GoodsPo retGoods = goodsInfoService.updateGoodsById(goodsOld, goodsPo);
                 if (retGoods != null) {
-                    Log log=new Log(request.getIntHeader("userId"),
-                            request.getHeader("ip"),2,"修改商品",1,null);
+                    Log log = new Log(request.getIntHeader("userId"),
+                            request.getHeader("ip"), 2, "修改商品", 1, null);
                     //logClientService.addLog(log);
                     Object retObj = ResponseUtil.ok(retGoods);
                     return retObj;
                 } else {
-                    Log log=new Log(request.getIntHeader("userId"),
-                            request.getHeader("ip"),2,"修改商品",0,null);
+                    Log log = new Log(request.getIntHeader("userId"),
+                            request.getHeader("ip"), 2, "修改商品", 0, null);
                     //logClientService.addLog(log);
                     Object retObj = ResponseUtil.fail(772, "数据库操作失败,商品修改失败");
                     return retObj;
                 }
             } else {
-                Log log=new Log(request.getIntHeader("userId"),
-                        request.getHeader("ip"),2,"修改商品",0,null);
+                Log log = new Log(request.getIntHeader("userId"),
+                        request.getHeader("ip"), 2, "修改商品", 0, null);
                 //logClientService.addLog(log);
                 Object retObj = ResponseUtil.fail(772, "该商品不存在,商品修改失败");
                 return retObj;
             }
         } else {
-            Log log=new Log(request.getIntHeader("userId"),
-                    request.getHeader("ip"),2,"修改商品",0,null);
+            Log log = new Log(request.getIntHeader("userId"),
+                    request.getHeader("ip"), 2, "修改商品", 0, null);
             //logClientService.addLog(log);
             Object retObj = ResponseUtil.fail(772, "前端传入数据为null,商品修改失败");
             return retObj;
@@ -177,26 +163,26 @@ public class GoodsController {
      * @param id：Integer
      * @return ResponseUtil.ok()或者ResponseUtil.fail()
      */
-    public Object deleteGoodsById(Integer id,HttpServletRequest request) {
-        Goods goods = goodsInfoService.getGoodsById(id);
+    public Object deleteGoodsById(Integer id, HttpServletRequest request) {
+        GoodsPo goods = goodsInfoService.getGoodsById(id);
         if (goods != null) {
             boolean ret = goodsInfoService.deleteGoodsById(goods);
             if (ret) {
-                Log log=new Log(request.getIntHeader("userId"),
-                        request.getHeader("ip"),3,"删除商品",1,null);
+                Log log = new Log(request.getIntHeader("userId"),
+                        request.getHeader("ip"), 3, "删除商品", 1, null);
                 //logClientService.addLog(log);
                 Object retObj = ResponseUtil.ok();
                 return retObj;
             } else {
-                Log log=new Log(request.getIntHeader("userId"),
-                        request.getHeader("ip"),3,"删除商品",0,null);
+                Log log = new Log(request.getIntHeader("userId"),
+                        request.getHeader("ip"), 3, "删除商品", 0, null);
                 //logClientService.addLog(log);
                 Object retObj = ResponseUtil.fail(773, "数据库操作失败,商品删除失败");
                 return retObj;
             }
         } else {
-            Log log=new Log(request.getIntHeader("userId"),
-                    request.getHeader("ip"),3,"删除商品",0,null);
+            Log log = new Log(request.getIntHeader("userId"),
+                    request.getHeader("ip"), 3, "删除商品", 0, null);
             //logClientService.addLog(log);
             Object retObj = ResponseUtil.fail(773, "该商品不存在,商品删除失败");
             return retObj;
@@ -210,21 +196,21 @@ public class GoodsController {
      * @return Goods（不可获取下架商品）
      */
     public Object getGoodsForSaleById(Integer id) {
-        Goods retGoods = goodsInfoService.getGoodsForSaleById(id);
-        if (retGoods != null) {
-            retGoods.setBrandPo(goodsInfoService.getBrandById(retGoods.getBrandId()));
-            retGoods.setGoodsCategoryPo(goodsInfoService.getGoodsCategoryById(retGoods.getGoodsCategoryId()));
-            //goods.setGrouponRule();
-            //goods.setPresaleRule();
-            List<Product> listProducts = goodsInfoService.listProductsByGoodsId(id, 1, Integer.MAX_VALUE);
-            List<ProductPo> listProductPos = new ArrayList<ProductPo>(listProducts.size());
-            for (Product product : listProducts) {
-                listProductPos.add(product);
-            }
-            retGoods.setProductPoList(listProductPos);
-            //goods.setShareRule();
-
-            Object retObj = ResponseUtil.ok(retGoods);
+        GoodsPo goods = goodsInfoService.getGoodsById(id);
+        if (goods != null) {
+            Goods goodsPojo = new Goods(goods);
+            //Brand
+            BrandPo brandPo = goodsInfoService.getBrandById(goods.getBrandId());
+            goodsPojo.setBrandPo(new Brand(brandPo));
+            //GoodsCategory
+            GoodsCategoryPo goodsCategoryPo = goodsInfoService.getGoodsCategoryById(goods.getGoodsCategoryId());
+            goodsPojo.setGoodsCategoryPo(goodsCategoryPo);
+            //goodsPojo.setGrouponRule();-----------------------
+            //goodsPojo.setPresaleRule();-----------------------
+            List<ProductPo> retProductPoList = goodsInfoService.listProductsByGoodsId(id, 1, Integer.MAX_VALUE);
+            goodsPojo.setProductPoList(retProductPoList);
+            //goods.setShareRule();-------------------------
+            Object retObj = ResponseUtil.ok(goodsPojo);
             return retObj;
         } else {
             Object retObj = ResponseUtil.fail(775, "该商品不存在");
@@ -242,12 +228,8 @@ public class GoodsController {
      */
     public Object listGoodsForSaleByCondition(String goodsName, Integer page, Integer limit) {
         if (page > 0 && limit > 0) {
-            List<Goods> listGoods = goodsInfoService.listGoodsForSaleByCondition(goodsName, page, limit);
-            List<GoodsPo> retListGoodsPo = new ArrayList<GoodsPo>(listGoods.size());
-            for (Goods goods : listGoods) {
-                retListGoodsPo.add(goods);
-            }
-            Object retObj = ResponseUtil.ok(retListGoodsPo);
+            List<GoodsPo> retGoodsList = goodsInfoService.listGoodsForSaleByCondition(goodsName, page, limit);
+            Object retObj = ResponseUtil.ok(retGoodsList);
             return retObj;
         } else {
             Object retObj = ResponseUtil.fail(776, "分页参数错误，获取商品列表失败");
@@ -265,14 +247,10 @@ public class GoodsController {
      */
     public Object listGoodsForSaleByCategoryId(Integer id, Integer page, Integer limit) {
         if (page > 0 && limit > 0) {
-            GoodsCategory goodsCategory = goodsInfoService.getGoodsCategoryById(id);
+            GoodsCategoryPo goodsCategory = goodsInfoService.getGoodsCategoryById(id);
             if (goodsCategory != null) {
-                List<Goods> listGoods = goodsInfoService.listGoodsForSaleByCategoryId(id, page, limit);
-                List<GoodsPo> retListGoodsPo = new ArrayList<GoodsPo>(listGoods.size());
-                for (Goods goods : listGoods) {
-                    retListGoodsPo.add(goods);
-                }
-                Object retObj = ResponseUtil.ok(retListGoodsPo);
+                List<GoodsPo> retGoodsList = goodsInfoService.listGoodsForSaleByCategoryId(id, page, limit);
+                Object retObj = ResponseUtil.ok(retGoodsList);
                 return retObj;
             } else {
                 Object retObj = ResponseUtil.fail(776, "该分类不存在，获取商品列表失败");
@@ -294,14 +272,10 @@ public class GoodsController {
      */
     public Object listGoodsForSaleByBrandId(Integer id, Integer page, Integer limit) {
         if (page > 0 && limit > 0) {
-            Brand brand = goodsInfoService.getBrandById(id);
+            BrandPo brand = goodsInfoService.getBrandById(id);
             if (brand != null) {
-                List<Goods> listGoods = goodsInfoService.listGoodsForSaleByBrandId(id, page, limit);
-                List<GoodsPo> retListGoodsPo = new ArrayList<GoodsPo>(listGoods.size());
-                for (Goods goods1 : listGoods) {
-                    retListGoodsPo.add(goods1);
-                }
-                Object retObj = ResponseUtil.ok(retListGoodsPo);
+                List<GoodsPo> retGoodsList = goodsInfoService.listGoodsForSaleByBrandId(id, page, limit);
+                Object retObj = ResponseUtil.ok(retGoodsList);
                 return retObj;
             } else {
                 Object retObj = ResponseUtil.fail(776, "该品牌不存在，获取商品列表失败");
@@ -320,7 +294,7 @@ public class GoodsController {
      * @return Boolean
      */
     public Object isGoodsOnSale(Integer id) {
-        Goods goods = goodsInfoService.getGoodsById(id);
+        GoodsPo goods = goodsInfoService.getGoodsById(id);
         if (goods != null) {
             if (goods.getStatusCode() != 0) {
                 Object retObj = ResponseUtil.ok(true);
@@ -342,7 +316,7 @@ public class GoodsController {
      * @return GoodsPo（不可获取下架商品）
      */
     public Object getGoodsInnerById(Integer id) {
-        Goods retGoods = goodsInfoService.getGoodsInnerById(id);
+        GoodsPo retGoods = goodsInfoService.getGoodsInnerById(id);
         if (retGoods != null) {
             Object retObj = ResponseUtil.ok(retGoods);
             return retObj;
@@ -350,13 +324,5 @@ public class GoodsController {
             Object retObj = ResponseUtil.fail(775, "该商品不存在");
             return retObj;
         }
-    }
-
-    /**
-     * 将GoodsPo转换成Goods对象
-     */
-    private Goods goodsConverter(GoodsPo goodsPo) {
-        Goods goods = new Goods();
-        return Copyer.Copy(goodsPo, goods) ? goods : null;
     }
 }
