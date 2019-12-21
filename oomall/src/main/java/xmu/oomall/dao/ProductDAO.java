@@ -11,6 +11,7 @@ import xmu.oomall.mapper.GoodsMapper;
 import xmu.oomall.mapper.ProductMapper;
 import xmu.oomall.util.Copyer;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -86,7 +87,24 @@ public class ProductDAO {
      */
     public List<Product> selectByGoodsId(Integer id, Integer page, Integer limit) {
         PageHelper.startPage(page,limit);
-        return products(productMapper.selectByGoodsId(id));
+        List<ProductPo> productPos = new ArrayList<>();
+        
+        List<String> productIds = iRedisService.sget(GoodsPo.getProductRedisKeys(id));
+        if (productIds == null) {
+            productPos = productMapper.selectByGoodsId(id);
+            if (productPos.size() == 0) {
+                return products(productPos);
+            }
+            for (ProductPo productPo: productPos) {
+                productIds.add(productPo.getId().toString());
+            }
+            iRedisService.sadd(GoodsPo.getProductRedisKeys(id), productIds);
+        } else {
+            for (String productId: productIds) {
+                productPos.add(selectById(Integer.valueOf(productId)));
+            }
+        }
+        return products(productPos);
     }
 
     /**
@@ -131,6 +149,14 @@ public class ProductDAO {
             products.add(product(productPo));
         }
         return products;
+    }
+
+    boolean isArgsInvalid(Product product) {
+        if (product.getBeDeleted()) {
+            return true;
+        }
+        Integer goodsId = product.getGoodsId();
+        return goodsId != null && goodsMapper.selectByPrimaryKey(goodsId) == null;
     }
 
     public Boolean descStock(Integer productId, int dStock) {
