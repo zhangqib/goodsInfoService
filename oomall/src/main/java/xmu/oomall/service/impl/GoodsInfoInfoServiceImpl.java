@@ -187,7 +187,15 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      */
     @Override
     public Goods getGoodsInnerById(Integer id) {
-        return goodsDao.selectById(id);
+        Goods goods = goodsDao.selectById(id);
+        if (goods != null) {
+            if (goods.getStatusCode() != 0) {
+                //1.获取userId
+                //2.有的话调用足迹服务（@PostMapping("/footprints") ），没有的话跳过
+                return goods;
+            }
+        }
+        return null;
     }
 
 

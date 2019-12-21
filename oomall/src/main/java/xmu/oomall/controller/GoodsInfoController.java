@@ -37,6 +37,14 @@ public class GoodsInfoController {
     private BrandController brandController;
     @Autowired
     private GoodsCategoryController goodsCategoryController;
+
+    @GetMapping ("/test")
+    void test(HttpServletRequest request){
+        System.out.println(111);
+        Log log=new Log(request.getIntHeader("userId"),
+                request.getHeader("ip"),0,"查询商品",1,null);
+        logClientService.addLog(log);
+    }
     //-----------------Goods---------------Goods-----------Goods---------
 
     /**

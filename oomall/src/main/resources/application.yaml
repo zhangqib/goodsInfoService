@@ -33,13 +33,14 @@ spring:
     host: localhost
 
 eureka:
-  instance:
-    preferIpAddress: true
-    instance-id: GoodsInfoService8088
-    ip-address: 192.168.123.55
   client:
     service-url:
       defaultZone: http://handsomeyida.xyz:8761/eureka
+  instance:
+    preferIpAddress: true
+    instance-id: GoodsInfoService8088
+    ip-address: handsomeyida.xyz
+
 
 mybatis:
   type-aliases-package: xmu.oomall.domain.po
