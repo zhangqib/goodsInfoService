@@ -1,6 +1,9 @@
+server:
+  port: 8088
+
 spring:
   application:
-    name: GOODSINFOSERVICE
+    name: GoodsInfoService
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://www.wangwangwang.fun:3306/oomall
@@ -30,6 +33,10 @@ spring:
     host: localhost
 
 eureka:
+  instance:
+    preferIpAddress: true
+    instance-id: GoodsInfoService8088
+    ip-address: 192.168.123.55
   client:
     service-url:
       defaultZone: http://handsomeyida.xyz:8761/eureka

@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import xmu.oomall.domain.Goods;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -96,4 +97,30 @@ public class GoodsPo {
     private LocalDateTime gmtCreate;
     private LocalDateTime gmtModified;
 
+    public GoodsPo(Goods goods) {
+        this.id = goods.getId();
+        this.name = goods.getName();
+        this.goodsSn = goods.getGoodsSn();
+        this.shortName = goods.getShortName();
+        this.description = goods.getDescription();
+        this.brief = goods.getBrief();
+        this.picUrl = goods.getPicUrl();
+        this.detail = goods.getDetail();
+        this.statusCode = goods.getStatusCode();
+        this.shareUrl = goods.getShareUrl();
+        this.gallery = goods.getGallery();
+        this.goodsCategoryId = goods.getGoodsCategoryId();
+        this.brandId = goods.getBrandId();
+        this.weight = goods.getWeight();
+        this.volume = goods.getVolume();
+        this.specialFreightId = goods.getSpecialFreightId();
+        this.beSpecial = goods.getBeSpecial();
+        this.price = goods.getPrice();
+        this.beDeleted = goods.getBeDeleted();
+        this.gmtCreate = goods.getGmtCreate();
+        this.gmtModified = goods.getGmtModified();
+    }
+
+    public GoodsPo() {
+    }
 }

@@ -15,7 +15,7 @@ import java.util.List;
 
 
 @Service
-public interface GoodsService {
+public interface GoodsInfoService {
     //-----------------Goods---------------Goods-----------Goods---------
 
     /**

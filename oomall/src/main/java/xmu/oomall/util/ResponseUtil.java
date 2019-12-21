@@ -36,19 +36,20 @@ import java.util.Map;
  * <li> 7xx，管理后台后端业务错误码，
  * 具体见litemall-wx-api模块的WxResponseCode。
  * </ul>
+ *
  * @author Ke
  */
 public class ResponseUtil {
     public static Object ok() {
         Map<String, Object> obj = new HashMap<String, Object>();
-        obj.put("errno", 0);
+        obj.put("errno", 200);
         obj.put("errmsg", "成功");
         return obj;
     }
 
     public static Object ok(Object data) {
         Map<String, Object> obj = new HashMap<String, Object>();
-        obj.put("errno", 0);
+        obj.put("errno", 200);
         obj.put("errmsg", "成功");
         obj.put("data", data);
         return obj;
@@ -98,6 +99,12 @@ public class ResponseUtil {
 
     public static Object unauthz() {
         return fail(506, "无操作权限");
+    }
+
+    public static Object clientShutdown() {
+
+        return fail(507, "服务已关闭");
+
     }
 }
 

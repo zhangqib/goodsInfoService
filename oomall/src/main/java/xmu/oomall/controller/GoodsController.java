@@ -1,405 +1,360 @@
 package xmu.oomall.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.*;
-import xmu.oomall.domain.po.BrandPo;
-import xmu.oomall.domain.po.GoodsCategoryPo;
-import xmu.oomall.domain.po.GoodsPo;
-import xmu.oomall.domain.po.ProductPo;
-import xmu.oomall.service.GoodsService;
+import xmu.oomall.controller.feign.LogClientService;
+import xmu.oomall.domain.*;
+import xmu.oomall.domain.po.*;
+import xmu.oomall.service.*;
 
+import xmu.oomall.util.Copyer;
+import xmu.oomall.util.ResponseUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Author Ke
  * @Description: GoodsController
- * @create 2019/12/15 2:22
+ * @create 2019/12/20
  */
 
-@RestController
-@RequestMapping("/goodsService")
+@Configuration
 public class GoodsController {
-    private static final Logger logger = LoggerFactory.getLogger(GoodsController.class);
-
+    //@Autowired
+   // private LogClientService logClientService;
     @Autowired
-    private GoodsService goodsService;
-
-    //-----------------Goods---------------Goods-----------Goods---------
+    private GoodsInfoService goodsInfoService;
 
     /**
-     * 用户根据id搜索商品
-     *
-     * @param id：Integer(PathVariable
-     * @return Goods（不可获取下架商品）
-     */
-    @GetMapping("/goods/{id}")
-    public Object getGoodsForSaleById(@PathVariable Integer id) {
-        return null;
-    }
-
-    /**
-     * 管理员根据id搜索商品
-     *
-     * @param id：Integer(PathVariable
-     * @return Goods(可获取下架商品)
-     */
-    @GetMapping("/admin/goods/{id}")
-    public Object getGoodsById(@PathVariable Integer id) {
-        return null;
-    }
-
-    /**
-     * 内部接口————————————判断商品是否在售
+     * 1.管理员根据id搜索商品
      *
      * @param id：Integer
-     * @return Integer，0表示该商品下架，1表示该商品在售，-1表示该商品不存在
+     * @return Goods(可获取下架商品)
      */
-    @GetMapping("/goods/{id}/isOnSale")
-    public Object isGoodsOnSale(@PathVariable Integer id) {
-        return null;
+    public Object getGoodsById(Integer id, HttpServletRequest request) {
+        Goods retGoods = goodsInfoService.getGoodsById(id);
+        if (retGoods != null) {
+            Log log=new Log(request.getIntHeader("userId"),
+                    request.getHeader("ip"),0,"查询商品",1,null);
+            //logClientService.addLog(log);
+            retGoods.setBrandPo(goodsInfoService.getBrandById(retGoods.getBrandId()));
+            retGoods.setGoodsCategoryPo(goodsInfoService.getGoodsCategoryById(retGoods.getGoodsCategoryId()));
+            //goods.setGrouponRule();
+            //goods.setPresaleRule();
+            List<Product> listProducts = goodsInfoService.listProductsByGoodsId(id, 1, Integer.MAX_VALUE);
+            List<ProductPo> listProductPos = new ArrayList<ProductPo>(listProducts.size());
+            for (Product product : listProducts) {
+                listProductPos.add(product);
+            }
+            retGoods.setProductPoList(listProductPos);
+            //goods.setShareRule();
+
+            Object retObj = ResponseUtil.ok(retGoods);
+            return retObj;
+        } else {
+            Log log=new Log(request.getIntHeader("userId"),
+                    request.getHeader("ip"),0,"查询商品",0,null);
+            //logClientService.addLog(log);
+            Object retObj = ResponseUtil.fail(775, "该商品不存在");
+            return retObj;
+        }
     }
 
     /**
-     * 管理员根据条件搜索商品
+     * 2.管理员根据条件搜索商品
      *
      * @param goodsSn:String   商品的序列号
      * @param goodsName:String 商品的名字
-     * @param status:Integer   商品是否上架，这个域的取值以数据字典为准
      * @param page:            Integer 第几页
      * @param limit:           Integer 一页多少
-     * @return List<GoodsPo>,搜索到的商品的列表
+     * @return List<GoodsPo>,搜索到的商品的列表(可获取下架商品)
      */
-    @GetMapping("/admin/goods")
-    public Object listGoodsByCondition(@RequestParam String goodsSn,
-                                       @RequestParam String goodsName,
-                                       @RequestParam Integer status,
-                                       @RequestParam Integer page,
-                                       @RequestParam Integer limit) {
-        return null;
+    public Object listGoodsByCondition(String goodsSn, String goodsName, Integer page, Integer limit,
+                                       HttpServletRequest request) {
+        if (page > 0 && limit > 0) {
+            Log log=new Log(request.getIntHeader("userId"),
+                    request.getHeader("ip"),0,"查询商品",1,null);
+            //logClientService.addLog(log);
+            List<Goods> listGoods = goodsInfoService.listGoodsByCondition(goodsSn, goodsName, page, limit);
+            List<GoodsPo> retListGoodsPo = new ArrayList<GoodsPo>(listGoods.size());
+            for (Goods goods : listGoods) {
+                retListGoodsPo.add(goods);
+            }
+            Object retObj = ResponseUtil.ok(retListGoodsPo);
+            return retObj;
+        } else {
+            Log log=new Log(request.getIntHeader("userId"),
+                    request.getHeader("ip"),0,"查询商品",0,null);
+            //logClientService.addLog(log);
+            Object retObj = ResponseUtil.fail(776, "分页参数错误，获取商品列表失败");
+            return retObj;
+        }
     }
 
     /**
-     * 用户根据条件搜素商品
+     * 3.管理员新建商品
      *
-     * @param goodsSn:String   商品的序列号
+     * @param goodsPo：GoodsPo
+     * @return GoodsPo，新建的商品
+     */
+    public Object addGoods(GoodsPo goodsPo,HttpServletRequest request) {
+        if (goodsPo != null) {
+            Goods goods = goodsConverter(goodsPo);
+            Goods retGoods = goodsInfoService.addGoods(goods);
+            if (retGoods != null) {
+                Log log=new Log(request.getIntHeader("userId"),
+                        request.getHeader("ip"),1,"新建商品",1,null);
+                //logClientService.addLog(log);
+                Object retObj = ResponseUtil.ok(retGoods);
+                return retObj;
+            } else {
+                Log log=new Log(request.getIntHeader("userId"),
+                        request.getHeader("ip"),1,"新建商品",0,null);
+                //logClientService.addLog(log);
+                Object retObj = ResponseUtil.fail(771, "数据库操作失败,商品新建失败");
+                return retObj;
+            }
+        } else {
+            Log log=new Log(request.getIntHeader("userId"),
+                    request.getHeader("ip"),1,"新建商品",0,null);
+            //logClientService.addLog(log);
+            Object retObj = ResponseUtil.fail(771, "前端传入数据为null,商品新建失败");
+            return retObj;
+        }
+    }
+
+    /**
+     * 4.管理员根据id修改商品
+     *
+     * @param id：Integer
+     * @param goodsPo:GoodsPo
+     * @return GoodsPo，修改后的商品
+     */
+    public Object updateGoodsById(Integer id, GoodsPo goodsPo,HttpServletRequest request) {
+        if (goodsPo != null) {
+            goodsPo.setId(id);
+            Goods goods = goodsInfoService.getGoodsById(id);
+            if (goods != null) {
+                Goods goods1 = goodsConverter(goodsPo);
+                Goods retGoods = goodsInfoService.updateGoodsById(goods1);
+                if (retGoods != null) {
+                    Log log=new Log(request.getIntHeader("userId"),
+                            request.getHeader("ip"),2,"修改商品",1,null);
+                    //logClientService.addLog(log);
+                    Object retObj = ResponseUtil.ok(retGoods);
+                    return retObj;
+                } else {
+                    Log log=new Log(request.getIntHeader("userId"),
+                            request.getHeader("ip"),2,"修改商品",0,null);
+                    //logClientService.addLog(log);
+                    Object retObj = ResponseUtil.fail(772, "数据库操作失败,商品修改失败");
+                    return retObj;
+                }
+            } else {
+                Log log=new Log(request.getIntHeader("userId"),
+                        request.getHeader("ip"),2,"修改商品",0,null);
+                //logClientService.addLog(log);
+                Object retObj = ResponseUtil.fail(772, "该商品不存在,商品修改失败");
+                return retObj;
+            }
+        } else {
+            Log log=new Log(request.getIntHeader("userId"),
+                    request.getHeader("ip"),2,"修改商品",0,null);
+            //logClientService.addLog(log);
+            Object retObj = ResponseUtil.fail(772, "前端传入数据为null,商品修改失败");
+            return retObj;
+        }
+    }
+
+    /**
+     * 5.管理员根据id删除商品
+     *
+     * @param id：Integer
+     * @return ResponseUtil.ok()或者ResponseUtil.fail()
+     */
+    public Object deleteGoodsById(Integer id,HttpServletRequest request) {
+        Goods goods = goodsInfoService.getGoodsById(id);
+        if (goods != null) {
+            boolean ret = goodsInfoService.deleteGoodsById(id);
+            if (ret) {
+                Log log=new Log(request.getIntHeader("userId"),
+                        request.getHeader("ip"),3,"删除商品",1,null);
+                //logClientService.addLog(log);
+                Object retObj = ResponseUtil.ok();
+                return retObj;
+            } else {
+                Log log=new Log(request.getIntHeader("userId"),
+                        request.getHeader("ip"),3,"删除商品",0,null);
+                //logClientService.addLog(log);
+                Object retObj = ResponseUtil.fail(773, "数据库操作失败,商品删除失败");
+                return retObj;
+            }
+        } else {
+            Log log=new Log(request.getIntHeader("userId"),
+                    request.getHeader("ip"),3,"删除商品",0,null);
+            //logClientService.addLog(log);
+            Object retObj = ResponseUtil.fail(773, "该商品不存在,商品删除失败");
+            return retObj;
+        }
+    }
+
+    /**
+     * 1.用户根据id搜索商品
+     *
+     * @param id：Integer
+     * @return Goods（不可获取下架商品）
+     */
+    public Object getGoodsForSaleById(Integer id) {
+        Goods retGoods = goodsInfoService.getGoodsForSaleById(id);
+        if (retGoods != null) {
+            retGoods.setBrandPo(goodsInfoService.getBrandById(retGoods.getBrandId()));
+            retGoods.setGoodsCategoryPo(goodsInfoService.getGoodsCategoryById(retGoods.getGoodsCategoryId()));
+            //goods.setGrouponRule();
+            //goods.setPresaleRule();
+            List<Product> listProducts = goodsInfoService.listProductsByGoodsId(id, 1, Integer.MAX_VALUE);
+            List<ProductPo> listProductPos = new ArrayList<ProductPo>(listProducts.size());
+            for (Product product : listProducts) {
+                listProductPos.add(product);
+            }
+            retGoods.setProductPoList(listProductPos);
+            //goods.setShareRule();
+
+            Object retObj = ResponseUtil.ok(retGoods);
+            return retObj;
+        } else {
+            Object retObj = ResponseUtil.fail(775, "该商品不存在");
+            return retObj;
+        }
+    }
+
+    /**
+     * 2.用户根据条件搜素商品
+     *
      * @param goodsName:String 商品的名字
      * @param page:Integer     第几页
      * @param limit:Integer    一页多少
-     * @return List<GoodsPo>,搜索到的商品的列表
+     * @return List<GoodsPo>,搜索到的商品的列表(不可获取下架商品)
      */
-    @GetMapping("/goods")
-    public Object listGoodsByCondition(@RequestParam String goodsSn,
-                                       @RequestParam String goodsName,
-                                       @RequestParam Integer page,
-                                       @RequestParam Integer limit) {
-        return null;
+    public Object listGoodsForSaleByCondition(String goodsName, Integer page, Integer limit) {
+        if (page > 0 && limit > 0) {
+            List<Goods> listGoods = goodsInfoService.listGoodsForSaleByCondition(goodsName, page, limit);
+            List<GoodsPo> retListGoodsPo = new ArrayList<GoodsPo>(listGoods.size());
+            for (Goods goods : listGoods) {
+                retListGoodsPo.add(goods);
+            }
+            Object retObj = ResponseUtil.ok(retListGoodsPo);
+            return retObj;
+        } else {
+            Object retObj = ResponseUtil.fail(776, "分页参数错误，获取商品列表失败");
+            return retObj;
+        }
     }
 
     /**
-     * 用户根据商品分类id搜索该分类下的所有商品
+     * 3.用户根据商品分类id搜索该分类下的所有商品(看不到下架商品)
      *
-     * @param id:Integer(PathVariable
-     * @param page:Integer            第几页
-     * @param limit:Integer           一页多少
+     * @param id:Integer
+     * @param page:Integer  第几页
+     * @param limit:Integer 一页多少
      * @return List<GoodsPo>，搜索到的商品的列表
      */
-    @GetMapping("/categories/{id}/goods")
-    public Object ListGoodsByCategoryId(@PathVariable Integer id,
-                                        @RequestParam Integer page,
-                                        @RequestParam Integer limit) {
-        return null;
+    public Object listGoodsForSaleByCategoryId(Integer id, Integer page, Integer limit) {
+        if (page > 0 && limit > 0) {
+            GoodsCategory goodsCategory = goodsInfoService.getGoodsCategoryById(id);
+            if (goodsCategory != null) {
+                List<Goods> listGoods = goodsInfoService.listGoodsForSaleByCategoryId(id, page, limit);
+                List<GoodsPo> retListGoodsPo = new ArrayList<GoodsPo>(listGoods.size());
+                for (Goods goods : listGoods) {
+                    retListGoodsPo.add(goods);
+                }
+                Object retObj = ResponseUtil.ok(retListGoodsPo);
+                return retObj;
+            } else {
+                Object retObj = ResponseUtil.fail(776, "该分类不存在，获取商品列表失败");
+                return retObj;
+            }
+        } else {
+            Object retObj = ResponseUtil.fail(776, "分页参数错误，获取商品列表失败");
+            return retObj;
+        }
     }
 
     /**
-     * 管理员或用户根据品牌id搜索该品牌下的所有商品
+     * 4.用户根据品牌id搜索该品牌下的所有商品（无法看到下架商品）
      *
-     * @param id:Integer(PathVariable
-     * @param page:                   Integer 第几页
-     * @param limit:                  Integer 一页多少
-     * @return List<GoodsPo>，搜索到的商品的列表
-     */
-    @GetMapping("/brands/{id}/goods")
-    public Object ListGoodsByBrandId(@PathVariable Integer id,
-                                     @RequestParam Integer page,
-                                     @RequestParam Integer limit) {
-        return null;
-    }
-
-    /**
-     * 管理员新建商品
-     *
-     * @param goodsPo：GoodsPo(RequestBody
-     * @return GoodsPo，新建的商品
-     */
-    @PostMapping("/goods")
-    public Object addGoods(@RequestBody GoodsPo goodsPo) {
-        return null;
-    }
-
-    /**
-     * 管理员根据id修改商品
-     *
-     * @param id：Integer(PathVariable
-     * @param goodsPo:GoodsPo(RequestBody
-     * @return GoodsPo，修改后的商品
-     */
-    @PutMapping("/goods/{id}")
-    public Object updateGoodsById(@PathVariable Integer id,
-                                  @RequestBody GoodsPo goodsPo) {
-        return null;
-    }
-
-    /**
-     * 管理员根据id删除商品
-     *
-     * @param id：Integer(PathVariable
-     * @return ResponseUtil.ok(xxx)或者ResponseUtil.fail(xxx)
-     */
-    @DeleteMapping("/goods/{id}")
-    public Object deleteGoodsById(@PathVariable Integer id) {
-        return null;
-    }
-    //-----------------Goods---------------Goods-----------Goods---------
-    //-----------------Goods---------------Goods-----------Goods---------
-
-    //-----------------Product-------------Product-------------Product--------
-
-    /**
-     * 管理员根据id搜索产品
-     *
-     * @param id:Integer(PathVariable
-     * @return Product，搜索到的产品
-     */
-    @GetMapping("/products/{id}")
-    public Object getProductById(@PathVariable Integer id) {
-        return null;
-    }
-
-    /**
-     * 管理员搜索某个商品下的所有产品
-     *
-     * @param id:Integer(PathVariable
-     * @param page:Integer            第几页
-     * @param limit:Integer           一页多少
-     * @return List<ProductPo>，所属该商品的产品列表
-     */
-    @GetMapping("/goods/{id}/products")
-    public Object listProductsByGoodsId(@PathVariable Integer id,
-                                        @RequestParam Integer page,
-                                        @RequestParam Integer limit) {
-        return null;
-    }
-
-    /**
-     * 管理员新建某个商品下的产品
-     *
-     * @param id:Integer(PathVariable
-     * @param productPo:ProductPo(RequestBody
-     * @return ProductPo，新建的商品
-     */
-    @PostMapping("/goods/{id}/products")
-    public Object addProduct(@PathVariable Integer id,
-                             @RequestBody ProductPo productPo) {
-        return null;
-    }
-
-    /**
-     * 管理员根据id修改产品
-     *
-     * @param id:Integer(PathVariable
-     * @param productPo:ProductPo(RequestBody
-     * @return ProductPo，修改后的产品
-     */
-    @PutMapping("/products/{id}")
-    public Object updateProductById(@PathVariable Integer id,
-                                    @RequestBody ProductPo productPo) {
-        return null;
-    }
-
-    /**
-     * 管理员根据id删除产品
-     *
-     * @param id:Integer(PathVariable
-     * @return ResponseUtil.ok(xxx)或者ResponseUtil.fail(xxx)
-     */
-    @DeleteMapping("/products/{id}")
-    public Object deleteProductById(@PathVariable Integer id) {
-        return null;
-    }
-
-    //-----------------Product-------------Product-------------Product--------
-    //-----------------Product-------------Product-------------Product--------
-
-
-    //-----------------Brand---------------Brand-----------Brand---------
-
-    /**
-     * 管理员或用户根据id搜索品牌
-     *
-     * @param id:Integer(PathVariable
-     * @return Brand
-     */
-    @GetMapping("/brands/{id}")
-    public Object getBrandById(@PathVariable Integer id) {
-        return null;
-    }
-
-    /**
-     * 管理员根据条件搜索品牌
-     *
-     * @param brandId:String   品牌的id
-     * @param brandName:String 品牌的名字
-     * @param page:            Integer 第几页
-     * @param limit:           Integer 一页多少
-     * @return List<BrandPo>,搜索到的品牌列表
-     */
-    @GetMapping("/admins/brands")
-    public Object listBrandsByCondition(@RequestParam String brandId,
-                                        @RequestParam String brandName,
-                                        @RequestParam Integer page,
-                                        @RequestParam Integer limit) {
-        return null;
-    }
-
-    /**
-     * 用户搜索所有品牌
-     *
-     * @param page:  Integer 第几页
-     * @param limit: Integer 一页多少
-     * @return List<BrandPo>,搜索到的品牌列表
-     */
-    @GetMapping("/brands")
-    public Object listBrandsByCondition(@RequestParam Integer page,
-                                        @RequestParam Integer limit) {
-        return null;
-    }
-
-    /**
-     * 管理员创建品牌
-     *
-     * @param brandPo:BrandPo 要添加的品牌(body包含name、description、picURL(上传图片产生))
-     * @return BrandPo
-     */
-    @PostMapping("/brands")
-    public Object addBrand(@RequestBody BrandPo brandPo) {
-        return null;
-    }
-
-    /**
-     * 管理员修改品牌
-     *
-     * @param id：Integer（PathVariable
-     * @param brandPo：BrandPo（RequestBody)(body包含name、description、picURL(上传图片产生))
-     * @return BrandPo
-     */
-    @PutMapping("/brands/{id}")
-    public Object updateBrandById(@PathVariable Integer id, @RequestBody BrandPo brandPo) {
-        return null;
-    }
-
-    /**
-     * 管理员根据id删除品牌
-     *
-     * @param id：Integer
-     * @return ResponseUtil.ok(xxx)或者ResponseUtil.fail(xxx)
-     */
-    @DeleteMapping("/brands/{id}")
-    public Object deleteBrandById(@PathVariable Integer id) {
-        return null;
-    }
-
-    //-----------------Brand---------------Brand-----------Brand---------
-    //-----------------Brand---------------Brand-----------Brand---------
-
-    //-----------------GoodsCategory---------------GoodsCategory-----------GoodsCategory---------
-
-    /**
-     * 管理员或用户根据id搜索分类
-     *
-     * @param id：Integer
-     * @return GoodsCategory
-     */
-    @GetMapping("/categories/{id}")
-    public Object getGoodsCategoryById(@PathVariable Integer id) {
-        return null;
-    }
-
-    /**
-     * 管理员或用户搜索所有分类
-     *
-     * @param page:  Integer 第几页
-     * @param limit: Integer 一页多少
-     * @return List<GoodsCategoryPo>
-     */
-    @GetMapping("/categories")
-    public Object listGoodsCategories(@RequestParam Integer page,
-                                      @RequestParam Integer limit) {
-        return null;
-    }
-
-    /**
-     * 内部接口————————搜索所有一级分类
-     *
-     * @param page:  Integer 第几页
-     * @param limit: Integer 一页多少
-     * @return List<GoodsCategoryPo>
-     */
-    @GetMapping("/categories/l1")
-    public Object listOneLevelGoodsCategories(@RequestParam Integer page,
-                                              @RequestParam Integer limit) {
-        return null;
-    }
-
-    /**
-     * 管理员或用户搜索某一级分类下的所有二级分类
-     *
-     * @param id：Integer
+     * @param id:Integer
      * @param page:      Integer 第几页
      * @param limit:     Integer 一页多少
-     * @return List<GoodsCategoryPo>
+     * @return List<GoodsPo>，搜索到的商品的列表
      */
-    @GetMapping("/categories/l1/{id}/l2")
-    public Object listSecondLevelGoodsCategoryById(@PathVariable Integer id,
-                                                   @RequestParam Integer page,
-                                                   @RequestParam Integer limit) {
-        return null;
+    public Object listGoodsForSaleByBrandId(Integer id, Integer page, Integer limit) {
+        if (page > 0 && limit > 0) {
+            Brand brand = goodsInfoService.getBrandById(id);
+            if (brand != null) {
+                List<Goods> listGoods = goodsInfoService.listGoodsForSaleByBrandId(id, page, limit);
+                List<GoodsPo> retListGoodsPo = new ArrayList<GoodsPo>(listGoods.size());
+                for (Goods goods1 : listGoods) {
+                    retListGoodsPo.add(goods1);
+                }
+                Object retObj = ResponseUtil.ok(retListGoodsPo);
+                return retObj;
+            } else {
+                Object retObj = ResponseUtil.fail(776, "该品牌不存在，获取商品列表失败");
+                return retObj;
+            }
+        } else {
+            Object retObj = ResponseUtil.fail(776, "分页参数错误，获取商品列表失败");
+            return retObj;
+        }
     }
 
     /**
-     * 管理员新建分类
-     *
-     * @param goodsCategoryPo：GoodsCategoryPo(body包含name、pid(可以为空) 、picURL(上传图片产生))
-     * @return GoodsCategoryPo
-     */
-    @PostMapping("/categories")
-    public Object addGoodsCategory(@RequestBody GoodsCategoryPo goodsCategoryPo) {
-        return null;
-    }
-
-    /**
-     * 管理员修改分类
-     *
-     * @param id：Integer
-     * @param goodsCategoryPo：GoodsCategoryPo(body包含name、pid(可以为空)、picURL(上传图片产生))
-     * @return GoodsCategoryPo
-     */
-    @PutMapping("/categories/{id}")
-    public Object updateGoodsCategoryById(@PathVariable Integer id,
-                                          @RequestBody GoodsCategoryPo goodsCategoryPo) {
-        return null;
-    }
-
-    /**
-     * 管理员删除分类
+     * 1.判断商品是否在售（内部接口）
      *
      * @param id：Integer
-     * @return ResponseUtil.ok(xxx)或者ResponseUtil.fail(xxx)
+     * @return Boolean
      */
-    @DeleteMapping("/categories/{id}")
-    public Object deleteGoodsCategory(@PathVariable Integer id) {
-        return null;
+    public Object isGoodsOnSale(Integer id) {
+        Goods goods = goodsInfoService.getGoodsById(id);
+        if (goods != null) {
+            if (goods.getStatusCode() != 0) {
+                Object retObj = ResponseUtil.ok(true);
+                return retObj;
+            } else {
+                Object retObj = ResponseUtil.ok(false);
+                return retObj;
+            }
+        } else {
+            Object retObj = ResponseUtil.fail(775, "该商品不存在");
+            return retObj;
+        }
     }
-    //-----------------GoodsCategory---------------GoodsCategory-----------GoodsCategory---------
-    //-----------------GoodsCategory---------------GoodsCategory-----------GoodsCategory---------
+
+    /**
+     * 2.根据id搜索商品(内部接口)
+     *
+     * @param id：Integer
+     * @return GoodsPo（不可获取下架商品）
+     */
+    public Object getGoodsInnerById(Integer id) {
+        Goods retGoods = goodsInfoService.getGoodsInnerById(id);
+        if (retGoods != null) {
+            Object retObj = ResponseUtil.ok(retGoods);
+            return retObj;
+        } else {
+            Object retObj = ResponseUtil.fail(775, "该商品不存在");
+            return retObj;
+        }
+    }
+
+    /**
+     * 将GoodsPo转换成Goods对象
+     */
+    private Goods goodsConverter(GoodsPo goodsPo) {
+        Goods goods = new Goods();
+        return Copyer.Copy(goodsPo, goods) ? goods : null;
+    }
 }

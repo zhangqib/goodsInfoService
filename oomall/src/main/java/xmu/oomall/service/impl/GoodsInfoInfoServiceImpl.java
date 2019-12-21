@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xmu.oomall.dao.*;
 import xmu.oomall.domain.*;
-import xmu.oomall.service.GoodsService;
+import xmu.oomall.service.GoodsInfoService;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import java.util.List;
  */
 
 @Service
-public class GoodsServiceImpl implements GoodsService {
+public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
     @Autowired
     private GoodsDAO goodsDao;
     @Autowired
@@ -70,13 +70,13 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Goods updateGoodsById(Goods goods) {
-        Goods goods1=goodsDao.selectById(goods.getId());
-        if(goods1!=null){
-            if(goods1.getStatusCode()!=0
-                    &&goods.getStatusCode()==0){
+        Goods goods1 = goodsDao.selectById(goods.getId());
+        if (goods1 != null) {
+            if (goods1.getStatusCode() != 0
+                    && goods.getStatusCode() == 0) {
                 //去其他服务查看活动是否下线
                 //如果活动下线则下架 否则失败
-                if(true){
+                if (true) {
                     return goodsDao.updateById(goods);
                 }
             }
@@ -92,11 +92,11 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public boolean deleteGoodsById(Integer id) {
-        Goods goods=goodsDao.selectById(id);
-        if(goods!=null){
-            if(goods.getStatusCode()==0){
-                boolean ret=goodsDao.deleteById(id);
-                if(ret){
+        Goods goods = goodsDao.selectById(id);
+        if (goods != null) {
+            if (goods.getStatusCode() == 0) {
+                boolean ret = goodsDao.deleteById(id);
+                if (ret) {
                     return true;
                 }
             }
@@ -172,7 +172,7 @@ public class GoodsServiceImpl implements GoodsService {
     public Boolean isGoodsOnSale(Integer id) {
         Goods goods = goodsDao.selectById(id);
         if (goods != null) {
-            if(goods.getStatusCode()!=0){
+            if (goods.getStatusCode() != 0) {
                 return true;
             }
         }
