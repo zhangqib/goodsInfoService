@@ -105,6 +105,15 @@ public class GoodsPo implements Serializable {
     public String getProductRedisKeys() {
         return "Goods:Id" + this.id + ":Product:Ids";
     }
+
+    static public String getRedisKey(Integer id) {
+        return "Goods:Id:" + id;
+    }
+
+    static public String getProductRedisKeys(Integer id) {
+        return "Goods:Id" + id + ":Product:Ids";
+    }
+
     public GoodsPo(Goods goods) {
         this.id = goods.getId();
         this.name = goods.getName();
@@ -129,6 +138,4 @@ public class GoodsPo implements Serializable {
         this.gmtModified = goods.getGmtModified();
     }
 
-    public GoodsPo() {
-    }
 }
