@@ -1,7 +1,9 @@
 package xmu.oomall.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import xmu.oomall.controller.feign.LogClientService;
 import xmu.oomall.domain.*;
@@ -21,10 +23,10 @@ import java.util.List;
  * @create 2019/12/20
  */
 
-@Configuration
+@Component
 public class GoodsController {
-    //@Autowired
-   // private LogClientService logClientService;
+    @Autowired
+   private LogClientService logClientService;
     @Autowired
     private GoodsInfoService goodsInfoService;
 

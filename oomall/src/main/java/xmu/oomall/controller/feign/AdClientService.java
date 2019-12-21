@@ -25,7 +25,6 @@ public interface AdClientService {
     @RequestMapping(value="/ads/{id}",method = RequestMethod.GET)
     public Object getAdById(@PathVariable Integer id);
     @DeleteMapping("/ads/{id}")
-
     public Object deleteAdById(@PathVariable Integer id);
 
 

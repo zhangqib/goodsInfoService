@@ -27,6 +27,11 @@ public class Goods extends GoodsPo {
     private ShareRule shareRule;
     private PresaleRule presaleRule;
 
+
+    public Goods() {
+        super();
+    }
+
     public Goods(Goods goods) {
         super(goods);
     }
@@ -34,11 +39,6 @@ public class Goods extends GoodsPo {
     @Override
     public String toString() {
         return super.toString();
-    }
-
-    public Goods() {
-        this.setGmtCreate(LocalDateTime.now());
-        this.setGmtModified(LocalDateTime.now());
     }
 
     public void setModified() {
