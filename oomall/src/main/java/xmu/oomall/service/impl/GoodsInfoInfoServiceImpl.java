@@ -254,13 +254,13 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
                 goods.setPrice(temp);
                 goodsDao.updateById(goods);
             }
-            boolean ret = productDao.deleteById(product.getId());
+            boolean ret = productDao.deleteById(product);
             return ret;
         } else if (productList.size() == 1) {
             GoodsPo goods = goodsDao.selectById(product.getGoodsId());
             Boolean ret = pullOffGoods(goods);
             if (ret) {
-                boolean ret2 = productDao.deleteById(product.getId());
+                boolean ret2 = productDao.deleteById(product);
                 return ret2;
             }
         }
@@ -393,7 +393,7 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      */
     @Override
     public List<BrandPo> listBrandsByCondition(Integer page, Integer limit) {
-        return brandDao.selectBrandsByCondition(null, null, page, limit);
+        return brandDao.selectAll(page,limit);
     }
 
     /**

@@ -65,6 +65,12 @@ public class BrandController {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 0, "查询品牌", 1, null);
             //logClientService.addLog(log);
+            if(brandId==""){
+                brandId=null;
+            }
+            if(brandName==""){
+                brandName=null;
+            }
             List<BrandPo> retBrandList = goodsInfoService.listBrandsByCondition(brandId, brandName, page, limit);
             Object retObj = ResponseUtil.ok(retBrandList);
             return retObj;
@@ -210,8 +216,7 @@ public class BrandController {
      * @return List<BrandPo>,搜索到的品牌列表
      */
     @GetMapping("/brands")
-    public Object listBrandsByCondition(Integer page,
-                                        Integer limit) {
+    public Object listBrandsByCondition(Integer page, Integer limit) {
         if (page > 0 && limit > 0) {
             List<BrandPo> retBrandList = goodsInfoService.listBrandsByCondition(page, limit);
             Object retObj = ResponseUtil.ok(retBrandList);

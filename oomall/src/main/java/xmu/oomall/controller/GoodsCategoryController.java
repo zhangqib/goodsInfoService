@@ -56,8 +56,7 @@ public class GoodsCategoryController {
      * @return List<GoodsCategoryPo>
      */
     @GetMapping("/categories")
-    public Object listGoodsCategories(Integer page, Integer limit,
-                                      HttpServletRequest request) {
+    public Object listGoodsCategories(Integer page, Integer limit, HttpServletRequest request) {
         if (page > 0 && limit > 0) {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 0, "查询分类", 1, null);

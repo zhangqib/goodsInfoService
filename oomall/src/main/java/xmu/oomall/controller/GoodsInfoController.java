@@ -170,7 +170,7 @@ public class GoodsInfoController {
                                             @RequestParam(defaultValue = "10", name = "limit") Integer limit) {
         return goodsController.listGoodsForSaleByBrandId(id, page, limit);
     }
- 
+
     /**
      * 1.判断商品是否在售（内部接口）
      *
