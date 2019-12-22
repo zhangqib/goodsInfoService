@@ -6,8 +6,8 @@ spring:
     name: GoodsInfoService
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/oomall?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC
-    username: root
+    url: jdbc:mysql://handsomeyida.xyz:3306/oomall?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC
+    username: oomallUser
     password: 123456
     druid:
       #初始化时建立物理连接的个数
@@ -41,7 +41,7 @@ eureka:
   instance:
     preferIpAddress: true
     instance-id: GoodsInfoService8088
-    ip-address: handsomeyida.xyz
+    ip-address: 39.106.136.106
 
 
 mybatis:

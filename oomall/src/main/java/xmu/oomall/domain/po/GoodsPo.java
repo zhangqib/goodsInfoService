@@ -98,19 +98,19 @@ public class GoodsPo implements Serializable {
     private LocalDateTime gmtCreate;
     private LocalDateTime gmtModified;
 
-    public String getRedisKey() {
+    public String gemRedisKey() {
         return "Goods:Id:" + this.id;
     }
 
-    public String getProductRedisKeys() {
+    public String gemProductRedisKeys() {
         return "Goods:Id:" + this.id + ":Product:Ids";
     }
 
-    static public String getRedisKey(Integer id) {
+    static public String gemRedisKey(Integer id) {
         return "Goods:Id:" + id;
     }
 
-    static public String getProductRedisKeys(Integer id) {
+    static public String gemProductRedisKeys(Integer id) {
         return "Goods:Id:" + id + ":Product:Ids";
     }
 

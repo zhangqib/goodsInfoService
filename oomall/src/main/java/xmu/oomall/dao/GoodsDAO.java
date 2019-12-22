@@ -89,14 +89,14 @@ public class GoodsDAO {
     public boolean deleteById(Integer id) {
         List<ProductPo> products = productMapper.selectByGoodsId(id);
         for (ProductPo product : products) {
-            iRedisService.remove(product.getRedisKey());
+            iRedisService.remove(product.gemRedisKey());
             if (productMapper.deleteByPrimaryKey(product.getId()) == 0) {
                 return false;
             }
         }
-        iRedisService.remove(GoodsPo.getRedisKey(id));
-        iRedisService.remove(GoodsPo.getProductRedisKeys(id));
-        iRedisService.remove(ProductPo.getGoodsRedisKey(id));
+        iRedisService.remove(GoodsPo.gemRedisKey(id));
+        iRedisService.remove(GoodsPo.gemProductRedisKeys(id));
+        iRedisService.remove(ProductPo.gemGoodsRedisKey(id));
         return goodsMapper.deleteByPrimaryKey(id) == 1;
     }
 
@@ -107,13 +107,13 @@ public class GoodsDAO {
      * @return Goods
      */
     public GoodsPo selectById(Integer id) {
-        GoodsPo redisGoods = (GoodsPo)iRedisService.get(GoodsPo.getRedisKey(id));
+        GoodsPo redisGoods = (GoodsPo)iRedisService.get(GoodsPo.gemRedisKey(id));
         if (redisGoods == null) {
             GoodsPo goods = goodsMapper.selectByPrimaryKey(id);
             if (goods == null) {
                 return null;
             }
-            iRedisService.set(goods.getRedisKey(), goods);
+            iRedisService.set(goods.gemRedisKey(), goods);
             return goods;
         } else {
             return redisGoods;
@@ -135,14 +135,14 @@ public class GoodsDAO {
     }
 
     public GoodsPo selectByProductId(Integer productId) {
-        GoodsPo redisGoods = (GoodsPo) iRedisService.get(ProductPo.getGoodsRedisKey(productId));
+        GoodsPo redisGoods = (GoodsPo) iRedisService.get(ProductPo.gemGoodsRedisKey(productId));
         if (redisGoods == null) {
             ProductPo product = productDAO.selectById(productId);
             if (product == null) {
                 return null;
             } else {
                 GoodsPo goods = selectById(product.getGoodsId());
-                iRedisService.set(product.getGoodsRedisKey(), goods);
+                iRedisService.set(product.gemGoodsRedisKey(), goods);
                 return goods;
             }
         } else {
@@ -168,10 +168,10 @@ public class GoodsDAO {
         // 判断是否有可更新的属性(若是空对象，只有id会出错）
         // 感觉应该放在controller
 
-        iRedisService.remove(goods.getRedisKey());
+        iRedisService.remove(goods.gemRedisKey());
         List<ProductPo> products = productMapper.selectByGoodsId(goods.getId());
         for (ProductPo product: products) {
-            iRedisService.remove(product.getGoodsRedisKey());
+            iRedisService.remove(product.gemGoodsRedisKey());
         }
         return goodsMapper.selectByPrimaryKey(goods.getId());
     }

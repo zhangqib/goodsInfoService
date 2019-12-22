@@ -2,11 +2,12 @@ package xmu.oomall.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import xmu.oomall.controller.feign.LogClientService;
 import xmu.oomall.domain.*;
-import xmu.oomall.domain.po.*;
-import xmu.oomall.service.*;
-
+import xmu.oomall.domain.po.BrandPo;
+import xmu.oomall.domain.po.GoodsCategoryPo;
+import xmu.oomall.domain.po.GoodsPo;
+import xmu.oomall.domain.po.ProductPo;
+import xmu.oomall.service.GoodsInfoService;
 import xmu.oomall.util.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,15 +38,15 @@ public class GoodsController {
             Goods goodsPojo = new Goods(goods);
             //Brand
             BrandPo brandPo = goodsInfoService.getBrandById(goods.getBrandId());
-            goodsPojo.setBrandPo(new Brand(brandPo));
+            goodsPojo.setBrandPo(brandPo);
             //GoodsCategory
             GoodsCategoryPo goodsCategoryPo = goodsInfoService.getGoodsCategoryById(goods.getGoodsCategoryId());
             goodsPojo.setGoodsCategoryPo(goodsCategoryPo);
-            //goodsPojo.setGrouponRule();-----------------------
-            //goodsPojo.setPresaleRule();-----------------------
+            goodsPojo.setGrouponRule(null);
+            goodsPojo.setPresaleRule(null);
             List<ProductPo> retProductPoList = goodsInfoService.listProductsByGoodsId(id, 1, Integer.MAX_VALUE);
             goodsPojo.setProductPoList(retProductPoList);
-            //goods.setShareRule();-------------------------
+            goodsPojo.setShareRule(null);
             Object retObj = ResponseUtil.ok(goodsPojo);
             return retObj;
         } else {
@@ -218,15 +219,15 @@ public class GoodsController {
             Goods goodsPojo = new Goods(goods);
             //Brand
             BrandPo brandPo = goodsInfoService.getBrandById(goods.getBrandId());
-            goodsPojo.setBrandPo(new Brand(brandPo));
+            goodsPojo.setBrandPo(brandPo);
             //GoodsCategory
             GoodsCategoryPo goodsCategoryPo = goodsInfoService.getGoodsCategoryById(goods.getGoodsCategoryId());
             goodsPojo.setGoodsCategoryPo(goodsCategoryPo);
-            //goodsPojo.setGrouponRule();-----------------------
-            //goodsPojo.setPresaleRule();-----------------------
+            goodsPojo.setGrouponRule(null);
+            goodsPojo.setPresaleRule(null);
             List<ProductPo> retProductPoList = goodsInfoService.listProductsByGoodsId(id, 1, Integer.MAX_VALUE);
             goodsPojo.setProductPoList(retProductPoList);
-            //goods.setShareRule();-------------------------
+            goodsPojo.setShareRule(null);
             Object retObj = ResponseUtil.ok(goodsPojo);
             return retObj;
         } else {

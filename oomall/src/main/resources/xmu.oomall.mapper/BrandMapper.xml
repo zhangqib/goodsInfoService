@@ -41,7 +41,7 @@
     select 
     <include refid="Base_Column_List" />
     from `oomall_brand`
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT} and is_deleted = 0
   </select>
   <select id="selectAll" resultMap="BrandMap">
     select

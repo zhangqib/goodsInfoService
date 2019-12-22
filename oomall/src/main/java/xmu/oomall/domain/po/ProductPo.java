@@ -87,19 +87,19 @@ public class ProductPo implements Serializable {
     }
 
 
-    public String getRedisKey() {
+    public String gemRedisKey() {
         return "Product:Id:" + this.id;
     }
 
-    public String getGoodsRedisKey() {
+    public String gemGoodsRedisKey() {
         return "Product:Id:" + this.id + ":Goods:Id";
     }
 
-    static public String getRedisKey(Integer id) {
+    static public String gemRedisKey(Integer id) {
         return "Product:Id:" + id;
     }
 
-    static public String getGoodsRedisKey(Integer id) {
+    static public String gemGoodsRedisKey(Integer id) {
         return "Product:Id:"+id+":Goods:Id";
     }
 }

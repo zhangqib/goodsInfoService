@@ -21,7 +21,6 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping(value = "/goodsInfoService")
 public class GoodsInfoController {
     @Autowired
     private AdClientService adClientService;

@@ -127,7 +127,7 @@ public class BrandController {
     @PutMapping("/brands/{id}")
     public Object updateBrandById(Integer id, BrandPo brandPo, HttpServletRequest request) {
         if (brandPo != null) {
-            BrandPo brand = goodsInfoService.getBrandById(brandPo.getId());
+            BrandPo brand = goodsInfoService.getBrandById(id);
             if (brand != null) {
                 brandPo.setId(id);
                 BrandPo retBrand = goodsInfoService.updateBrandById(brandPo);
@@ -188,7 +188,7 @@ public class BrandController {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 3, "删除品牌", 0, null);
             //logClientService.addLog(log);
-            Object retObj = ResponseUtil.fail(793, "该品牌不存在,品牌删除失败");
+            Object retObj = ResponseUtil.fail(794, "该品牌不存在,品牌删除失败");
             return retObj;
         }
     }

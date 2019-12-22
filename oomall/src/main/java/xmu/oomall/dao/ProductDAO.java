@@ -50,9 +50,9 @@ public class ProductDAO {
         if (product.getBeDeleted()) {
             return false;
         }
-        iRedisService.remove(product.getRedisKey());
-        iRedisService.remove(product.getGoodsRedisKey());
-        iRedisService.remove(GoodsPo.getProductRedisKeys(product.getGoodsId()));
+        iRedisService.remove(product.gemRedisKey());
+        iRedisService.remove(product.gemGoodsRedisKey());
+        iRedisService.remove(GoodsPo.gemProductRedisKeys(product.getGoodsId()));
         return productMapper.deleteByPrimaryKey(product.getId()) == 1;
     }
 
@@ -67,11 +67,11 @@ public class ProductDAO {
      * @return product
      */
     public ProductPo selectById(Integer id) {
-        ProductPo product = (ProductPo) iRedisService.get(ProductPo.getRedisKey(id));
+        ProductPo product = (ProductPo) iRedisService.get(ProductPo.gemRedisKey(id));
         if (product == null) {
             product =  productMapper.selectByPrimaryKey(id);
             if (product != null) {
-                iRedisService.set(product.getRedisKey(), product);
+                iRedisService.set(product.gemRedisKey(), product);
             }
         }
         return product;
@@ -88,7 +88,7 @@ public class ProductDAO {
         PageHelper.startPage(page,limit);
         List<ProductPo> productPos = new ArrayList<>();
 
-        List<String> productIds = iRedisService.sget(GoodsPo.getProductRedisKeys(id));
+        List<String> productIds = iRedisService.sget(GoodsPo.gemProductRedisKeys(id));
         if (productIds.isEmpty()) {
             productPos = productMapper.selectByGoodsId(id);
             if (productPos.size() == 0) {
@@ -97,7 +97,7 @@ public class ProductDAO {
             for (ProductPo productPo: productPos) {
                 productIds.add(productPo.getId().toString());
             }
-            iRedisService.sadd(GoodsPo.getProductRedisKeys(id), productIds);
+            iRedisService.sadd(GoodsPo.gemProductRedisKeys(id), productIds);
         } else {
             for (String productId: productIds) {
                 productPos.add(selectById(Integer.valueOf(productId)));
@@ -126,7 +126,7 @@ public class ProductDAO {
         if (productMapper.updateByPrimaryKey(product) == 0) {
             return null;
         }
-        iRedisService.remove(product.getRedisKey());
+        iRedisService.remove(product.gemRedisKey());
         return productMapper.selectByPrimaryKey(product.getId());
     }
 

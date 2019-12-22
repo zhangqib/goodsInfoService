@@ -25,7 +25,7 @@
     select 
     <include refid="Base_Column_List" />
     from `oomall_goods_category`
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT} and is_deleted != 1
   </select>
   <select id="selectOneLevelGoodsCategories" resultMap="GoodsCategoryMap">
     select
