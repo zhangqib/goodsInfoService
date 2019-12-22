@@ -336,7 +336,7 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      * @return List<BrandPo>,搜索到的品牌列表
      */
     @Override
-    public List<BrandPo> listBrandsByCondition(String brandId, String brandName, Integer page, Integer limit) {
+    public List<BrandPo> listBrandsByCondition(Integer brandId, String brandName, Integer page, Integer limit) {
         return brandDao.selectBrandsByCondition(brandId, brandName, page, limit);
     }
 

@@ -65,13 +65,16 @@ public class BrandController {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 0, "查询品牌", 1, null);
             //logClientService.addLog(log);
+            Integer brandId2;
             if(brandId==""){
-                brandId=null;
+                brandId2=null;
+            }else{
+                brandId2=Integer.parseInt(brandId);
             }
             if(brandName==""){
                 brandName=null;
             }
-            List<BrandPo> retBrandList = goodsInfoService.listBrandsByCondition(brandId, brandName, page, limit);
+            List<BrandPo> retBrandList = goodsInfoService.listBrandsByCondition(brandId2, brandName, page, limit);
             Object retObj = ResponseUtil.ok(retBrandList);
             return retObj;
         } else {
