@@ -157,26 +157,18 @@ public class ProductController {
     public Object deleteProductById(Integer id, HttpServletRequest request) {
         ProductPo product = goodsInfoService.getProductById(id);
         if (product != null) {
-            if (!product.getBeDeleted()) {
-                boolean ret = goodsInfoService.deleteProductById(product);
-                if (ret) {
-                    Log log = new Log(request.getIntHeader("userId"),
-                            request.getHeader("ip"), 3, "删除产品", 1, null);
-                    //logClientService.addLog(log);
-                    Object retObj = ResponseUtil.ok();
-                    return retObj;
-                } else {
-                    Log log = new Log(request.getIntHeader("userId"),
-                            request.getHeader("ip"), 3, "删除产品", 0, null);
-                    //logClientService.addLog(log);
-                    Object retObj = ResponseUtil.fail(783, "数据库操作失败,产品删除失败");
-                    return retObj;
-                }
+            boolean ret = goodsInfoService.deleteProductById(product);
+            if (ret) {
+                Log log = new Log(request.getIntHeader("userId"),
+                        request.getHeader("ip"), 3, "删除产品", 1, null);
+                //logClientService.addLog(log);
+                Object retObj = ResponseUtil.ok();
+                return retObj;
             } else {
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 3, "删除产品", 0, null);
                 //logClientService.addLog(log);
-                Object retObj = ResponseUtil.fail(783, "该产品已删除,产品删除失败");
+                Object retObj = ResponseUtil.fail(783, "数据库操作失败,产品删除失败");
                 return retObj;
             }
         } else {

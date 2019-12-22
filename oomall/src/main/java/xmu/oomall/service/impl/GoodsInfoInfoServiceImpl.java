@@ -91,16 +91,19 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      * @return boolean
      */
     @Override
-    public boolean deleteGoodsById(GoodsPo goods) {
+    public Integer deleteGoodsById(GoodsPo goods) {
         if (goods != null) {
             if (goods.getStatusCode() == 0) {
                 boolean ret = goodsDao.deleteById(goods.getId());
                 if (ret) {
-                    return true;
+
+                    return 1;
                 }
+            } else {
+                return 0;
             }
         }
-        return false;
+        return -1;
     }
 
     /**
@@ -113,7 +116,7 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
     public GoodsPo getGoodsForSaleById(Integer id) {
         GoodsPo goods = goodsDao.selectById(id);
         if (goods != null) {
-            if (goods.getStatusCode() != 0) {
+            if (goods.getStatusCode() > 0) {
                 //1.获取userId
                 //2.有的话调用足迹服务（@PostMapping("/footprints") ），没有的话跳过
                 return goods;
@@ -240,29 +243,11 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      */
     @Override
     public boolean deleteProductById(ProductPo product) {
-        List<ProductPo> productList = productDao.selectByGoodsId(product.getGoodsId(), 1, Integer.MAX_VALUE);
-        if (productList.size() > 1) {
-            GoodsPo goods = goodsDao.selectById(product.getGoodsId());
-            productList.remove(product);
-            BigDecimal temp = new BigDecimal(999999999);
-            for (ProductPo product1 : productList) {
-                if (product1.getPrice().compareTo(temp) == -1) {
-                    temp = product1.getPrice();
+        if (product != null) {
+                boolean ret = productDao.deleteById(product);
+                if (ret) {
+                    return true;
                 }
-            }
-            if (goods.getPrice().compareTo(temp) == -1) {
-                goods.setPrice(temp);
-                goodsDao.updateById(goods);
-            }
-            boolean ret = productDao.deleteById(product);
-            return ret;
-        } else if (productList.size() == 1) {
-            GoodsPo goods = goodsDao.selectById(product.getGoodsId());
-            Boolean ret = pullOffGoods(goods);
-            if (ret) {
-                boolean ret2 = productDao.deleteById(product);
-                return ret2;
-            }
         }
         return false;
     }
@@ -297,6 +282,7 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      */
     @Override
     public boolean updateStockByProductId(List<OrderItem> orderItemList, boolean operation) {
+        boolean flag=true;
         if (operation) {
             for (OrderItem orderItem : orderItemList) {
                 boolean ret = productDao.descStock(orderItem.getProductId(), -orderItem.getNumber());
@@ -306,10 +292,13 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
             }
         } else {
             for (OrderItem orderItem : orderItemList) {
-                boolean ret = productDao.descStock(orderItem.getProductId(), -orderItem.getNumber());
+                boolean ret = productDao.descStock(orderItem.getProductId(), orderItem.getNumber());
                 if (ret) {
-                    return true;
+                    flag=false;
                 }
+            }
+            if(flag){
+                return true;
             }
         }
         return false;
@@ -393,7 +382,7 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      */
     @Override
     public List<BrandPo> listBrandsByCondition(Integer page, Integer limit) {
-        return brandDao.selectAll(page,limit);
+        return brandDao.selectAll(page, limit);
     }
 
     /**

@@ -58,9 +58,9 @@ public interface GoodsInfoService {
      * 5.管理员根据id删除商品
      *
      * @param goods
-     * @return boolean
+     * @return Integer
      */
-    boolean deleteGoodsById(GoodsPo goods);
+    Integer deleteGoodsById(GoodsPo goods);
 
     /**
      * 1.用户根据id搜索商品

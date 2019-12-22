@@ -172,18 +172,24 @@ public class GoodsController {
     public Object deleteGoodsById(Integer id, HttpServletRequest request) {
         GoodsPo goods = goodsInfoService.getGoodsById(id);
         if (goods != null) {
-            boolean ret = goodsInfoService.deleteGoodsById(goods);
-            if (ret) {
+            Integer ret = goodsInfoService.deleteGoodsById(goods);
+            if (ret==1) {
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 3, "删除商品", 1, null);
                 //logClientService.addLog(log);
                 Object retObj = ResponseUtil.ok();
                 return retObj;
-            } else {
+            } else if(ret==-1){
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 3, "删除商品", 0, null);
                 //logClientService.addLog(log);
                 Object retObj = ResponseUtil.fail(773, "数据库操作失败,商品删除失败");
+                return retObj;
+            }else{
+                Log log = new Log(request.getIntHeader("userId"),
+                        request.getHeader("ip"), 3, "删除商品", 0, null);
+                //logClientService.addLog(log);
+                Object retObj = ResponseUtil.fail(773, "该商品未下架,商品删除失败");
                 return retObj;
             }
         } else {
@@ -202,7 +208,7 @@ public class GoodsController {
      * @return Goods（不可获取下架商品）
      */
     public Object getGoodsForSaleById(Integer id) {
-        GoodsPo goods = goodsInfoService.getGoodsById(id);
+        GoodsPo goods = goodsInfoService.getGoodsForSaleById(id);
         if (goods != null) {
             Goods goodsPojo = new Goods(goods);
             //Brand
