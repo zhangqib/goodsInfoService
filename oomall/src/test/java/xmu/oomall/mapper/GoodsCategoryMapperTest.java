@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import xmu.oomall.domain.po.GoodsCategoryPo;
 
 import java.time.LocalDateTime;
@@ -17,7 +18,7 @@ class GoodsCategoryMapperTest {
 
     @Test
     void deleteByPrimaryKey() {
-        System.out.println(goodsCategoryMapper.deleteByPrimaryKey(7));
+        Assert.isTrue(goodsCategoryMapper.deleteByPrimaryKey(123) == 1, "delete category failed");
     }
 
     @Test
@@ -29,32 +30,37 @@ class GoodsCategoryMapperTest {
         goodsCategory.setGmtCreate(LocalDateTime.now());
         goodsCategory.setGmtModified(LocalDateTime.now());
         goodsCategoryMapper.insert(goodsCategory);
-        System.out.println(goodsCategory);
+        Assert.notNull(goodsCategory.getId(), "insert failed");
     }
 
     @Test
     void selectByPrimaryKey() {
-        System.out.println(goodsCategoryMapper.selectByPrimaryKey(3));
+        Assert.notNull(goodsCategoryMapper.selectByPrimaryKey(123), "select category failed");
     }
 
     @Test
     void selectOneLevelGoodsCategories() {
         List<GoodsCategoryPo> goodsCategoryPos = goodsCategoryMapper.selectOneLevelGoodsCategories();
+        Assert.notEmpty(goodsCategoryPos, "select one level category failed");
         goodsCategoryPos.forEach(goodsCategoryPo -> {
-            System.out.println(goodsCategoryPo);
+            Assert.notNull(goodsCategoryPo, "failed");
         });
     }
 
     @Test
     void selectSecondLevelGoodsCategories() {
-        List<GoodsCategoryPo> goodsCategoryList = goodsCategoryMapper.selectSecondLevelGoodsCategories(2);
-        goodsCategoryList.forEach(goodsCategoryPo -> System.out.println(goodsCategoryPo));
+        List<GoodsCategoryPo> goodsCategoryList = goodsCategoryMapper.selectSecondLevelGoodsCategories(122);
+        Assert.notEmpty(goodsCategoryList, "select second categories failed");
+        goodsCategoryList.forEach(goodsCategoryPo ->
+            Assert.notNull(goodsCategoryPo, "failed")
+        );
     }
 
     @Test
     void updateByPrimaryKey() {
-        GoodsCategoryPo goodsCategory = goodsCategoryMapper.selectByPrimaryKey(3);
+        GoodsCategoryPo goodsCategory = goodsCategoryMapper.selectByPrimaryKey(122);
         goodsCategory.setName("test name");
-        System.out.println(goodsCategoryMapper.updateByPrimaryKey(goodsCategory));
+        Assert.isTrue(goodsCategoryMapper.updateByPrimaryKey(goodsCategory) == 1, "update failed");
+        Assert.isTrue(goodsCategoryMapper.selectByPrimaryKey(122).getName().equals("test name"), "update error");
     }
 }

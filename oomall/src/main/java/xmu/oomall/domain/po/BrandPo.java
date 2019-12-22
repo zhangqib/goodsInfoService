@@ -56,5 +56,4 @@ public class BrandPo {
         this.name = brand.getName();
         this.picUrl = brand.getPicUrl();
     }
-
 }

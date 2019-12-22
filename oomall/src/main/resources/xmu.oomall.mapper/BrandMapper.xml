@@ -67,7 +67,7 @@
   <!-- 逻辑删除 -->
   <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     update `oomall_brand`
-    set is_deleted = 1
+    set is_deleted = 1,gmt_modified = "${@java.time.LocalDateTime@now()}"
     where id = #{id} and is_deleted = 0
   </update>
   <insert id="insert" parameterType="BrandPo" keyProperty="id" useGeneratedKeys="true">
@@ -80,10 +80,9 @@
       pic_url, gmt_create, gmt_modified, 
       is_deleted)
     values (#{brand.id,jdbcType=BIGINT}, #{brand.name,jdbcType=VARCHAR}, #{brand.description,jdbcType=VARCHAR},
-      #{brand.picUrl,jdbcType=VARCHAR}, #{brand.gmtCreate,jdbcType=TIMESTAMP}, #{brand.gmtModified,jdbcType=TIMESTAMP},
+      #{brand.picUrl,jdbcType=VARCHAR}, "${@java.time.LocalDateTime@now()}", "${@java.time.LocalDateTime@now()}",
       #{brand.beDeleted,jdbcType=BIT})
   </insert>
-
   <update id="updateByPrimaryKey" parameterType="BrandPo">
     update `oomall_brand`
     <set>
@@ -96,9 +95,7 @@
       <if test = "brand.picUrl != null" >
         pic_url = #{brand.picUrl},
       </if>
-      <if test = "brand.gmtModified != null" >
-        gmt_modified = #{brand.gmtModified},
-      </if>
+      gmt_modified = "${@java.time.LocalDateTime@now()}",
     </set>
     where id = #{brand.id,jdbcType=BIGINT}
   </update>

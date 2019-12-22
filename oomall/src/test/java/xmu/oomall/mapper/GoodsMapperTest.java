@@ -3,16 +3,14 @@ package xmu.oomall.mapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.transaction.annotation.Transactional;
-import xmu.oomall.Application;
-import xmu.oomall.domain.Goods;
+import org.springframework.util.Assert;
 import xmu.oomall.domain.po.GoodsPo;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.List;
 
-@SpringBootTest(classes = Application.class)
+@SpringBootTest
 @Transactional
 class GoodsMapperTest {
     @Autowired
@@ -20,7 +18,10 @@ class GoodsMapperTest {
 
     @Test
     void deleteByPrimaryKey() {
-        System.out.println(goodsMapper.deleteByPrimaryKey(1));
+        Integer goodsId = 273;
+        Assert.isTrue(goodsMapper.deleteByPrimaryKey(273) == 1, "delete goods failed");
+        System.out.println(goodsMapper.selectByPrimaryKey(goodsId));
+        Assert.isTrue(goodsMapper.selectByPrimaryKey(goodsId).getBeDeleted(), "delete goods error");
     }
 
     @Test
@@ -33,8 +34,6 @@ class GoodsMapperTest {
         goods.setDescription("test description");
         goods.setDetail("test detail");
         goods.setGallery("test Gallery");
-        goods.setGmtCreate(LocalDateTime.now());
-        goods.setGmtModified(LocalDateTime.now());
         goods.setGoodsCategoryId(1);
         goods.setName("test goods");
         goods.setPicUrl("test url");
@@ -45,31 +44,29 @@ class GoodsMapperTest {
         goods.setVolume("1");
         goods.setWeight(new BigDecimal(1));
         goods.setGoodsSn("1");
-        try {
-            goodsMapper.insert(goods);
-            System.out.println(goods);
-        } catch(DuplicateKeyException e) {
-            System.out.println("goodsSn error");
-        }
+        Assert.isTrue(goodsMapper.insert(goods) > 0, "insert goods failed");
     }
 
     @Test
     void selectByPrimaryKey() {
-        System.out.println(goodsMapper.selectByPrimaryKey(1));
+        Integer goodsId = 273;
+        Assert.notNull(goodsMapper.selectByPrimaryKey(goodsId), "select goods failed");
     }
 
     @Test
     void updateByPrimaryKey() {
-//        GoodsPo goods = goodsMapper.selectByPrimaryKey(4);
-        Goods goods = new Goods();
-        goods.setId(7);
-        goods.setShortName("ee");
-        System.out.println(goodsMapper.updateByPrimaryKey(goods));
+        GoodsPo goods = goodsMapper.selectByPrimaryKey(273);
+        goods.setName("ee");
+        Assert.isTrue(goodsMapper.updateByPrimaryKey(goods) == 1, "update failed");
+        Assert.isTrue(goodsMapper.selectByPrimaryKey(273).getName().equals("ee"), "update error");
     }
 
     @Test
     void selectByCategoryId() {
-        goodsMapper.selectByCategoryId(1).forEach(goodsPo -> System.out.println(goodsPo));
+        Integer categoryId = 128;
+        List<GoodsPo> goodsList = goodsMapper.selectByCategoryId(categoryId);
+        Assert.notEmpty(goodsList, "select by category failed");
+        goodsList.forEach(goodsPo -> Assert.isTrue(goodsPo.getGoodsCategoryId().equals(categoryId), "select by category error"));
     }
 
     @Test
@@ -79,7 +76,10 @@ class GoodsMapperTest {
 
     @Test
     void selectByBrandId() {
-        goodsMapper.selectByBrandId(3).forEach(goodsPo -> System.out.println(goodsPo));
+        Integer brandId = 103;
+        List<GoodsPo> goodsList = goodsMapper.selectByBrandId(brandId);
+        Assert.notEmpty(goodsList, "select by brand failed");
+        goodsList.forEach(goodsPo -> Assert.isTrue(goodsPo.getBrandId().equals(brandId), "select by brand error"));
     }
 
     @Test
@@ -104,11 +104,11 @@ class GoodsMapperTest {
 
     @Test
     void cleanBrand() {
-        System.out.println(goodsMapper.cleanBrand(1));
+        System.out.println(goodsMapper.cleanBrand(103));
     }
 
     @Test
     void cleanCategory() {
-        System.out.println(goodsMapper.cleanCategory(1));
+        System.out.println(goodsMapper.cleanCategory(128));
     }
 }

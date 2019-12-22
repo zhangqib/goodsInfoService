@@ -6,7 +6,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import xmu.oomall.Application;
-import xmu.oomall.domain.Brand;
 import xmu.oomall.domain.po.BrandPo;
 
 import java.time.LocalDateTime;
@@ -25,7 +24,9 @@ class BrandMapperTest {
 
     @Test
     void deleteByPrimaryKeyFail() {
-        Assert.isTrue(brandMapper.deleteByPrimaryKey(3) == 0, "delete brand error");
+        Integer brandId = 71;
+        Assert.isTrue(brandMapper.deleteByPrimaryKey(brandId) == 0, "delete brand error");
+        Assert.isTrue(brandMapper.selectByPrimaryKey(brandId).isBeDeleted(), "delete error");
 //        Assert.isTrue(brandMapper.deleteByPrimaryKey(77) == 0, "delete brand error");
     }
 
@@ -54,8 +55,13 @@ class BrandMapperTest {
     }
 
     @Test
+    void selectByCondition() {
+        Assert.notEmpty(brandMapper.selectByCondition(null, "刘伟"), "select by conditon failed");
+    }
+
+    @Test
     void updateByPrimaryKey() {
-        Brand brand = new Brand();
+        BrandPo brand = new BrandPo();
         Integer brandId = 71;
         String name = "update brand test";
         brand.setId(brandId);

@@ -51,6 +51,8 @@ public class ProductDAO {
             return false;
         }
         iRedisService.remove(product.getRedisKey());
+        iRedisService.remove(product.getGoodsRedisKey());
+        iRedisService.remove(GoodsPo.getProductRedisKeys(product.getGoodsId()));
         return productMapper.deleteByPrimaryKey(product.getId()) == 1;
     }
 

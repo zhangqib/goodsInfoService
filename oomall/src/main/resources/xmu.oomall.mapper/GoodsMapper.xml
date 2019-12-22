@@ -127,7 +127,7 @@
   <!-- 逻辑删除 -->
   <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     update `oomall_goods`
-    set is_deleted = 1
+    set is_deleted = 1, gmt_modified = "${@java.time.LocalDateTime@now()}"
     where id = #{id} and is_deleted = 0
   </update>
   <insert id="insert" parameterType="GoodsPo" keyProperty="id" useGeneratedKeys="true">
@@ -143,7 +143,7 @@
       gallery, goods_category_id, brand_id,
       is_deleted, weight, volume,
       special_freight_id, is_special)
-    values (#{goods.gmtCreate,jdbcType=TIMESTAMP}, #{goods.gmtModified,jdbcType=TIMESTAMP},
+    values ("${@java.time.LocalDateTime@now()}", "${@java.time.LocalDateTime@now()}",
       #{goods.name,jdbcType=VARCHAR}, #{goods.goodsSn,jdbcType=VARCHAR}, #{goods.shortName,jdbcType=VARCHAR},
       #{goods.description,jdbcType=VARCHAR}, #{goods.brief,jdbcType=VARCHAR}, #{goods.picUrl,jdbcType=VARCHAR},
       #{goods.detail,jdbcType=VARCHAR}, #{goods.statusCode,jdbcType=TINYINT}, #{goods.shareUrl,jdbcType=VARCHAR},
@@ -160,9 +160,6 @@
     -->
     update `oomall_goods`
     <set>
-      <if test="goods.gmtModified != null">
-        gmt_modified = #{goods.gmtModified,jdbcType=TIMESTAMP},
-      </if>
       <if test="goods.name != null">
         name = #{goods.name,jdbcType=VARCHAR},
       </if>
@@ -182,7 +179,7 @@
         detail = #{goods.detail,jdbcType=VARCHAR},
       </if>
       <if test="goods.statusCode != null">
-        status = #{goods.status,jdbcType=TINYINT},
+        status = #{goods.statusCode,jdbcType=TINYINT},
       </if>
       <if test="goods.shareUrl != null">
         share_url = #{goods.shareUrl,jdbcType=VARCHAR},
@@ -197,7 +194,7 @@
         brand_id = #{goods.brandId,jdbcType=BIGINT},
       </if>
       <if test="goods.weight != null">
-        weight = #{weight,jdbcType=DECIMAL},
+        weight = #{goods.weight,jdbcType=DECIMAL},
       </if>
       <if test="goods.volume != null">
         volume = #{goods.volume,jdbcType=VARCHAR},
@@ -205,20 +202,18 @@
       <if test="goods.specialFreightId != null">
         special_freight_id = #{goods.specialFreightId,jdbcType=BIGINT},
       </if>
-      <if test="goods.beSpecial != null">
-        is_special = #{goods.beSpecial,jdbcType=BIT},
-      </if>
+      gmt_modified = "${@java.time.LocalDateTime@now()}"
     </set>
-    where id = #{goods.id,jdbcType=BIGINT}
+    where id = #{goods.id,jdbcType=BIGINT} and is_deleted != 1
   </update>
   <update id="cleanBrand" parameterType="java.lang.Integer">
     update `oomall_goods`
-    set brand_id=null
+    set brand_id=0 and gmt_modified ="${@java.time.LocalDateTime@now()}"
     where brand_id = #{brandId}
   </update>
   <update id="cleanCategory">
     update `oomall_goods`
-    set goods_category_id=null
+    set goods_category_id=0 and gmt_modified ="${@java.time.LocalDateTime@now()}"
     where goods_category_id = #{categoryId}
   </update>
 </mapper>

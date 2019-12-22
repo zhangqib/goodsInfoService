@@ -7,7 +7,6 @@ import xmu.oomall.domain.po.BrandPo;
 import xmu.oomall.mapper.BrandMapper;
 import xmu.oomall.mapper.GoodsMapper;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -31,8 +30,6 @@ public class BrandDAO {
         if (isArgsInvalid(brand)) {
             return null;
         }
-        brand.setGmtCreate(LocalDateTime.now());
-        brand.setGmtModified(LocalDateTime.now());
         brandMapper.insert(brand);
         return brand;
     }
@@ -67,7 +64,6 @@ public class BrandDAO {
         if (isArgsInvalid(brand)) {
             return null;
         }
-        brand.setGmtModified(LocalDateTime.now());
         if (brandMapper.updateByPrimaryKey(brand) == 0) {
             return null;
         }

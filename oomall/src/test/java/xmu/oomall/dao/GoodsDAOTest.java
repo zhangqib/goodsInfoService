@@ -5,18 +5,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import xmu.oomall.IRedisService;
 import xmu.oomall.domain.po.GoodsPo;
+import xmu.oomall.domain.po.ProductPo;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest
-@Transactional
 class GoodsDAOTest {
     @Autowired
     private GoodsDAO goodsDAO;
 
+    @Autowired
+    private IRedisService iRedisService;
+
     @Test
+    @Transactional
     void insert() {
         GoodsPo goods = new GoodsPo();
         goods.setBeDeleted(false);
@@ -39,31 +46,47 @@ class GoodsDAOTest {
         goods.setVolume("1");
         goods.setWeight(new BigDecimal(1));
         goodsDAO.insert(goods);
-        System.out.println(goods);
+        System.out.println(goods.getId());
         Assert.notNull(goods.getId(), "insert fail");
     }
 
     @Test
+    @Transactional
     void deleteById() {
-        System.out.println(goodsDAO.deleteById(5));
+        Assert.isTrue(goodsDAO.deleteById(333), "delete failed");
+    }
+
+    @Test
+    @Transactional
+    void deleteByIdFailed() {
+        Assert.isTrue(!goodsDAO.deleteById(5), "delete error");
     }
 
     @Test
     void selectById() {
-        System.out.println(goodsDAO.selectById(5));
+        Integer goodsId = 273;
+        Assert.notNull(goodsDAO.selectById(goodsId), "select failed");
+        Assert.notNull(iRedisService.get(GoodsPo.getRedisKey(goodsId)), "redis get failed");
     }
 
     @Test
     void selectByProductId() {
-        System.out.println(goodsDAO.selectByProductId(4));
+        Integer productId = 1;
+        Integer goodsId = 273;
+        GoodsPo goods = goodsDAO.selectByProductId(productId);
+        Assert.notNull(goods, "select goods by product id failed");
+        Assert.isTrue(iRedisService.exists(ProductPo.getGoodsRedisKey(productId)), "redis failed");
+        assertEquals(goods.getId(), goodsId);
     }
 
     @Test
     void selectByCategoryId() {
-        System.out.println(goodsDAO.selectByCategoryId(3, 1, 3));
+        Integer categoryId = 128;
+        Assert.notEmpty(goodsDAO.selectByCategoryId(categoryId, 1, 10), "select goods by category failed");
     }
 
     @Test
     void selectGoodsByCondition() {
+        Assert.notEmpty(goodsDAO.selectByCondition(null, null, null, 3, 4), "select goods by condition failed");
     }
 }

@@ -48,7 +48,7 @@
   <!-- 逻辑删除 -->
   <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     update `oomall_goods_category`
-    set is_deleted = 1
+    set is_deleted = 1, gmt_modified ="${@java.time.LocalDateTime@now()}"
     where id = #{id} and is_deleted = 0
   </update>
   <insert id="insert" parameterType="GoodsCategoryPo" keyProperty="id" useGeneratedKeys="true">
@@ -57,7 +57,7 @@
       )
     values (#{goodsCategory.id,jdbcType=BIGINT}, #{goodsCategory.name,jdbcType=VARCHAR},
       #{goodsCategory.pid,jdbcType=BIGINT}, #{goodsCategory.picUrl,jdbcType=VARCHAR},
-      #{goodsCategory.gmtCreate,jdbcType=TIMESTAMP}, #{goodsCategory.gmtModified,jdbcType=TIMESTAMP},
+      #{goodsCategory.gmtCreate,jdbcType=TIMESTAMP}, "${@java.time.LocalDateTime@now()}",
       #{goodsCategory.beDeleted,jdbcType=BIT}
       )
   </insert>
@@ -73,9 +73,7 @@
       <if test = "goodsCategory.picUrl != null" >
         pic_url = #{goodsCategory.picUrl},
       </if>
-      <if test = "goodsCategory.gmtModified != null" >
-        gmt_modified = #{goodsCategory.gmtModified,jdbcType=TIMESTAMP},
-      </if>
+      gmt_modified = "${@java.time.LocalDateTime@now()}",
     </set>
     where id = #{goodsCategory.id,jdbcType=BIGINT}
   </update>

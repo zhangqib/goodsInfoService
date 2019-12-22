@@ -21,7 +21,7 @@ class ProductMapperTest {
 
     @Test
     void deleteByPrimaryKey() {
-        Integer id = 512;
+        Integer id = 12;
         Assert.isTrue(productMapper.deleteByPrimaryKey(id) == 1, "delete failed!");
         Assert.isTrue(productMapper.selectByPrimaryKey(id).getBeDeleted(), "delete failed");
     }
@@ -72,9 +72,9 @@ class ProductMapperTest {
 
     @Test
     void updateByPrimaryKeySuccess() {
-        Integer productId = 512;
+        Integer productId = 12;
         ProductPo product = new ProductPo();
-        product.setId(512);
+        product.setId(productId);
         product.setPicUrl("test url");
         Assert.isTrue(productMapper.updateByPrimaryKey(product) == 1, "update failed");
         Assert.isTrue(productMapper.selectByPrimaryKey(productId).getPicUrl().equals("test url"), "update failed");
@@ -82,9 +82,9 @@ class ProductMapperTest {
 
     @Test
     void updateByPrimaryKeyFailed() {
-        Integer productId = 512;
+        Integer productId = 12;
         ProductPo product = new ProductPo();
-        product.setId(512);
+        product.setId(productId);
         product.setPicUrl("test url");
         LocalDateTime localDateTime = LocalDateTime.now();
         product.setGmtCreate(localDateTime);

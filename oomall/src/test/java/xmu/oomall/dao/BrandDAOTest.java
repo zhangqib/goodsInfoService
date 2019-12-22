@@ -47,7 +47,7 @@ class BrandDAOTest {
 
     @Test
     void selectBrandsByCondition() {
-        Assert.notEmpty(brandDAO.selectBrandsByCondition("71", null, 1, 2),
+        Assert.notEmpty(brandDAO.selectBrandsByCondition(null, null, 1, 2),
                 "select by condition failed");
     }
 }

@@ -10,6 +10,7 @@ import xmu.oomall.domain.po.ProductPo;
 import xmu.oomall.util.Config;
 
 import java.util.Arrays;
+import java.util.List;
 
 @SpringBootTest
 class IRedisServiceTest {
@@ -26,7 +27,7 @@ class IRedisServiceTest {
     @Test
     public void set() {
        Long existTime = 10L;
-       GoodsPo goods = new GoodsPo();
+       xmu.oomall.domain.po.GoodsPo goods = new xmu.oomall.domain.po.GoodsPo();
        goods.setId(3);
        goods.setGoodsSn("goods sn");
        String testKey = "Goods:Id:"+goods.getId();
@@ -54,5 +55,12 @@ class IRedisServiceTest {
         iRedisService.sadd(testSet, Arrays.asList(testVs));
         Assert.notEmpty(iRedisService.sget(testSet), "sadd failed");
         System.out.println(iRedisService.sget(testSet));
+    }
+
+    @Test
+    public void sget() {
+        List<String> productIds = iRedisService.sget(GoodsPo.getProductRedisKeys(1));
+        Assert.isTrue(productIds.size() == 0, "sget failed");
+        System.out.println(productIds);
     }
 }
