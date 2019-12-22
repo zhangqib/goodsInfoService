@@ -31,7 +31,7 @@
     select
     <include refid="Base_Column_List" />
     from `oomall_goods_category`
-    where pid == 0 and is_deleted != 1
+    where pid = 0 and is_deleted != 1
   </select>
   <select id="selectSecondLevelGoodsCategories" parameterType="java.lang.Integer" resultMap="GoodsCategoryMap" >
     select
