@@ -27,6 +27,9 @@ class ProductDAOTest {
     @Transactional
     @Test
     void deleteById() {
+        ProductPo product = productDAO.selectById(12);
+        Assert.isTrue(productDAO.deleteById(product), "delete failed");
+        Assert.isTrue(productDAO.selectById(product.getId()).getBeDeleted(), "delete error");
     }
 
     @Test
@@ -56,5 +59,11 @@ class ProductDAOTest {
     @Transactional
     @Test
     void descStock() {
+        Integer productId = 6;
+        int descStock = 6;
+        ProductPo productPo = productDAO.selectById(productId);
+        System.out.println(productPo.getSafetyStock());
+        Assert.isTrue(productDAO.descStock(productId, descStock), "desc stock failed");
+        System.out.println(productPo.getSafetyStock());
     }
 }
