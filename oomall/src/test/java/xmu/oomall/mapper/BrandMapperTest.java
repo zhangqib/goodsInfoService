@@ -24,9 +24,9 @@ class BrandMapperTest {
 
     @Test
     void deleteByPrimaryKeyFail() {
-        Integer brandId = 71;
+        Integer brandId = 70;
         Assert.isTrue(brandMapper.deleteByPrimaryKey(brandId) == 0, "delete brand error");
-        Assert.isTrue(brandMapper.selectByPrimaryKey(brandId).isBeDeleted(), "delete error");
+
 //        Assert.isTrue(brandMapper.deleteByPrimaryKey(77) == 0, "delete brand error");
     }
 

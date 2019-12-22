@@ -66,4 +66,14 @@ class ProductDAOTest {
         Assert.isTrue(productDAO.descStock(productId, descStock), "desc stock failed");
         System.out.println(productPo.getSafetyStock());
     }
+    @Transactional
+    @Test
+    void incrStock() {
+        Integer productId = 6;
+        int descStock = 6;
+        ProductPo productPo = productDAO.selectById(productId);
+        System.out.println(productPo.getSafetyStock());
+        Assert.isTrue(productDAO.incrStock(productId, descStock), "desc stock failed");
+        System.out.println(productPo.getSafetyStock());
+    }
 }

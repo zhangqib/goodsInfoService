@@ -140,12 +140,22 @@ public class ProductDAO {
 
     public Boolean descStock(Integer productId, int dStock) {
         ProductPo product = productMapper.selectByPrimaryKey(productId);
-        if (product == null) {
+        if (product == null || product.getBeDeleted()) {
             return false;
         } else if (product.getSafetyStock() < dStock){
             return false;
         } else {
             product.setSafetyStock(product.getSafetyStock() - dStock);
+            return productMapper.updateByPrimaryKey(product) == 1;
+        }
+    }
+
+    public Boolean incrStock(Integer productId, int dStock) {
+        ProductPo product = selectById(productId);
+        if (product == null || product.getBeDeleted()) {
+            return false;
+        } else {
+            product.setSafetyStock(product.getSafetyStock() + dStock);
             return productMapper.updateByPrimaryKey(product) == 1;
         }
     }
