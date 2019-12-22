@@ -11,6 +11,7 @@ import xmu.oomall.service.GoodsInfoService;
 import xmu.oomall.util.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -188,6 +189,12 @@ public class ProductController {
      */
     @GetMapping("/user/product/{id}")
     public Object getProductById(Integer id) {
+//        List<OrderItem> orderItemList=new ArrayList<OrderItem>();
+//        OrderItem orderItem=new OrderItem();
+//        orderItem.setProductId(407);
+//        orderItem.setNumber(2);
+//        orderItemList.add(orderItem);
+//        goodsInfoService.updateStockByProductId(orderItemList,true);
         ProductPo product = goodsInfoService.getProductById(id);
         if (product != null) {
             Product retProduct = new Product(product);

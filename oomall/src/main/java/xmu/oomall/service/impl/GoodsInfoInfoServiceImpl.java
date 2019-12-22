@@ -3,16 +3,15 @@ package xmu.oomall.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import xmu.oomall.controller.feign.FootprintClientService;
 import xmu.oomall.dao.*;
 import xmu.oomall.domain.*;
-import xmu.oomall.domain.po.BrandPo;
-import xmu.oomall.domain.po.GoodsCategoryPo;
-import xmu.oomall.domain.po.GoodsPo;
-import xmu.oomall.domain.po.ProductPo;
+import xmu.oomall.domain.po.*;
 import xmu.oomall.service.GoodsInfoService;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author Ke
@@ -30,6 +29,8 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
     private BrandDAO brandDao;
     @Autowired
     private GoodsCategoryDAO goodsCategoryDao;
+    @Autowired
+    private FootprintClientService footprintClientService;
 
     /**
      * 1.管理员根据id搜索商品
@@ -113,12 +114,16 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      * @return Goods（不可获取下架商品）
      */
     @Override
-    public GoodsPo getGoodsForSaleById(Integer id) {
+    public GoodsPo getGoodsForSaleById(Integer userId, Integer id) {
         GoodsPo goods = goodsDao.selectById(id);
         if (goods != null) {
             if (goods.getStatusCode() > 0) {
                 //1.获取userId
                 //2.有的话调用足迹服务（@PostMapping("/footprints") ），没有的话跳过
+                FootprintItemPo footprintItemPo = new FootprintItemPo();
+                footprintItemPo.setUserId(userId);
+                footprintItemPo.setGoodsId(id);
+                footprintClientService.addFootprint(footprintItemPo);
                 return goods;
             }
         }
@@ -191,7 +196,7 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
     public GoodsPo getGoodsInnerById(Integer id) {
         GoodsPo goods = goodsDao.selectById(id);
         if (goods != null) {
-            if (goods.getStatusCode() != 0) {
+            if (goods.getStatusCode() > 0) {
                 return goods;
             }
         }
@@ -242,10 +247,10 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
     @Override
     public boolean deleteProductById(ProductPo product) {
         if (product != null) {
-                boolean ret = productDao.deleteById(product);
-                if (ret) {
-                    return true;
-                }
+            boolean ret = productDao.deleteById(product);
+            if (ret) {
+                return true;
+            }
         }
         return false;
     }
@@ -280,26 +285,23 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      */
     @Override
     public boolean updateStockByProductId(List<OrderItem> orderItemList, boolean operation) {
-        boolean flag=true;
         if (operation) {
             for (OrderItem orderItem : orderItemList) {
-                boolean ret = productDao.descStock(orderItem.getProductId(), -orderItem.getNumber());
-                if (ret) {
-                    return true;
+                boolean ret = productDao.incrStock(orderItem.getProductId(), orderItem.getNumber());
+                if (!ret) {
+                    return false;
                 }
             }
+            return true;
         } else {
             for (OrderItem orderItem : orderItemList) {
                 boolean ret = productDao.descStock(orderItem.getProductId(), orderItem.getNumber());
-                if (ret) {
-                    flag=false;
+                if (!ret) {
+                    return false;
                 }
             }
-            if(flag){
-                return true;
-            }
+            return true;
         }
-        return false;
     }
 
     /**

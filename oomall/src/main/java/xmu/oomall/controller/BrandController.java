@@ -200,7 +200,7 @@ public class BrandController {
      * @return BrandPo
      */
     @GetMapping("/brands/{id}")
-    public Object getBrandForUserById(Integer id) {
+    public Object getBrandForUserById(Integer id, HttpServletRequest request) {
         BrandPo retBrand = goodsInfoService.getBrandById(id);
         if (retBrand != null) {
             Object retObj = ResponseUtil.ok(retBrand);
@@ -219,7 +219,7 @@ public class BrandController {
      * @return List<BrandPo>,搜索到的品牌列表
      */
     @GetMapping("/brands")
-    public Object listBrandsByCondition(Integer page, Integer limit) {
+    public Object listBrandsByCondition(Integer page, Integer limit, HttpServletRequest request) {
         if (page > 0 && limit > 0) {
             List<BrandPo> retBrandList = goodsInfoService.listBrandsByCondition(page, limit);
             Object retObj = ResponseUtil.ok(retBrandList);

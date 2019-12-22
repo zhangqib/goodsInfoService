@@ -72,11 +72,11 @@ public class GoodsController {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 0, "查询商品", 1, null);
             //logClientService.addLog(log);
-            if(goodsSn==""){
-                goodsSn=null;
+            if (goodsSn == "") {
+                goodsSn = null;
             }
-            if(goodsName==""){
-                goodsName=null;
+            if (goodsName == "") {
+                goodsName = null;
             }
             List<GoodsPo> retGoodsList = goodsInfoService.listGoodsByCondition(goodsSn, goodsName, page, limit);
             Object retObj = ResponseUtil.ok(retGoodsList);
@@ -173,19 +173,19 @@ public class GoodsController {
         GoodsPo goods = goodsInfoService.getGoodsById(id);
         if (goods != null) {
             Integer ret = goodsInfoService.deleteGoodsById(goods);
-            if (ret==1) {
+            if (ret == 1) {
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 3, "删除商品", 1, null);
                 //logClientService.addLog(log);
                 Object retObj = ResponseUtil.ok();
                 return retObj;
-            } else if(ret==-1){
+            } else if (ret == -1) {
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 3, "删除商品", 0, null);
                 //logClientService.addLog(log);
                 Object retObj = ResponseUtil.fail(773, "数据库操作失败,商品删除失败");
                 return retObj;
-            }else{
+            } else {
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 3, "删除商品", 0, null);
                 //logClientService.addLog(log);
@@ -207,8 +207,9 @@ public class GoodsController {
      * @param id：Integer
      * @return Goods（不可获取下架商品）
      */
-    public Object getGoodsForSaleById(Integer id) {
-        GoodsPo goods = goodsInfoService.getGoodsForSaleById(id);
+    public Object getGoodsForSaleById(Integer id, HttpServletRequest request) {
+        Integer userId = Integer.parseInt(request.getHeader("userId"));
+        GoodsPo goods = goodsInfoService.getGoodsForSaleById(userId, id);
         if (goods != null) {
             Goods goodsPojo = new Goods(goods);
             //Brand
@@ -238,10 +239,10 @@ public class GoodsController {
      * @param limit:Integer    一页多少
      * @return List<GoodsPo>,搜索到的商品的列表(不可获取下架商品)
      */
-    public Object listGoodsForSaleByCondition(String goodsName, Integer page, Integer limit) {
+    public Object listGoodsForSaleByCondition(String goodsName, Integer page, Integer limit, HttpServletRequest request) {
         if (page > 0 && limit > 0) {
-            if(goodsName==""){
-                goodsName=null;
+            if (goodsName == "") {
+                goodsName = null;
             }
             List<GoodsPo> retGoodsList = goodsInfoService.listGoodsForSaleByCondition(goodsName, page, limit);
             Object retObj = ResponseUtil.ok(retGoodsList);
@@ -260,7 +261,7 @@ public class GoodsController {
      * @param limit:Integer 一页多少
      * @return List<GoodsPo>，搜索到的商品的列表
      */
-    public Object listGoodsForSaleByCategoryId(Integer id, Integer page, Integer limit) {
+    public Object listGoodsForSaleByCategoryId(Integer id, Integer page, Integer limit, HttpServletRequest request) {
         if (page > 0 && limit > 0) {
             GoodsCategoryPo goodsCategory = goodsInfoService.getGoodsCategoryById(id);
             if (goodsCategory != null) {
@@ -285,7 +286,7 @@ public class GoodsController {
      * @param limit:     Integer 一页多少
      * @return List<GoodsPo>，搜索到的商品的列表
      */
-    public Object listGoodsForSaleByBrandId(Integer id, Integer page, Integer limit) {
+    public Object listGoodsForSaleByBrandId(Integer id, Integer page, Integer limit, HttpServletRequest request) {
         if (page > 0 && limit > 0) {
             BrandPo brand = goodsInfoService.getBrandById(id);
             if (brand != null) {

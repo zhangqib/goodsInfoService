@@ -38,11 +38,11 @@ public class GoodsInfoController {
     @Autowired
     private GoodsCategoryController goodsCategoryController;
 
-    @GetMapping ("/test")
-    void test(HttpServletRequest request){
+    @GetMapping("/test")
+    void test(HttpServletRequest request) {
         System.out.println(111);
-        Log log=new Log(request.getIntHeader("userId"),
-                request.getHeader("ip"),0,"查询商品",1,null);
+        Log log = new Log(request.getIntHeader("userId"),
+                request.getHeader("ip"), 0, "查询商品", 1, null);
         logClientService.addLog(log);
     }
     //-----------------Goods---------------Goods-----------Goods---------
@@ -53,10 +53,10 @@ public class GoodsInfoController {
      * @param id：Integer(PathVariable
      * @return Goods(可获取下架商品)
      */
-    @GetMapping("/admin/goods/{id}")
+    @GetMapping(value = "/admin/goods/{id}", produces = "application/json;charset=utf-8")
     public Object getGoodsById(@PathVariable Integer id,
                                HttpServletRequest request) {
-        return goodsController.getGoodsById(id,request);
+        return goodsController.getGoodsById(id, request);
     }
 
     /**
@@ -68,12 +68,12 @@ public class GoodsInfoController {
      * @param limit:           Integer 一页多少
      * @return List<GoodsPo>,搜索到的商品的列表(可获取下架商品)
      */
-    @GetMapping("/admin/goods")
+    @GetMapping(value ="/admin/goods", produces = "application/json;charset=utf-8")
     public Object listGoodsByCondition(@RequestParam String goodsSn, @RequestParam String goodsName,
                                        @RequestParam(defaultValue = "1", name = "page") Integer page,
                                        @RequestParam(defaultValue = "10", name = "limit") Integer limit,
                                        HttpServletRequest request) {
-        return goodsController.listGoodsByCondition(goodsSn, goodsName, page, limit,request);
+        return goodsController.listGoodsByCondition(goodsSn, goodsName, page, limit, request);
     }
 
     /**
@@ -85,7 +85,7 @@ public class GoodsInfoController {
     @PostMapping("/goods")
     public Object addGoods(@RequestBody GoodsPo goodsPo,
                            HttpServletRequest request) {
-        return goodsController.addGoods(goodsPo,request);
+        return goodsController.addGoods(goodsPo, request);
     }
 
     /**
@@ -99,7 +99,7 @@ public class GoodsInfoController {
     public Object updateGoodsById(@PathVariable Integer id,
                                   @RequestBody GoodsPo goodsPo,
                                   HttpServletRequest request) {
-        return goodsController.updateGoodsById(id, goodsPo,request);
+        return goodsController.updateGoodsById(id, goodsPo, request);
     }
 
     /**
@@ -111,7 +111,7 @@ public class GoodsInfoController {
     @DeleteMapping("/goods/{id}")
     public Object deleteGoodsById(@PathVariable Integer id,
                                   HttpServletRequest request) {
-        return goodsController.deleteGoodsById(id,request);
+        return goodsController.deleteGoodsById(id, request);
     }
 
     /**
@@ -120,9 +120,9 @@ public class GoodsInfoController {
      * @param id：Integer(PathVariable
      * @return Goods（不可获取下架商品）
      */
-    @GetMapping("/goods/{id}")
-    public Object getGoodsForSaleById(@PathVariable Integer id) {
-        return goodsController.getGoodsForSaleById(id);
+    @GetMapping(value = "/goods/{id}", produces = "application/json;charset=utf-8")
+    public Object getGoodsForSaleById(@PathVariable Integer id, HttpServletRequest request) {
+        return goodsController.getGoodsForSaleById(id, request);
     }
 
     /**
@@ -133,11 +133,12 @@ public class GoodsInfoController {
      * @param limit:Integer    一页多少
      * @return List<GoodsPo>,搜索到的商品的列表(不可获取下架商品)
      */
-    @GetMapping("/goods")
+    @GetMapping(value = "/goods", produces = "application/json;charset=utf-8")
     public Object listGoodsForSaleByCondition(@RequestParam String goodsName,
                                               @RequestParam(defaultValue = "1", name = "page") Integer page,
-                                              @RequestParam(defaultValue = "10", name = "limit") Integer limit) {
-        return goodsController.listGoodsForSaleByCondition(goodsName, page, limit);
+                                              @RequestParam(defaultValue = "10", name = "limit") Integer limit,
+                                              HttpServletRequest request) {
+        return goodsController.listGoodsForSaleByCondition(goodsName, page, limit, request);
     }
 
 
@@ -149,11 +150,12 @@ public class GoodsInfoController {
      * @param limit:Integer           一页多少
      * @return List<GoodsPo>，搜索到的商品的列表
      */
-    @GetMapping("/categories/{id}/goods")
+    @GetMapping(value = "/categories/{id}/goods", produces = "application/json;charset=utf-8")
     public Object listGoodsForSaleByCategoryId(@PathVariable Integer id,
                                                @RequestParam(defaultValue = "1", name = "page") Integer page,
-                                               @RequestParam(defaultValue = "10", name = "limit") Integer limit) {
-        return goodsController.listGoodsForSaleByCategoryId(id, page, limit);
+                                               @RequestParam(defaultValue = "10", name = "limit") Integer limit,
+                                               HttpServletRequest request) {
+        return goodsController.listGoodsForSaleByCategoryId(id, page, limit, request);
     }
 
     /**
@@ -164,11 +166,12 @@ public class GoodsInfoController {
      * @param limit:                  Integer 一页多少
      * @return List<GoodsPo>，搜索到的商品的列表
      */
-    @GetMapping("/brands/{id}/goods")
+    @GetMapping(value = "/brands/{id}/goods", produces = "application/json;charset=utf-8")
     public Object listGoodsForSaleByBrandId(@PathVariable Integer id,
                                             @RequestParam(defaultValue = "1", name = "page") Integer page,
-                                            @RequestParam(defaultValue = "10", name = "limit") Integer limit) {
-        return goodsController.listGoodsForSaleByBrandId(id, page, limit);
+                                            @RequestParam(defaultValue = "10", name = "limit") Integer limit,
+                                            HttpServletRequest request) {
+        return goodsController.listGoodsForSaleByBrandId(id, page, limit, request);
     }
 
     /**
@@ -177,7 +180,7 @@ public class GoodsInfoController {
      * @param id：Integer
      * @return Boolean
      */
-    @GetMapping("/goods/{id}/isOnSale")
+    @GetMapping(value = "/goods/{id}/isOnSale", produces = "application/json;charset=utf-8")
     public Object isGoodsOnSale(@PathVariable Integer id) {
         return goodsController.isGoodsOnSale(id);
     }
@@ -188,7 +191,7 @@ public class GoodsInfoController {
      * @param id：Integer(PathVariable
      * @return GoodsPo（不可获取下架商品）
      */
-    @GetMapping("/inner/goods/{id}")
+    @GetMapping(value = "/inner/goods/{id}", produces = "application/json;charset=utf-8")
     public Object getGoodsInnerById(@PathVariable Integer id) {
         return goodsController.getGoodsInnerById(id);
     }
@@ -203,12 +206,12 @@ public class GoodsInfoController {
      * @param limit:Integer           一页多少
      * @return List<ProductPo>，所属该商品的产品列表
      */
-    @GetMapping("/goods/{id}/products")
+    @GetMapping(value = "/goods/{id}/products", produces = "application/json;charset=utf-8")
     public Object listProductsByGoodsId(@PathVariable Integer id,
                                         @RequestParam(defaultValue = "1", name = "page") Integer page,
                                         @RequestParam(defaultValue = "10", name = "limit") Integer limit,
                                         HttpServletRequest request) {
-        return productController.listProductsByGoodsId(id, page, limit,request);
+        return productController.listProductsByGoodsId(id, page, limit, request);
     }
 
 
@@ -223,7 +226,7 @@ public class GoodsInfoController {
     public Object addProduct(@PathVariable Integer id,
                              @RequestBody ProductPo productPo,
                              HttpServletRequest request) {
-        return productController.addProduct(id, productPo,request);
+        return productController.addProduct(id, productPo, request);
     }
 
     /**
@@ -237,7 +240,7 @@ public class GoodsInfoController {
     public Object updateProductById(@PathVariable Integer id,
                                     @RequestBody ProductPo productPo,
                                     HttpServletRequest request) {
-        return productController.updateProductById(id, productPo,request);
+        return productController.updateProductById(id, productPo, request);
     }
 
     /**
@@ -249,7 +252,7 @@ public class GoodsInfoController {
     @DeleteMapping("/products/{id}")
     public Object deleteProductById(@PathVariable Integer id,
                                     HttpServletRequest request) {
-        return productController.deleteProductById(id,request);
+        return productController.deleteProductById(id, request);
     }
 
     /**
@@ -258,7 +261,7 @@ public class GoodsInfoController {
      * @param id:Integer(PathVariable
      * @return Product，搜索到的产品
      */
-    @GetMapping("/user/product/{id}")
+    @GetMapping(value = "/user/product/{id}", produces = "application/json;charset=utf-8")
     public Object getProductById(@PathVariable Integer id) {
         return productController.getProductById(id);
     }
@@ -282,10 +285,10 @@ public class GoodsInfoController {
      * @param id:Integer(PathVariable
      * @return BrandPo
      */
-    @GetMapping("/admin/brands/{id}")
+    @GetMapping(value = "/admin/brands/{id}", produces = "application/json;charset=utf-8")
     public Object getBrandById(@PathVariable Integer id,
                                HttpServletRequest request) {
-        return brandController.getBrandById(id,request);
+        return brandController.getBrandById(id, request);
     }
 
     /**
@@ -297,12 +300,12 @@ public class GoodsInfoController {
      * @param limit:           Integer 一页多少
      * @return List<BrandPo>,搜索到的品牌列表
      */
-    @GetMapping("/admin/brands")
+    @GetMapping(value = "/admin/brands", produces = "application/json;charset=utf-8")
     public Object listBrandsByCondition(@RequestParam String brandId, @RequestParam String brandName,
                                         @RequestParam(defaultValue = "1", name = "page") Integer page,
                                         @RequestParam(defaultValue = "10", name = "limit") Integer limit,
                                         HttpServletRequest request) {
-        return brandController.listBrandsByCondition(brandId, brandName, page, limit,request);
+        return brandController.listBrandsByCondition(brandId, brandName, page, limit, request);
     }
 
     /**
@@ -314,7 +317,7 @@ public class GoodsInfoController {
     @PostMapping("/brands")
     public Object addBrand(@RequestBody BrandPo brandPo,
                            HttpServletRequest request) {
-        return brandController.addBrand(brandPo,request);
+        return brandController.addBrand(brandPo, request);
     }
 
     /**
@@ -328,7 +331,7 @@ public class GoodsInfoController {
     public Object updateBrandById(@PathVariable Integer id,
                                   @RequestBody BrandPo brandPo,
                                   HttpServletRequest request) {
-        return brandController.updateBrandById(id, brandPo,request);
+        return brandController.updateBrandById(id, brandPo, request);
     }
 
     /**
@@ -340,7 +343,7 @@ public class GoodsInfoController {
     @DeleteMapping("/brands/{id}")
     public Object deleteBrandById(@PathVariable Integer id,
                                   HttpServletRequest request) {
-        return brandController.deleteBrandById(id,request);
+        return brandController.deleteBrandById(id, request);
     }
 
     /**
@@ -349,9 +352,10 @@ public class GoodsInfoController {
      * @param id:Integer(PathVariable
      * @return BrandPo
      */
-    @GetMapping("/brands/{id}")
-    public Object getBrandForUserById(@PathVariable Integer id) {
-        return brandController.getBrandForUserById(id);
+    @GetMapping(value = "/brands/{id}", produces = "application/json;charset=utf-8")
+    public Object getBrandForUserById(@PathVariable Integer id,
+                                      HttpServletRequest request) {
+        return brandController.getBrandForUserById(id, request);
     }
 
     /**
@@ -361,10 +365,11 @@ public class GoodsInfoController {
      * @param limit: Integer 一页多少
      * @return List<BrandPo>,搜索到的品牌列表
      */
-    @GetMapping("/brands")
+    @GetMapping(value = "/brands", produces = "application/json;charset=utf-8")
     public Object listBrandsByCondition(@RequestParam(defaultValue = "1", name = "page") Integer page,
-                                        @RequestParam(defaultValue = "10", name = "limit") Integer limit) {
-        return brandController.listBrandsByCondition(page, limit);
+                                        @RequestParam(defaultValue = "10", name = "limit") Integer limit,
+                                        HttpServletRequest request) {
+        return brandController.listBrandsByCondition(page, limit, request);
     }
 
     //-----------------GoodsCategory---------------GoodsCategory-----------GoodsCategory---------
@@ -375,10 +380,10 @@ public class GoodsInfoController {
      * @param id：Integer
      * @return GoodsCategoryPo
      */
-    @GetMapping("/categories/{id}")
+    @GetMapping(value = "/categories/{id}", produces = "application/json;charset=utf-8")
     public Object getGoodsCategoryById(@PathVariable Integer id,
                                        HttpServletRequest request) {
-        return goodsCategoryController.getGoodsCategoryById(id,request);
+        return goodsCategoryController.getGoodsCategoryById(id, request);
     }
 
     /**
@@ -388,11 +393,11 @@ public class GoodsInfoController {
      * @param limit: Integer 一页多少
      * @return List<GoodsCategoryPo>
      */
-    @GetMapping("/categories")
+    @GetMapping(value = "/categories", produces = "application/json;charset=utf-8")
     public Object listGoodsCategories(@RequestParam(defaultValue = "1", name = "page") Integer page,
                                       @RequestParam(defaultValue = "10", name = "limit") Integer limit,
                                       HttpServletRequest request) {
-        return goodsCategoryController.listGoodsCategories(page, limit,request);
+        return goodsCategoryController.listGoodsCategories(page, limit, request);
     }
 
     /**
@@ -404,7 +409,7 @@ public class GoodsInfoController {
     @PostMapping("/categories")
     public Object addGoodsCategory(@RequestBody GoodsCategoryPo goodsCategoryPo,
                                    HttpServletRequest request) {
-        return goodsCategoryController.addGoodsCategory(goodsCategoryPo,request);
+        return goodsCategoryController.addGoodsCategory(goodsCategoryPo, request);
     }
 
     /**
@@ -418,7 +423,7 @@ public class GoodsInfoController {
     public Object updateGoodsCategoryById(@PathVariable Integer id,
                                           @RequestBody GoodsCategoryPo goodsCategoryPo,
                                           HttpServletRequest request) {
-        return goodsCategoryController.updateGoodsCategoryById(id, goodsCategoryPo,request);
+        return goodsCategoryController.updateGoodsCategoryById(id, goodsCategoryPo, request);
     }
 
     /**
@@ -432,7 +437,7 @@ public class GoodsInfoController {
     public Object updateGoodsCategoryPidById(@PathVariable Integer id,
                                              @RequestBody GoodsCategoryPo goodsCategoryPo,
                                              HttpServletRequest request) {
-        return goodsCategoryController.updateGoodsCategoryPidById(id, goodsCategoryPo,request);
+        return goodsCategoryController.updateGoodsCategoryPidById(id, goodsCategoryPo, request);
     }
 
     /**
@@ -444,7 +449,7 @@ public class GoodsInfoController {
     @DeleteMapping("/categories/{id}")
     public Object deleteGoodsCategoryById(@PathVariable Integer id,
                                           HttpServletRequest request) {
-        return goodsCategoryController.deleteGoodsCategoryById(id,request);
+        return goodsCategoryController.deleteGoodsCategoryById(id, request);
     }
 
     /**
@@ -454,10 +459,11 @@ public class GoodsInfoController {
      * @param limit: Integer 一页多少
      * @return List<GoodsCategoryPo>
      */
-    @GetMapping("/categories/l1")
+    @GetMapping(value = "/categories/l1", produces = "application/json;charset=utf-8")
     public Object listOneLevelGoodsCategories(@RequestParam(defaultValue = "1", name = "page") Integer page,
-                                              @RequestParam(defaultValue = "10", name = "limit") Integer limit) {
-        return goodsCategoryController.listOneLevelGoodsCategories(page, limit);
+                                              @RequestParam(defaultValue = "10", name = "limit") Integer limit,
+                                              HttpServletRequest request) {
+        return goodsCategoryController.listOneLevelGoodsCategories(page, limit, request);
     }
 
     /**
@@ -468,10 +474,11 @@ public class GoodsInfoController {
      * @param limit:     Integer 一页多少
      * @return List<GoodsCategoryPo>
      */
-    @GetMapping("/categories/l1/{id}/l2")
+    @GetMapping(value = "/categories/l1/{id}/l2", produces = "application/json;charset=utf-8")
     public Object listSecondLevelGoodsCategoryById(@PathVariable Integer id,
                                                    @RequestParam(defaultValue = "1", name = "page") Integer page,
-                                                   @RequestParam(defaultValue = "10", name = "limit") Integer limit) {
-        return goodsCategoryController.listSecondLevelGoodsCategoryById(id, page, limit);
+                                                   @RequestParam(defaultValue = "10", name = "limit") Integer limit,
+                                                   HttpServletRequest request) {
+        return goodsCategoryController.listSecondLevelGoodsCategoryById(id, page, limit, request);
     }
 }

@@ -232,7 +232,7 @@ public class GoodsCategoryController {
      * @return List<GoodsCategoryPo>
      */
     @GetMapping("/categories/l1")
-    public Object listOneLevelGoodsCategories(Integer page, Integer limit) {
+    public Object listOneLevelGoodsCategories(Integer page, Integer limit, HttpServletRequest request) {
         if (page > 0 && limit > 0) {
             List<GoodsCategoryPo> retGoodsCategoryList = goodsInfoService.listOneLevelGoodsCategories(page, limit);
             Object retObj = ResponseUtil.ok(retGoodsCategoryList);
@@ -252,7 +252,7 @@ public class GoodsCategoryController {
      * @return List<GoodsCategoryPo>
      */
     @GetMapping("/categories/l1/{id}/l2")
-    public Object listSecondLevelGoodsCategoryById(Integer id, Integer page, Integer limit) {
+    public Object listSecondLevelGoodsCategoryById(Integer id, Integer page, Integer limit, HttpServletRequest request) {
         if (page > 0 && limit > 0) {
             GoodsCategoryPo goodsCategory = goodsInfoService.getGoodsCategoryById(id);
             if (goodsCategory != null) {

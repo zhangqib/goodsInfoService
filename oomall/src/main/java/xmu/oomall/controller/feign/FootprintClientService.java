@@ -14,5 +14,5 @@ import xmu.oomall.domain.po.FootprintItemPo;
 
 public interface FootprintClientService {
     @PostMapping("/footprintService/footprints")
-    Object footprintItemPo(@RequestBody FootprintItemPo footprintItemPo);
+    Object addFootprint(@RequestBody FootprintItemPo footprintItemPo);
 }
