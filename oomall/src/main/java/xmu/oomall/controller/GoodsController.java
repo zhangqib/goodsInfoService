@@ -208,7 +208,11 @@ public class GoodsController {
      * @return Goods（不可获取下架商品）
      */
     public Object getGoodsForSaleById(Integer id, HttpServletRequest request) {
-        Integer userId = Integer.parseInt(request.getHeader("userId"));
+        Integer userId=null;
+        String userId2=request.getHeader("userId");
+        if(userId2!=null){
+            userId=Integer.parseInt(userId2);
+        }
         GoodsPo goods = goodsInfoService.getGoodsForSaleById(userId, id);
         if (goods != null) {
             Goods goodsPojo = new Goods(goods);
