@@ -65,7 +65,7 @@
   <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     update `oomall_product`
     set is_deleted = 1
-    where id = #{id} and id_deleted = 0
+    where id = #{id} and is_deleted = 0
   </update>
 
   <insert id="insert" parameterType="ProductPo" keyProperty="id" useGeneratedKeys="true">
@@ -105,9 +105,6 @@
       </if>
       <if test="product.specifications != null">
         specifications = #{product.specifications,jdbcType=VARCHAR},
-      </if>
-      <if test="product.goodsId != null">
-        goods_id = #{product.goodsId,jdbcType=BIGINT},
       </if>
       <if test="product.price != null">
         price = #{product.price,jdbcType=DECIMAL},
