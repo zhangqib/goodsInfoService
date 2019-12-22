@@ -68,8 +68,9 @@ public class GoodsInfoController {
      * @param limit:           Integer 一页多少
      * @return List<GoodsPo>,搜索到的商品的列表(可获取下架商品)
      */
-    @GetMapping(value ="/admin/goods", produces = "application/json;charset=utf-8")
-    public Object listGoodsByCondition(@RequestParam String goodsSn, @RequestParam String goodsName,
+    @GetMapping(value = "/admin/goods", produces = "application/json;charset=utf-8")
+    public Object listGoodsByCondition(@RequestParam(defaultValue = "", name = "goodsSn") String goodsSn,
+                                       @RequestParam(defaultValue = "", name = "goodsName") String goodsName,
                                        @RequestParam(defaultValue = "1", name = "page") Integer page,
                                        @RequestParam(defaultValue = "10", name = "limit") Integer limit,
                                        HttpServletRequest request) {
@@ -134,7 +135,7 @@ public class GoodsInfoController {
      * @return List<GoodsPo>,搜索到的商品的列表(不可获取下架商品)
      */
     @GetMapping(value = "/goods", produces = "application/json;charset=utf-8")
-    public Object listGoodsForSaleByCondition(@RequestParam String goodsName,
+    public Object listGoodsForSaleByCondition(@RequestParam(defaultValue = "", name = "goodsName") String goodsName,
                                               @RequestParam(defaultValue = "1", name = "page") Integer page,
                                               @RequestParam(defaultValue = "10", name = "limit") Integer limit,
                                               HttpServletRequest request) {
@@ -274,7 +275,8 @@ public class GoodsInfoController {
      * @return Boolean ，修改成功与否
      */
     @PutMapping("/product/list/deduct")
-    public Object updateStockByProductId(@RequestBody List<OrderItem> orderItemList, @RequestParam boolean operation) {
+    public Object updateStockByProductId(@RequestBody List<OrderItem> orderItemList,
+                                         @RequestParam(defaultValue = "false", name = "operation") boolean operation) {
         return productController.updateStockByProductId(orderItemList, operation);
     }
     //-----------------Brand---------------Brand-----------Brand---------
@@ -301,7 +303,8 @@ public class GoodsInfoController {
      * @return List<BrandPo>,搜索到的品牌列表
      */
     @GetMapping(value = "/admin/brands", produces = "application/json;charset=utf-8")
-    public Object listBrandsByCondition(@RequestParam String brandId, @RequestParam String brandName,
+    public Object listBrandsByCondition(@RequestParam(defaultValue = "", name = "brandId") String brandId,
+                                        @RequestParam(defaultValue = "", name = "brandName") String brandName,
                                         @RequestParam(defaultValue = "1", name = "page") Integer page,
                                         @RequestParam(defaultValue = "10", name = "limit") Integer limit,
                                         HttpServletRequest request) {

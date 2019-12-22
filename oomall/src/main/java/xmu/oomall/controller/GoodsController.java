@@ -72,10 +72,10 @@ public class GoodsController {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 0, "查询商品", 1, null);
             //logClientService.addLog(log);
-            if (goodsSn == "") {
+            if (goodsSn.equals("")) {
                 goodsSn = null;
             }
-            if (goodsName == "") {
+            if (goodsName.equals("")) {
                 goodsName = null;
             }
             List<GoodsPo> retGoodsList = goodsInfoService.listGoodsByCondition(goodsSn, goodsName, page, limit);
@@ -173,13 +173,13 @@ public class GoodsController {
         GoodsPo goods = goodsInfoService.getGoodsById(id);
         if (goods != null) {
             Integer ret = goodsInfoService.deleteGoodsById(goods);
-            if (ret == 1) {
+            if (ret==1) {
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 3, "删除商品", 1, null);
                 //logClientService.addLog(log);
                 Object retObj = ResponseUtil.ok();
                 return retObj;
-            } else if (ret == -1) {
+            } else if (ret==-1) {
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 3, "删除商品", 0, null);
                 //logClientService.addLog(log);
@@ -245,7 +245,7 @@ public class GoodsController {
      */
     public Object listGoodsForSaleByCondition(String goodsName, Integer page, Integer limit, HttpServletRequest request) {
         if (page > 0 && limit > 0) {
-            if (goodsName == "") {
+            if (goodsName.equals("")) {
                 goodsName = null;
             }
             List<GoodsPo> retGoodsList = goodsInfoService.listGoodsForSaleByCondition(goodsName, page, limit);
