@@ -190,7 +190,7 @@ public interface GoodsInfoService {
      * @param limit:           Integer 一页多少
      * @return List<BrandPo>,搜索到的品牌列表
      */
-    List<BrandPo> listBrandsByCondition(String brandId, String brandName, Integer page, Integer limit);
+    List<BrandPo> listBrandsByCondition(Integer brandId, String brandName, Integer page, Integer limit);
 
     /**
      * 3.管理员创建品牌
