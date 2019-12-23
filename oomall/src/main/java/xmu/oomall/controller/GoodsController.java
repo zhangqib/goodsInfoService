@@ -74,10 +74,10 @@ public class GoodsController {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 0, "查询商品", 1, null);
             logClientService.addLog(log);
-            if (goodsSn.equals("")) {
+            if ("".equals(goodsSn)) {
                 goodsSn = null;
             }
-            if (goodsName.equals("")) {
+            if ("".equals(goodsName)) {
                 goodsName = null;
             }
             List<GoodsPo> retGoodsList = goodsInfoService.listGoodsByCondition(goodsSn, goodsName, page, limit);
@@ -247,7 +247,7 @@ public class GoodsController {
      */
     public Object listGoodsForSaleByCondition(String goodsName, Integer page, Integer limit, HttpServletRequest request) {
         if (page > 0 && limit > 0) {
-            if (goodsName.equals("")) {
+            if ("".equals(goodsName)) {
                 goodsName = null;
             }
             List<GoodsPo> retGoodsList = goodsInfoService.listGoodsForSaleByCondition(goodsName, page, limit);

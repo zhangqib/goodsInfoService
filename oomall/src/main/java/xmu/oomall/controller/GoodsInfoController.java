@@ -2,7 +2,6 @@ package xmu.oomall.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import xmu.oomall.controller.feign.AdClientService;
 import xmu.oomall.controller.feign.LogClientService;
 import xmu.oomall.domain.*;
 import xmu.oomall.domain.po.BrandPo;
@@ -23,9 +22,6 @@ import java.util.List;
 
 @RestController
 public class GoodsInfoController {
-    @Autowired
-    private AdClientService adClientService;
-
     @Autowired
     private LogClientService logClientService;
 
@@ -376,7 +372,7 @@ public class GoodsInfoController {
             Object retObj = ResponseUtil.fail(580, "参数不合法");
             return retObj;
         }
-        if(brandId.equals("")){
+        if("".equals(brandId)){
             brandId=null;
         }else{
             if(Integer.parseInt(brandId)<=0){

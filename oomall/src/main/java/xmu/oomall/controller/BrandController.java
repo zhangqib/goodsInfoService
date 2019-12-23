@@ -67,12 +67,12 @@ public class BrandController {
                     request.getHeader("ip"), 0, "查询品牌", 1, null);
             logClientService.addLog(log);
             Integer brandId2;
-            if (brandId.equals("")) {
+            if ("".equals(brandId)) {
                 brandId2 = null;
             } else {
                 brandId2 = Integer.parseInt(brandId);
             }
-            if (brandName.equals("")) {
+            if ("".equals(brandName)) {
                 brandName = null;
             }
             List<BrandPo> retBrandList = goodsInfoService.listBrandsByCondition(brandId2, brandName, page, limit);
