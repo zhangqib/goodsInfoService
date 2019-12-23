@@ -3,6 +3,7 @@ package xmu.oomall.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
+import xmu.oomall.controller.feign.LogClientService;
 import xmu.oomall.domain.Log;
 import xmu.oomall.domain.po.BrandPo;
 import xmu.oomall.service.GoodsInfoService;
@@ -19,8 +20,8 @@ import java.util.List;
 
 @Component
 public class BrandController {
-    //@Autowired
-    //private //LogClientService //logClientService;
+    @Autowired
+    private LogClientService logClientService;
     @Autowired
     private GoodsInfoService goodsInfoService;
     //-----------------Brand---------------Brand-----------Brand---------
@@ -37,13 +38,13 @@ public class BrandController {
         if (retBrand != null) {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 0, "查询品牌", 1, null);
-            //logClientService.addLog(log);
+            logClientService.addLog(log);
             Object retObj = ResponseUtil.ok(retBrand);
             return retObj;
         } else {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 0, "查询品牌", 0, null);
-            //logClientService.addLog(log);
+            logClientService.addLog(log);
             Object retObj = ResponseUtil.fail(794, "该品牌不存在");
             return retObj;
         }
@@ -64,15 +65,15 @@ public class BrandController {
         if (page > 0 && limit > 0) {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 0, "查询品牌", 1, null);
-            //logClientService.addLog(log);
+            logClientService.addLog(log);
             Integer brandId2;
-            if(brandId.equals("")){
-                brandId2=null;
-            }else{
-                brandId2=Integer.parseInt(brandId);
+            if (brandId.equals("")) {
+                brandId2 = null;
+            } else {
+                brandId2 = Integer.parseInt(brandId);
             }
-            if(brandName.equals("")){
-                brandName=null;
+            if (brandName.equals("")) {
+                brandName = null;
             }
             List<BrandPo> retBrandList = goodsInfoService.listBrandsByCondition(brandId2, brandName, page, limit);
             Object retObj = ResponseUtil.ok(retBrandList);
@@ -80,7 +81,7 @@ public class BrandController {
         } else {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 0, "查询品牌", 0, null);
-            //logClientService.addLog(log);
+            logClientService.addLog(log);
             Object retObj = ResponseUtil.fail(795, "分页参数错误，获取品牌列表失败");
             return retObj;
         }
@@ -99,20 +100,20 @@ public class BrandController {
             if (retBrand != null) {
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 1, "创建品牌", 1, null);
-                //logClientService.addLog(log);
+                logClientService.addLog(log);
                 Object retObj = ResponseUtil.ok(retBrand);
                 return retObj;
             } else {
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 1, "创建品牌", 0, null);
-                //logClientService.addLog(log);
+                logClientService.addLog(log);
                 Object retObj = ResponseUtil.fail(791, "数据库操作失败,品牌新建失败");
                 return retObj;
             }
         }
         Log log = new Log(request.getIntHeader("userId"),
                 request.getHeader("ip"), 1, "创建品牌", 0, null);
-        //logClientService.addLog(log);
+        logClientService.addLog(log);
         Object retObj = ResponseUtil.fail(791, "前端传入的数据为null,品牌新建失败");
         return retObj;
     }
@@ -134,27 +135,27 @@ public class BrandController {
                 if (retBrand != null) {
                     Log log = new Log(request.getIntHeader("userId"),
                             request.getHeader("ip"), 0, "修改品牌", 1, null);
-                    //logClientService.addLog(log);
+                    logClientService.addLog(log);
                     Object retObj = ResponseUtil.ok(retBrand);
                     return retObj;
                 } else {
                     Log log = new Log(request.getIntHeader("userId"),
                             request.getHeader("ip"), 2, "修改品牌", 0, null);
-                    //logClientService.addLog(log);
+                    logClientService.addLog(log);
                     Object retObj = ResponseUtil.fail(792, "数据库操作失败,品牌修改失败");
                     return retObj;
                 }
             } else {
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 2, "修改品牌", 0, null);
-                //logClientService.addLog(log);
+                logClientService.addLog(log);
                 Object retObj = ResponseUtil.fail(792, "该品牌不存在,品牌修改失败");
                 return retObj;
             }
         } else {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 2, "修改品牌", 0, null);
-            //logClientService.addLog(log);
+            logClientService.addLog(log);
             Object retObj = ResponseUtil.fail(792, "前端传入的数据为null,品牌修改失败");
             return retObj;
         }
@@ -174,20 +175,20 @@ public class BrandController {
             if (ret) {
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 0, "删除品牌", 1, null);
-                //logClientService.addLog(log);
+                logClientService.addLog(log);
                 Object retObj = ResponseUtil.ok();
                 return retObj;
             } else {
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 3, "删除品牌", 0, null);
-                //logClientService.addLog(log);
+                logClientService.addLog(log);
                 Object retObj = ResponseUtil.fail(793, "数据库操作失败,品牌删除失败");
                 return retObj;
             }
         } else {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 3, "删除品牌", 0, null);
-            //logClientService.addLog(log);
+            logClientService.addLog(log);
             Object retObj = ResponseUtil.fail(794, "该品牌不存在,品牌删除失败");
             return retObj;
         }

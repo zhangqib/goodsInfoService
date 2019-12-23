@@ -97,7 +97,6 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
             if (goods.getStatusCode() == 0) {
                 boolean ret = goodsDao.deleteById(goods.getId());
                 if (ret) {
-
                     return 1;
                 }
             } else {
@@ -204,6 +203,7 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
     }
 
     /**
+     *
      * 1.管理员搜索某个商品下的所有产品
      *
      * @param id    :Integer

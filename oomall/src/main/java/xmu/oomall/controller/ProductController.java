@@ -22,8 +22,8 @@ import java.util.List;
 
 @Component
 public class ProductController {
-    //@Autowired
-    //private //LogClientService //logClientService;
+    @Autowired
+    private LogClientService logClientService;
     @Autowired
     private GoodsInfoService goodsInfoService;
 
@@ -42,21 +42,21 @@ public class ProductController {
             if (goods != null) {
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 0, "查询产品", 1, null);
-                //logClientService.addLog(log);
+                logClientService.addLog(log);
                 List<ProductPo> retProductList = goodsInfoService.listProductsByGoodsId(id, page, limit);
                 Object retObj = ResponseUtil.ok(retProductList);
                 return retObj;
             } else {
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 0, "查询产品", 0, null);
-                //logClientService.addLog(log);
+                logClientService.addLog(log);
                 Object retObj = ResponseUtil.fail(785, "该商品不存在,获取产品列表失败");
                 return retObj;
             }
         } else {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 0, "查询产品", 0, null);
-            //logClientService.addLog(log);
+            logClientService.addLog(log);
             Object retObj = ResponseUtil.fail(785, "分页参数错误,获取产品列表失败");
             return retObj;
         }
@@ -79,27 +79,27 @@ public class ProductController {
                 if (retProduct != null) {
                     Log log = new Log(request.getIntHeader("userId"),
                             request.getHeader("ip"), 1, "修改产品", 1, null);
-                    //logClientService.addLog(log);
+                    logClientService.addLog(log);
                     Object retObj = ResponseUtil.ok(retProduct);
                     return retObj;
                 } else {
                     Log log = new Log(request.getIntHeader("userId"),
                             request.getHeader("ip"), 1, "修改产品", 0, null);
-                    //logClientService.addLog(log);
+                    logClientService.addLog(log);
                     Object retObj = ResponseUtil.fail(781, "数据库操作失败,产品新建失败");
                     return retObj;
                 }
             } else {
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 1, "修改产品", 0, null);
-                //logClientService.addLog(log);
+                logClientService.addLog(log);
                 Object retObj = ResponseUtil.fail(781, "该商品不存在,产品新建失败");
                 return retObj;
             }
         } else {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 1, "修改产品", 0, null);
-            //logClientService.addLog(log);
+            logClientService.addLog(log);
             Object retObj = ResponseUtil.fail(781, "前端传入数据为null,产品新建失败");
             return retObj;
         }
@@ -122,27 +122,27 @@ public class ProductController {
                 if (retProduct != null) {
                     Log log = new Log(request.getIntHeader("userId"),
                             request.getHeader("ip"), 2, "修改产品", 1, null);
-                    //logClientService.addLog(log);
+                    logClientService.addLog(log);
                     Object retObj = ResponseUtil.ok(retProduct);
                     return retObj;
                 } else {
                     Log log = new Log(request.getIntHeader("userId"),
                             request.getHeader("ip"), 2, "修改产品", 0, null);
-                    //logClientService.addLog(log);
+                    logClientService.addLog(log);
                     Object retObj = ResponseUtil.fail(782, "数据库操作失败,产品修改失败");
                     return retObj;
                 }
             } else {
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 2, "修改产品", 0, null);
-                //logClientService.addLog(log);
+                logClientService.addLog(log);
                 Object retObj = ResponseUtil.fail(782, "该产品不存在,产品修改失败");
                 return retObj;
             }
         } else {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 2, "修改产品", 0, null);
-            //logClientService.addLog(log);
+            logClientService.addLog(log);
             Object retObj = ResponseUtil.fail(782, "前端传入数据为null,产品修改失败");
             return retObj;
         }
@@ -162,20 +162,20 @@ public class ProductController {
             if (ret) {
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 3, "删除产品", 1, null);
-                //logClientService.addLog(log);
+                logClientService.addLog(log);
                 Object retObj = ResponseUtil.ok();
                 return retObj;
             } else {
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 3, "删除产品", 0, null);
-                //logClientService.addLog(log);
+                logClientService.addLog(log);
                 Object retObj = ResponseUtil.fail(783, "数据库操作失败,产品删除失败");
                 return retObj;
             }
         } else {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 3, "删除产品", 0, null);
-            //logClientService.addLog(log);
+            logClientService.addLog(log);
             Object retObj = ResponseUtil.fail(783, "该产品不存在,产品删除失败");
             return retObj;
         }

@@ -13,6 +13,6 @@ import xmu.oomall.domain.po.FootprintItemPo;
 @FeignClient(value="FOOTPRINTSERVICE")
 
 public interface FootprintClientService {
-    @PostMapping("/footprintService/footprints")
+    @PostMapping("/footprints")
     Object addFootprint(@RequestBody FootprintItemPo footprintItemPo);
 }

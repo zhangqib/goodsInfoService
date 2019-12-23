@@ -3,6 +3,7 @@ package xmu.oomall.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
+import xmu.oomall.controller.feign.LogClientService;
 import xmu.oomall.domain.Log;
 import xmu.oomall.domain.po.GoodsCategoryPo;
 import xmu.oomall.service.GoodsInfoService;
@@ -19,8 +20,8 @@ import java.util.List;
 
 @Component
 public class GoodsCategoryController {
-    //@Autowired
-    //private //LogClientService //logClientService;
+    @Autowired
+    private LogClientService logClientService;
     @Autowired
     private GoodsInfoService goodsInfoService;
 
@@ -36,13 +37,13 @@ public class GoodsCategoryController {
         if (retGoodsCategory != null) {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 0, "查询分类", 1, null);
-            //logClientService.addLog(log);
+            logClientService.addLog(log);
             Object retObj = ResponseUtil.ok(retGoodsCategory);
             return retObj;
         } else {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 0, "查询分类", 0, null);
-            //logClientService.addLog(log);
+            logClientService.addLog(log);
             Object retObj = ResponseUtil.fail(804, "该分类不存在");
             return retObj;
         }
@@ -60,14 +61,14 @@ public class GoodsCategoryController {
         if (page > 0 && limit > 0) {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 0, "查询分类", 1, null);
-            //logClientService.addLog(log);
+            logClientService.addLog(log);
             List<GoodsCategoryPo> retGoodsCategoryList = goodsInfoService.listGoodsCategories(page, limit);
             Object retObj = ResponseUtil.ok(retGoodsCategoryList);
             return retObj;
         } else {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 0, "查询分类", 0, null);
-            //logClientService.addLog(log);
+            logClientService.addLog(log);
             Object retObj = ResponseUtil.fail(805, "分页参数错误，获取分类列表失败");
             return retObj;
         }
@@ -86,20 +87,20 @@ public class GoodsCategoryController {
             if (retGoodsCategory != null) {
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 1, "新建分类", 1, null);
-                //logClientService.addLog(log);
+                logClientService.addLog(log);
                 Object retObj = ResponseUtil.ok(retGoodsCategory);
                 return retObj;
             } else {
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 1, "新建分类", 0, null);
-                //logClientService.addLog(log);
+                logClientService.addLog(log);
                 Object retObj = ResponseUtil.fail(801, "数据库操作失败,分类新建失败");
                 return retObj;
             }
         } else {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 1, "新建分类", 0, null);
-            //logClientService.addLog(log);
+            logClientService.addLog(log);
             Object retObj = ResponseUtil.fail(801, "前端传入数据为null,分类新建失败");
             return retObj;
         }
@@ -122,27 +123,27 @@ public class GoodsCategoryController {
                 if (retGoodsCategory != null) {
                     Log log = new Log(request.getIntHeader("userId"),
                             request.getHeader("ip"), 2, "修改品牌", 1, null);
-                    //logClientService.addLog(log);
+                    logClientService.addLog(log);
                     Object retObj = ResponseUtil.ok(retGoodsCategory);
                     return retObj;
                 } else {
                     Log log = new Log(request.getIntHeader("userId"),
                             request.getHeader("ip"), 2, "修改品牌", 0, null);
-                    //logClientService.addLog(log);
+                    logClientService.addLog(log);
                     Object retObj = ResponseUtil.fail(802, "数据库操作失败,分类修改失败");
                     return retObj;
                 }
             } else {
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 2, "修改品牌", 0, null);
-                //logClientService.addLog(log);
+                logClientService.addLog(log);
                 Object retObj = ResponseUtil.fail(802, "该分类不存在,分类修改失败");
                 return retObj;
             }
         } else {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 2, "修改品牌", 0, null);
-            //logClientService.addLog(log);
+            logClientService.addLog(log);
             Object retObj = ResponseUtil.fail(802, "前端传入数据为null,分类修改失败");
             return retObj;
         }
@@ -165,27 +166,27 @@ public class GoodsCategoryController {
                 if (retGoodsCategory != null) {
                     Log log = new Log(request.getIntHeader("userId"),
                             request.getHeader("ip"), 2, "修改品牌", 1, null);
-                    //logClientService.addLog(log);
+                    logClientService.addLog(log);
                     Object retObj = ResponseUtil.ok(retGoodsCategory);
                     return retObj;
                 } else {
                     Log log = new Log(request.getIntHeader("userId"),
                             request.getHeader("ip"), 2, "修改品牌", 0, null);
-                    //logClientService.addLog(log);
+                    logClientService.addLog(log);
                     Object retObj = ResponseUtil.fail(802, "数据库操作失败,子分类修改失败");
                     return retObj;
                 }
             } else {
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 2, "修改品牌", 0, null);
-                //logClientService.addLog(log);
+                logClientService.addLog(log);
                 Object retObj = ResponseUtil.fail(802, "该子分类不存在,子分类修改失败");
                 return retObj;
             }
         } else {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 2, "修改品牌", 0, null);
-            //logClientService.addLog(log);
+            logClientService.addLog(log);
             Object retObj = ResponseUtil.fail(802, "前端传入数据为null,子分类修改失败");
             return retObj;
         }
@@ -205,20 +206,20 @@ public class GoodsCategoryController {
             if (ret) {
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 3, "删除分类", 1, null);
-                //logClientService.addLog(log);
+                logClientService.addLog(log);
                 Object retObj = ResponseUtil.ok();
                 return retObj;
             } else {
                 Log log = new Log(request.getIntHeader("userId"),
                         request.getHeader("ip"), 3, "删除分类", 0, null);
-                //logClientService.addLog(log);
+                logClientService.addLog(log);
                 Object retObj = ResponseUtil.fail(803, "数据库操作失败,分类删除失败");
                 return retObj;
             }
         } else {
             Log log = new Log(request.getIntHeader("userId"),
                     request.getHeader("ip"), 3, "删除分类", 0, null);
-            //logClientService.addLog(log);
+            logClientService.addLog(log);
             Object retObj = ResponseUtil.fail(803, "该分类不存在,分类删除失败");
             return retObj;
         }

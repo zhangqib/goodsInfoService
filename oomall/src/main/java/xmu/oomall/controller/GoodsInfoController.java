@@ -9,6 +9,7 @@ import xmu.oomall.domain.po.BrandPo;
 import xmu.oomall.domain.po.GoodsCategoryPo;
 import xmu.oomall.domain.po.GoodsPo;
 import xmu.oomall.domain.po.ProductPo;
+import xmu.oomall.util.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -55,6 +56,10 @@ public class GoodsInfoController {
     @GetMapping(value = "/admin/goods/{id}", produces = "application/json;charset=utf-8")
     public Object getGoodsById(@PathVariable Integer id,
                                HttpServletRequest request) {
+        if(id<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return goodsController.getGoodsById(id, request);
     }
 
@@ -73,6 +78,10 @@ public class GoodsInfoController {
                                        @RequestParam(defaultValue = "1", name = "page") Integer page,
                                        @RequestParam(defaultValue = "10", name = "limit") Integer limit,
                                        HttpServletRequest request) {
+        if(page<=0||limit<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return goodsController.listGoodsByCondition(goodsSn, goodsName, page, limit, request);
     }
 
@@ -99,6 +108,10 @@ public class GoodsInfoController {
     public Object updateGoodsById(@PathVariable Integer id,
                                   @RequestBody GoodsPo goodsPo,
                                   HttpServletRequest request) {
+        if(id<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return goodsController.updateGoodsById(id, goodsPo, request);
     }
 
@@ -111,6 +124,10 @@ public class GoodsInfoController {
     @DeleteMapping("/goods/{id}")
     public Object deleteGoodsById(@PathVariable Integer id,
                                   HttpServletRequest request) {
+        if(id<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return goodsController.deleteGoodsById(id, request);
     }
 
@@ -122,6 +139,10 @@ public class GoodsInfoController {
      */
     @GetMapping(value = "/goods/{id}", produces = "application/json;charset=utf-8")
     public Object getGoodsForSaleById(@PathVariable Integer id, HttpServletRequest request) {
+        if(id<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return goodsController.getGoodsForSaleById(id, request);
     }
 
@@ -138,6 +159,10 @@ public class GoodsInfoController {
                                               @RequestParam(defaultValue = "1", name = "page") Integer page,
                                               @RequestParam(defaultValue = "10", name = "limit") Integer limit,
                                               HttpServletRequest request) {
+        if(page<=0||limit<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return goodsController.listGoodsForSaleByCondition(goodsName, page, limit, request);
     }
 
@@ -155,6 +180,10 @@ public class GoodsInfoController {
                                                @RequestParam(defaultValue = "1", name = "page") Integer page,
                                                @RequestParam(defaultValue = "10", name = "limit") Integer limit,
                                                HttpServletRequest request) {
+        if(id<=0||page<=0||limit<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return goodsController.listGoodsForSaleByCategoryId(id, page, limit, request);
     }
 
@@ -171,6 +200,10 @@ public class GoodsInfoController {
                                             @RequestParam(defaultValue = "1", name = "page") Integer page,
                                             @RequestParam(defaultValue = "10", name = "limit") Integer limit,
                                             HttpServletRequest request) {
+        if(id<=0||page<=0||limit<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return goodsController.listGoodsForSaleByBrandId(id, page, limit, request);
     }
 
@@ -182,6 +215,10 @@ public class GoodsInfoController {
      */
     @GetMapping(value = "/goods/{id}/isOnSale", produces = "application/json;charset=utf-8")
     public Object isGoodsOnSale(@PathVariable Integer id) {
+        if(id<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return goodsController.isGoodsOnSale(id);
     }
 
@@ -193,6 +230,10 @@ public class GoodsInfoController {
      */
     @GetMapping(value = "/inner/goods/{id}", produces = "application/json;charset=utf-8")
     public Object getGoodsInnerById(@PathVariable Integer id) {
+        if(id<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return goodsController.getGoodsInnerById(id);
     }
 
@@ -211,6 +252,10 @@ public class GoodsInfoController {
                                         @RequestParam(defaultValue = "1", name = "page") Integer page,
                                         @RequestParam(defaultValue = "10", name = "limit") Integer limit,
                                         HttpServletRequest request) {
+        if(id<=0||page<=0||limit<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return productController.listProductsByGoodsId(id, page, limit, request);
     }
 
@@ -226,6 +271,10 @@ public class GoodsInfoController {
     public Object addProduct(@PathVariable Integer id,
                              @RequestBody ProductPo productPo,
                              HttpServletRequest request) {
+        if(id<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return productController.addProduct(id, productPo, request);
     }
 
@@ -240,6 +289,10 @@ public class GoodsInfoController {
     public Object updateProductById(@PathVariable Integer id,
                                     @RequestBody ProductPo productPo,
                                     HttpServletRequest request) {
+        if(id<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return productController.updateProductById(id, productPo, request);
     }
 
@@ -252,6 +305,10 @@ public class GoodsInfoController {
     @DeleteMapping("/products/{id}")
     public Object deleteProductById(@PathVariable Integer id,
                                     HttpServletRequest request) {
+        if(id<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return productController.deleteProductById(id, request);
     }
 
@@ -263,6 +320,10 @@ public class GoodsInfoController {
      */
     @GetMapping(value = "/user/product/{id}", produces = "application/json;charset=utf-8")
     public Object getProductById(@PathVariable Integer id) {
+        if(id<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return productController.getProductById(id);
     }
 
@@ -289,6 +350,10 @@ public class GoodsInfoController {
     @GetMapping(value = "/admin/brands/{id}", produces = "application/json;charset=utf-8")
     public Object getBrandById(@PathVariable Integer id,
                                HttpServletRequest request) {
+        if(id<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return brandController.getBrandById(id, request);
     }
 
@@ -307,6 +372,19 @@ public class GoodsInfoController {
                                         @RequestParam(defaultValue = "1", name = "page") Integer page,
                                         @RequestParam(defaultValue = "10", name = "limit") Integer limit,
                                         HttpServletRequest request) {
+        if(page<=0||limit<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
+        if(brandId.equals("")){
+            brandId=null;
+        }else{
+            if(Integer.parseInt(brandId)<=0){
+                Object retObj = ResponseUtil.fail(580, "参数不合法");
+                return retObj;
+            }
+        }
+
         return brandController.listBrandsByCondition(brandId, brandName, page, limit, request);
     }
 
@@ -333,6 +411,10 @@ public class GoodsInfoController {
     public Object updateBrandById(@PathVariable Integer id,
                                   @RequestBody BrandPo brandPo,
                                   HttpServletRequest request) {
+        if(id<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return brandController.updateBrandById(id, brandPo, request);
     }
 
@@ -345,6 +427,10 @@ public class GoodsInfoController {
     @DeleteMapping("/brands/{id}")
     public Object deleteBrandById(@PathVariable Integer id,
                                   HttpServletRequest request) {
+        if(id<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return brandController.deleteBrandById(id, request);
     }
 
@@ -357,6 +443,10 @@ public class GoodsInfoController {
     @GetMapping(value = "/brands/{id}", produces = "application/json;charset=utf-8")
     public Object getBrandForUserById(@PathVariable Integer id,
                                       HttpServletRequest request) {
+        if(id<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return brandController.getBrandForUserById(id, request);
     }
 
@@ -371,6 +461,10 @@ public class GoodsInfoController {
     public Object listBrandsByCondition(@RequestParam(defaultValue = "1", name = "page") Integer page,
                                         @RequestParam(defaultValue = "10", name = "limit") Integer limit,
                                         HttpServletRequest request) {
+        if(page<=0||limit<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return brandController.listBrandsByCondition(page, limit, request);
     }
 
@@ -385,6 +479,10 @@ public class GoodsInfoController {
     @GetMapping(value = "/categories/{id}", produces = "application/json;charset=utf-8")
     public Object getGoodsCategoryById(@PathVariable Integer id,
                                        HttpServletRequest request) {
+        if(id<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return goodsCategoryController.getGoodsCategoryById(id, request);
     }
 
@@ -399,6 +497,10 @@ public class GoodsInfoController {
     public Object listGoodsCategories(@RequestParam(defaultValue = "1", name = "page") Integer page,
                                       @RequestParam(defaultValue = "10", name = "limit") Integer limit,
                                       HttpServletRequest request) {
+        if(page<=0||limit<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return goodsCategoryController.listGoodsCategories(page, limit, request);
     }
 
@@ -425,6 +527,10 @@ public class GoodsInfoController {
     public Object updateGoodsCategoryById(@PathVariable Integer id,
                                           @RequestBody GoodsCategoryPo goodsCategoryPo,
                                           HttpServletRequest request) {
+        if(id<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return goodsCategoryController.updateGoodsCategoryById(id, goodsCategoryPo, request);
     }
 
@@ -439,6 +545,10 @@ public class GoodsInfoController {
     public Object updateGoodsCategoryPidById(@PathVariable Integer id,
                                              @RequestBody GoodsCategoryPo goodsCategoryPo,
                                              HttpServletRequest request) {
+        if(id<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return goodsCategoryController.updateGoodsCategoryPidById(id, goodsCategoryPo, request);
     }
 
@@ -451,6 +561,10 @@ public class GoodsInfoController {
     @DeleteMapping("/categories/{id}")
     public Object deleteGoodsCategoryById(@PathVariable Integer id,
                                           HttpServletRequest request) {
+        if(id<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return goodsCategoryController.deleteGoodsCategoryById(id, request);
     }
 
@@ -465,6 +579,10 @@ public class GoodsInfoController {
     public Object listOneLevelGoodsCategories(@RequestParam(defaultValue = "1", name = "page") Integer page,
                                               @RequestParam(defaultValue = "10", name = "limit") Integer limit,
                                               HttpServletRequest request) {
+        if(page<=0||limit<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return goodsCategoryController.listOneLevelGoodsCategories(page, limit, request);
     }
 
@@ -481,6 +599,10 @@ public class GoodsInfoController {
                                                    @RequestParam(defaultValue = "1", name = "page") Integer page,
                                                    @RequestParam(defaultValue = "10", name = "limit") Integer limit,
                                                    HttpServletRequest request) {
+        if(id<=0||page<=0||limit<=0){
+            Object retObj = ResponseUtil.fail(580, "参数不合法");
+            return retObj;
+        }
         return goodsCategoryController.listSecondLevelGoodsCategoryById(id, page, limit, request);
     }
 }
