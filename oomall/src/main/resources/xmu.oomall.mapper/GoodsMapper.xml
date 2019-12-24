@@ -180,7 +180,7 @@
       </if>
       <if test="goods.statusCode != null">
         status = #{goods.statusCode,jdbcType=TINYINT},
-      </if>
+      </if>oomall_privilege
       <if test="goods.shareUrl != null">
         share_url = #{goods.shareUrl,jdbcType=VARCHAR},
       </if>

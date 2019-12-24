@@ -8,6 +8,7 @@ import xmu.oomall.domain.po.GoodsPo;
 import xmu.oomall.domain.po.ProductPo;
 import xmu.oomall.mapper.GoodsMapper;
 import xmu.oomall.mapper.ProductMapper;
+import xmu.oomall.util.Config;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,9 @@ public class ProductDAO {
 
     @Autowired
     private IRedisService iRedisService;
+
+    @Autowired
+    private Config config;
 
     /**
      * 插入一个product
@@ -139,14 +143,71 @@ public class ProductDAO {
     }
 
     public Boolean descStock(Integer productId, int dStock) {
+        Integer redisStock = (Integer) iRedisService.get(ProductPo.gemStockRedisKey(productId));
+        if (redisStock == null) {
+            if (iRedisService.exists(ProductPo.gemStockRedisKey(productId))) {
+                return false;
+            } else {
+                redisStock = preDescStock(productId);
+                if (redisStock == 0) {
+                    return false;
+                }
+            }
+        }
+        // redisStock 存在且大于0
+        if (redisStock < dStock) {
+            // 从数据库中扣除
+            if (descStockFromDatabase(productId, dStock - redisStock)) {
+                redisStock = 0;
+            } else {
+                return false;
+            }
+        } else {
+            // 从redis中扣除
+            redisStock -= dStock;
+        }
+        if (redisStock < config.getRedisStockThreshold()){
+            redisStock += preDescStock(productId);
+        }
+        iRedisService.set(ProductPo.gemStockRedisKey(productId), redisStock);
+        return true;
+    }
+
+    private boolean descStockFromDatabase(Integer productId, int dStock) {
+        if (iRedisService.exists(ProductPo.gemStockRedisKey(productId))) {
+            return false;
+        }
         ProductPo product = productMapper.selectByPrimaryKey(productId);
         if (product == null || product.getBeDeleted()) {
             return false;
-        } else if (product.getSafetyStock() < dStock){
+        } else if (product.getSafetyStock() < dStock && product.getSafetyStock() != 0){
+            return false;
+        } else if (product.getSafetyStock() == 0) {
+            iRedisService.set(product.gemRedisStockUnDescable(), 1);
             return false;
         } else {
             product.setSafetyStock(product.getSafetyStock() - dStock);
             return productMapper.updateByPrimaryKey(product) == 1;
+        }
+    }
+
+    private Integer preDescStock(Integer productId) {
+        if (iRedisService.exists(ProductPo.gemRedisStockUnDescable(productId))) {
+            return 0;
+        } else {
+            // 可以扣库存
+            ProductPo product = productMapper.selectByPrimaryKey(productId);
+            if (product == null) {
+                return 0;
+            }
+            Integer descQty;
+            if (product.getSafetyStock() < config.getPreDescQty()) {
+                descQty = product.getSafetyStock();
+            } else {
+                descQty = config.getPreDescQty();
+            }
+            product.setSafetyStock(product.getSafetyStock() - descQty);
+            return productMapper.updateByPrimaryKey(product) == 1? descQty: 0;
         }
     }
 
@@ -156,7 +217,12 @@ public class ProductDAO {
             return false;
         } else {
             product.setSafetyStock(product.getSafetyStock() + dStock);
-            return productMapper.updateByPrimaryKey(product) == 1;
+            if(productMapper.updateByPrimaryKey(product) == 1) {
+                iRedisService.remove(product.gemRedisStockUnDescable());
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 }

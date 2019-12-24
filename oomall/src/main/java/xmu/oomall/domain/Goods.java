@@ -22,6 +22,7 @@ import java.util.List;
 public class Goods extends GoodsPo {
     private BrandPo brandPo;
     private GoodsCategoryPo goodsCategoryPo;
+    private List<ProductPo> productPoList;
     private GrouponRule grouponRule;
     private ShareRule shareRule;
     private PresaleRule presaleRule;

@@ -95,11 +95,23 @@ public class ProductPo implements Serializable {
         return "Product:Id:" + this.id + ":Goods:Id";
     }
 
+    public String gemRedisStockUnDescable() {
+        return "Product:Id:" + this.id + ":NoStock";
+    }
+
+    static public String gemRedisStockUnDescable(Integer id) {
+        return "Product:Id:" + id + ":NoStock";
+    }
+
     static public String gemRedisKey(Integer id) {
         return "Product:Id:" + id;
     }
 
     static public String gemGoodsRedisKey(Integer id) {
-        return "Product:Id:"+id+":Goods:Id";
+        return "Product:Id:" + id + ":Goods:Id";
+    }
+
+    static public String gemStockRedisKey(Integer id) {
+        return "Product:Id:" + id + ":Stock";
     }
 }
