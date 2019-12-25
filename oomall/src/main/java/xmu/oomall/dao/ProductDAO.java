@@ -143,15 +143,14 @@ public class ProductDAO {
     }
 
     public Boolean descStock(Integer productId, int dStock) {
+        if (iRedisService.exists(ProductPo.gemRedisStockUnDescable(productId))) {
+            return false;
+        }
         Integer redisStock = (Integer) iRedisService.get(ProductPo.gemStockRedisKey(productId));
         if (redisStock == null) {
-            if (iRedisService.exists(ProductPo.gemStockRedisKey(productId))) {
+            redisStock = preDescStock(productId);
+            if (redisStock == 0) {
                 return false;
-            } else {
-                redisStock = preDescStock(productId);
-                if (redisStock == 0) {
-                    return false;
-                }
             }
         }
         // redisStock 存在且大于0
