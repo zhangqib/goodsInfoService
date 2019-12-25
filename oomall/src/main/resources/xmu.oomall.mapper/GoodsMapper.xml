@@ -28,6 +28,7 @@
       <arg column="volume" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="special_freight_id" javaType="java.lang.Integer" jdbcType="BIGINT" />
       <arg column="is_special" javaType="java.lang.Boolean" jdbcType="BIT" />
+      <arg column="price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
     </constructor>
   </resultMap>
 
@@ -54,7 +55,7 @@
     -->
     id, gmt_create, gmt_modified, name, goods_sn, short_name, description, brief, pic_url, 
     detail, status, share_url, gallery, goods_category_id, brand_id, is_deleted, weight, 
-    volume, special_freight_id, is_special
+    volume, special_freight_id, is_special, price
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="GoodsMap" >
     <!--

@@ -54,4 +54,6 @@ oomall:
   #redis缓存失效时间，单位秒
   redisexpiretime: 30
   #预提库存数量
-  predescQty: 3
+  predescQty: 10
+  # 阈值
+  redisStockThreshold: 3
