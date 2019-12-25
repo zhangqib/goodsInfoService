@@ -65,6 +65,7 @@ public interface GoodsInfoService {
     /**
      * 1.用户根据id搜索商品
      *
+     * @param userId：Integer
      * @param id：Integer
      * @return GoodsPo（不可获取下架商品）
      */

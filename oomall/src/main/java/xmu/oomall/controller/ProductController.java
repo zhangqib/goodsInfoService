@@ -157,7 +157,7 @@ public class ProductController {
     @DeleteMapping("/products/{id}")
     public Object deleteProductById(Integer id, HttpServletRequest request) {
         ProductPo product = goodsInfoService.getProductById(id);
-        if (product != null) {
+        if (product != null&&!product.getBeDeleted()) {
             boolean ret = goodsInfoService.deleteProductById(product);
             if (ret) {
                 Log log = new Log(request.getIntHeader("userId"),

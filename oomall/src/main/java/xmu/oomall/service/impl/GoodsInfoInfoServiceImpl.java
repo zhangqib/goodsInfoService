@@ -77,19 +77,27 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
      */
     @Override
     public GoodsPo updateGoodsById(GoodsPo goodsOld, GoodsPo goodsNew) {
+        //下架商品需要去其他服务看该商品的活动是否下线
         if (goodsOld.getStatusCode() != 0 && goodsNew.getStatusCode() == 0) {
-            //去其他服务看该商品的活动是否下线
-            return goodsDao.updateById(goodsNew);
-        } else {
-            return goodsDao.updateById(goodsNew);
+            //查看该商品对应的团购活动
+            GrouponRule grouponRule = new GrouponRule();
+            if (grouponRule == null) {
+                return null;
+            }
+            //查看该商品对应的预售活动
+            PresaleRule presaleRule = new PresaleRule();
+            if (presaleRule == null) {
+                return null;
+            }
         }
+        return goodsDao.updateById(goodsNew);
     }
 
     /**
      * 5.管理员根据id删除商品
      *
      * @param goods
-     * @return boolean
+     * @return Integer
      */
     @Override
     public Integer deleteGoodsById(GoodsPo goods) {
@@ -178,9 +186,7 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
     public boolean isGoodsOnSale(Integer id) {
         GoodsPo goods = goodsDao.selectById(id);
         if (goods != null) {
-            if (goods.getStatusCode() != 0) {
-                return true;
-            }
+            return goods.getStatusCode() != 0;
         }
         return false;
     }
@@ -203,7 +209,6 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
     }
 
     /**
-     *
      * 1.管理员搜索某个商品下的所有产品
      *
      * @param id    :Integer
@@ -247,9 +252,35 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
     @Override
     public boolean deleteProductById(ProductPo product) {
         if (product != null) {
-            boolean ret = productDao.deleteById(product);
-            if (ret) {
-                return true;
+            List<ProductPo> productList = productDao.selectByGoodsId(product.getGoodsId(), 1, Integer.MAX_VALUE);
+            if (productList.size() > 1) {
+                GoodsPo goods = goodsDao.selectById(product.getGoodsId());
+                if (goods != null) {
+                    productList.remove(product);
+                    BigDecimal curLowestPrice = new BigDecimal("999999999.00");
+                    for (ProductPo product1 : productList) {
+                        if (product1.getPrice().compareTo(curLowestPrice) < 0) {
+                            curLowestPrice = product1.getPrice();
+                        }
+                    }
+                    System.out.println(curLowestPrice);
+                    if (goods.getPrice().compareTo(curLowestPrice) < 0) {
+                        goods.setPrice(curLowestPrice);
+                        GoodsPo goods2=goodsDao.updateById(goods);
+                        if(goods2==null){
+                            return false;
+                        }
+                    }
+                    boolean ret = productDao.deleteById(product);
+                    return ret;
+                }
+            } else if (productList.size() == 1) {
+                GoodsPo goods = goodsDao.selectById(product.getGoodsId());
+                Boolean ret = pullOffGoods(goods);
+                if (ret) {
+                    Boolean ret2=productDao.deleteById(product);
+                    return ret2;
+                }
             }
         }
         return false;
@@ -288,20 +319,21 @@ public class GoodsInfoInfoServiceImpl implements GoodsInfoService {
         if (operation) {
             for (OrderItem orderItem : orderItemList) {
                 boolean ret = productDao.incrStock(orderItem.getProductId(), orderItem.getNumber());
-                if (!ret) {
-                    return false;
+                if (ret) {
+                    return true;
                 }
             }
-            return true;
         } else {
             for (OrderItem orderItem : orderItemList) {
+                System.out.println(orderItem.getProductId()+"   "+orderItem.getNumber());
                 boolean ret = productDao.descStock(orderItem.getProductId(), orderItem.getNumber());
-                if (!ret) {
-                    return false;
+                System.out.println(ret);
+                if (ret) {
+                    return true;
                 }
             }
-            return true;
         }
+        return false;
     }
 
     /**

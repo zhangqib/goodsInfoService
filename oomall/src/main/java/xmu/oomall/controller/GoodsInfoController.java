@@ -124,7 +124,8 @@ public class GoodsInfoController {
             Object retObj = ResponseUtil.fail(580, "参数不合法");
             return retObj;
         }
-        return goodsController.deleteGoodsById(id, request);
+        Object retObj=goodsController.deleteGoodsById(id, request);
+        return retObj;
     }
 
     /**
@@ -305,7 +306,8 @@ public class GoodsInfoController {
             Object retObj = ResponseUtil.fail(580, "参数不合法");
             return retObj;
         }
-        return productController.deleteProductById(id, request);
+        Object retObj =productController.deleteProductById(id, request);
+        return retObj;
     }
 
     /**
